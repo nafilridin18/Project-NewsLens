@@ -32,7 +32,8 @@ class Category {
             ['id' => 11, 'name_bn' => 'চাকরি', 'name_en' => 'Jobs', 'slug' => 'jobs'],
             ['id' => 12, 'name_bn' => 'মতামত', 'name_en' => 'Opinion', 'slug' => 'opinion'],
             ['id' => 13, 'name_bn' => 'লাইফস্টাইল', 'name_en' => 'Lifestyle', 'slug' => 'lifestyle'],
-            ['id' => 14, 'name_bn' => 'প্রবাস', 'name_en' => 'Probash', 'slug' => 'probash']
+            ['id' => 14, 'name_bn' => 'প্রবাস', 'name_en' => 'Probash', 'slug' => 'probash'],
+            ['id' => 15, 'name_bn' => 'অপরাধ', 'name_en' => 'Crime', 'slug' => 'crime']
         ];
     }
 }

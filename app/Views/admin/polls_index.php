@@ -49,63 +49,66 @@ require __DIR__ . '/partials/header.php';
 <main class="admin-container">
   <?php if (isset($_GET['msg'])): ?>
     <div class="alert-banner">
-      <?php 
-        if ($_GET['msg'] === 'created') echo '✅ নতুন অনলাইন জরিপ সফলভাবে প্রকাশ করা হয়েছে!';
-        if ($_GET['msg'] === 'activated') echo '✅ নির্বাচিত জরিপটি মূল পোর্টালের হোমপেজে সক্রিয় করা হয়েছে!';
-        if ($_GET['msg'] === 'reset') echo '✅ এই জরিপের সকল ভোটের সংখ্যা সফলভাবে রিসেট (০) করা হয়েছে!';
-        if ($_GET['msg'] === 'deleted') echo '✅ জরিপটি সফলভাবে ডাটাবেজ থেকে মুছে ফেলা হয়েছে!';
-      ?>
+      <?php if ($_GET['msg'] === 'created'): ?>
+        <span data-bn="✅ নতুন অনলাইন জরিপ সফলভাবে প্রকাশ করা হয়েছে!" data-en="✅ New online poll successfully published!">✅ নতুন অনলাইন জরিপ সফলভাবে প্রকাশ করা হয়েছে!</span>
+      <?php elseif ($_GET['msg'] === 'activated'): ?>
+        <span data-bn="✅ নির্বাচিত জরিপটি মূল পোর্টালের হোমপেজে সক্রিয় করা হয়েছে!" data-en="✅ Selected poll activated on portal homepage!">✅ নির্বাচিত জরিপটি মূল পোর্টালের হোমপেজে সক্রিয় করা হয়েছে!</span>
+      <?php elseif ($_GET['msg'] === 'reset'): ?>
+        <span data-bn="✅ এই জরিপের সকল ভোটের সংখ্যা সফলভাবে রিসেট (০) করা হয়েছে!" data-en="✅ All votes for this poll have been reset to 0!">✅ এই জরিপের সকল ভোটের সংখ্যা সফলভাবে রিসেট (০) করা হয়েছে!</span>
+      <?php elseif ($_GET['msg'] === 'deleted'): ?>
+        <span data-bn="✅ জরিপটি সফলভাবে ডাটাবেজ থেকে মুছে ফেলা হয়েছে!" data-en="✅ Poll successfully deleted from database!">✅ জরিপটি সফলভাবে ডাটাবেজ থেকে মুছে ফেলা হয়েছে!</span>
+      <?php endif; ?>
     </div>
   <?php endif; ?>
 
   <div class="page-title-row">
     <div>
-      <h2>📈 অনলাইন জরিপ ও লাইভ ফলাফল ব্যবস্থাপনা</h2>
-      <p style="color:var(--adm-text-muted);font-size:0.9rem;">পাঠকদের জনমত যাচাইয়ের জন্য নতুন জরিপ তৈরি করুন এবং ফলাফল পরিচালনা করুন</p>
+      <h2 data-bn="📈 অনলাইন জরিপ ও লাইভ ফলাফল ব্যবস্থাপনা" data-en="📈 Online Polls & Live Results Management">📈 অনলাইন জরিপ ও লাইভ ফলাফল ব্যবস্থাপনা</h2>
+      <p style="color:var(--adm-text-muted);font-size:0.9rem;" data-bn="পাঠকদের জনমত যাচাইয়ের জন্য নতুন জরিপ তৈরি করুন এবং ফলাফল পরিচালনা করুন" data-en="Create new polls to gauge reader public opinion and manage results">পাঠকদের জনমত যাচাইয়ের জন্য নতুন জরিপ তৈরি করুন এবং ফলাফল পরিচালনা করুন</p>
     </div>
   </div>
 
   <!-- Create Poll Box (FEATURE REQUEST: emn jorip creat er freature dw aro) -->
   <div class="create-poll-card">
-    <h3 style="margin-bottom:16px;color:var(--adm-text);display:flex;align-items:center;gap:8px;">
+    <h3 style="margin-bottom:16px;color:var(--adm-text);display:flex;align-items:center;gap:8px;" data-bn="➕ নতুন জরিপ তৈরি করুন (Create Poll)" data-en="➕ Create New Poll">
       ➕ নতুন জরিপ তৈরি করুন (Create Poll)
     </h3>
     <form action="<?= $appUrl ?>/<?= $adminPath ?>/polls" method="POST">
       <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
 
       <div class="form-group">
-        <label for="poll_question">জরিপের প্রশ্ন (Question) *</label>
-        <textarea name="question" id="poll_question" required placeholder="উদাহরণ: আপনি কি মনে করেন দেশের রপ্তানি খাতে তথ্যপ্রযুক্তি দ্রুত শীর্ষস্থান নেবে?" class="form-control" rows="2" style="resize:vertical;"></textarea>
+        <label for="poll_question" data-bn="জরিপের প্রশ্ন (Question) *" data-en="Poll Question *">জরিপের প্রশ্ন (Question) *</label>
+        <textarea name="question" id="poll_question" required placeholder="উদাহরণ: আপনি কি মনে করেন দেশের রপ্তানি খাতে তথ্যপ্রযুক্তি দ্রুত শীর্ষস্থান নেবে?" data-placeholder-bn="উদাহরণ: আপনি কি মনে করেন দেশের রপ্তানি খাতে তথ্যপ্রযুক্তি দ্রুত শীর্ষস্থান নেবে?" data-placeholder-en="e.g. Do you think the IT sector will soon lead national exports?" class="form-control" rows="2" style="resize:vertical;"></textarea>
       </div>
 
-      <label style="display:block;font-weight:600;margin-bottom:8px;color:var(--adm-text);font-size:0.92rem;">ভোটের বিকল্পসমূহ (Options) *</label>
+      <label style="display:block;font-weight:600;margin-bottom:8px;color:var(--adm-text);font-size:0.92rem;" data-bn="ভোটের বিকল্পসমূহ (Options) *" data-en="Vote Options *">ভোটের বিকল্পসমূহ (Options) *</label>
       <div class="options-grid">
         <div>
-          <input type="text" name="options[]" value="হ্যাঁ" required placeholder="বিকল্প ১ (যেমন: হ্যাঁ)" class="form-control">
+          <input type="text" name="options[]" value="হ্যাঁ" required placeholder="বিকল্প ১ (যেমন: হ্যাঁ)" data-placeholder-bn="বিকল্প ১ (যেমন: হ্যাঁ)" data-placeholder-en="Option 1 (e.g. Yes)" class="form-control">
         </div>
         <div>
-          <input type="text" name="options[]" value="না" required placeholder="বিকল্প ২ (যেমন: না)" class="form-control">
+          <input type="text" name="options[]" value="না" required placeholder="বিকল্প ২ (যেমন: না)" data-placeholder-bn="বিকল্প ২ (যেমন: না)" data-placeholder-en="Option 2 (e.g. No)" class="form-control">
         </div>
         <div>
-          <input type="text" name="options[]" value="মতামত নেই" placeholder="বিকল্প ৩ (যেমন: মতামত নেই)" class="form-control">
+          <input type="text" name="options[]" value="মতামত নেই" placeholder="বিকল্প ৩ (যেমন: মতামত নেই)" data-placeholder-bn="বিকল্প ৩ (যেমন: মতামত নেই)" data-placeholder-en="Option 3 (e.g. No Opinion)" class="form-control">
         </div>
         <div>
-          <input type="text" name="options[]" placeholder="বিকল্প ৪ (ঐচ্ছিক)" class="form-control">
+          <input type="text" name="options[]" placeholder="বিকল্প ৪ (ঐচ্ছিক)" data-placeholder-bn="বিকল্প ৪ (ঐচ্ছিক)" data-placeholder-en="Option 4 (Optional)" class="form-control">
         </div>
       </div>
 
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:14px;">
         <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;color:var(--adm-text);font-weight:600;font-size:0.92rem;">
           <input type="checkbox" name="is_active" value="1" checked>
-          <span>হোমপেজে সক্রিয় জরিপ হিসেবে চালু রাখুন (Set as Active)</span>
+          <span data-bn="হোমপেজে সক্রিয় জরিপ হিসেবে চালু রাখুন (Set as Active)" data-en="Set as active poll on homepage">হোমপেজে সক্রিয় জরিপ হিসেবে চালু রাখুন (Set as Active)</span>
         </label>
-        <button type="submit" class="btn-submit">🚀 নতুন জরিপ প্রকাশ করুন</button>
+        <button type="submit" class="btn-submit" data-bn="🚀 নতুন জরিপ প্রকাশ করুন" data-en="🚀 Publish New Poll">🚀 নতুন জরিপ প্রকাশ করুন</button>
       </div>
     </form>
   </div>
 
   <!-- Existing Polls List -->
-  <h3 style="margin-bottom:16px;color:var(--adm-text);">📊 তৈরি করা জরিপের তালিকা ও লাইভ পরিসংখ্যান</h3>
+  <h3 style="margin-bottom:16px;color:var(--adm-text);" data-bn="📊 তৈরি করা জরিপের তালিকা ও লাইভ পরিসংখ্যান" data-en="📊 Polls List & Live Statistics">📊 তৈরি করা জরিপের তালিকা ও লাইভ পরিসংখ্যান</h3>
 
   <?php if (!empty($polls)): ?>
     <?php foreach ($polls as $poll): ?>
@@ -114,9 +117,9 @@ require __DIR__ . '/partials/header.php';
           <div class="poll-q"><?= htmlspecialchars($poll['question']) ?></div>
           <div>
             <?php if (!empty($poll['is_active'])): ?>
-              <span class="badge-active">🟢 সক্রিয় (Active)</span>
+              <span class="badge-active" data-bn="🟢 সক্রিয় (Active)" data-en="🟢 Active">🟢 সক্রিয় (Active)</span>
             <?php else: ?>
-              <span class="badge-inactive">⚪ নিষ্ক্রিয় (Inactive)</span>
+              <span class="badge-inactive" data-bn="⚪ নিষ্ক্রিয় (Inactive)" data-en="⚪ Inactive">⚪ নিষ্ক্রিয় (Inactive)</span>
             <?php endif; ?>
           </div>
         </div>
@@ -126,7 +129,7 @@ require __DIR__ . '/partials/header.php';
             <div class="stat-bar-container">
               <div class="stat-label-flex">
                 <span><strong><?= htmlspecialchars($opt['option_text']) ?></strong></span>
-                <span><?= $opt['percentage'] ?>% (<?= $opt['votes'] ?> ভোট)</span>
+                <span><?= $opt['percentage'] ?>% (<span data-bn="<?= $opt['votes'] ?> ভোট" data-en="<?= $opt['votes'] ?> votes"><?= $opt['votes'] ?> ভোট</span>)</span>
               </div>
               <div class="stat-progress">
                 <div class="stat-progress-fill" style="width: <?= $opt['percentage'] ?>%;"></div>
@@ -137,11 +140,11 @@ require __DIR__ . '/partials/header.php';
 
         <div class="poll-meta">
           <div>
-            <span>মোট প্রদত্ত ভোট: <strong><?= $poll['total_votes'] ?></strong> টি</span>
+            <span data-bn="মোট প্রদত্ত ভোট:" data-en="Total Votes:">মোট প্রদত্ত ভোট:</span> <strong><?= $poll['total_votes'] ?></strong> 
             <?php if ($poll['total_votes'] == 0): ?>
-              <span style="color:var(--adm-text-muted);font-style:italic;">(এখনও কোনো ভোট পড়েনি)</span>
+              <span style="color:var(--adm-text-muted);font-style:italic;" data-bn="(এখনও কোনো ভোট পড়েনি)" data-en="(No votes yet)">(এখনও কোনো ভোট পড়েনি)</span>
             <?php endif; ?>
-            | <span>শুরুর তারিখ: <?= htmlspecialchars($poll['created_at']) ?></span>
+            | <span data-bn="শুরুর তারিখ:" data-en="Created:">শুরুর তারিখ:</span> <?= htmlspecialchars($poll['created_at']) ?>
           </div>
 
           <div class="poll-actions">
@@ -149,20 +152,20 @@ require __DIR__ . '/partials/header.php';
               <form action="<?= $appUrl ?>/<?= $adminPath ?>/polls/active" method="POST" style="display:inline;">
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
                 <input type="hidden" name="id" value="<?= $poll['id'] ?>">
-                <button type="submit" class="btn-action-sm btn-active-poll" title="হোমপেজে সক্রিয় করুন">🟢 সক্রিয় করুন</button>
+                <button type="submit" class="btn-action-sm btn-active-poll" title="হোমপেজে সক্রিয় করুন" data-title-bn="হোমপেজে সক্রিয় করুন" data-title-en="Activate on homepage" data-bn="🟢 সক্রিয় করুন" data-en="🟢 Activate">🟢 সক্রিয় করুন</button>
               </form>
             <?php endif; ?>
 
             <form action="<?= $appUrl ?>/<?= $adminPath ?>/polls/reset" method="POST" onsubmit="return confirm('আপনি কি নিশ্চিত যে এই জরিপের সকল ভোটের সংখ্যা শূন্য (০) করতে চান?');" style="display:inline;">
               <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
               <input type="hidden" name="id" value="<?= $poll['id'] ?>">
-              <button type="submit" class="btn-action-sm btn-reset-poll" title="ভোট সংখ্যা রিসেট করুন">🔄 ভোট রিসেট</button>
+              <button type="submit" class="btn-action-sm btn-reset-poll" title="ভোট সংখ্যা রিসেট করুন" data-title-bn="ভোট সংখ্যা রিসেট করুন" data-title-en="Reset votes" data-bn="🔄 ভোট রিসেট" data-en="🔄 Reset Votes">🔄 ভোট রিসেট</button>
             </form>
 
             <form action="<?= $appUrl ?>/<?= $adminPath ?>/polls/delete" method="POST" onsubmit="return confirm('আপনি কি নিশ্চিত যে এই জরিপটি মুছে ফেলতে চান?');" style="display:inline;">
               <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
               <input type="hidden" name="id" value="<?= $poll['id'] ?>">
-              <button type="submit" class="btn-action-sm btn-delete-poll" title="জরিপটি মুছুন">🗑️ মুছুন</button>
+              <button type="submit" class="btn-action-sm btn-delete-poll" title="জরিপটি মুছুন" data-title-bn="জরিপটি মুছুন" data-title-en="Delete poll" data-bn="🗑️ মুছুন" data-en="🗑️ Delete">🗑️ মুছুন</button>
             </form>
           </div>
         </div>
@@ -170,10 +173,10 @@ require __DIR__ . '/partials/header.php';
     <?php endforeach; ?>
   <?php else: ?>
     <div class="poll-card-box" style="text-align:center;padding:40px;color:var(--adm-text-muted);">
-      <p>আপাতত কোনো জরিপ তৈরি করা নেই। ওপরের ফরম ব্যবহার করে আপনার প্রথম জরিপ তৈরি করুন।</p>
+      <p data-bn="আপাতত কোনো জরিপ তৈরি করা নেই। ওপরের ফরম ব্যবহার করে আপনার প্রথম জরিপ তৈরি করুন।" data-en="No polls created yet. Use the form above to create your first poll.">আপাতত কোনো জরিপ তৈরি করা নেই। ওপরের ফরম ব্যবহার করে আপনার প্রথম জরিপ তৈরি করুন।</p>
     </div>
   <?php endif; ?>
 </main>
-
+<?php require __DIR__ . '/partials/footer.php'; ?>
 </body>
 </html>

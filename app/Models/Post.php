@@ -54,7 +54,9 @@ class Post {
         try {
             $db = Database::getConnection();
             $stmt = $db->query("
-                SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug, u.name AS author_name, d.name_bn AS district_name
+                SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug, 
+                       COALESCE(NULLIF(p.custom_author, ''), u.name, 'স্টাফ রিপোর্টার') AS author_name, 
+                       d.name_bn AS district_name
                 FROM `posts` p
                 JOIN `categories` c ON p.category_id = c.id
                 LEFT JOIN `users` u ON p.author_id = u.id
@@ -82,7 +84,8 @@ class Post {
         try {
             $db = Database::getConnection();
             $stmt = $db->prepare("
-                SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug, u.name AS author_name
+                SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug, 
+                       COALESCE(NULLIF(p.custom_author, ''), u.name, 'স্টাফ রিপোর্টার') AS author_name
                 FROM `posts` p
                 JOIN `categories` c ON p.category_id = c.id
                 LEFT JOIN `users` u ON p.author_id = u.id
@@ -129,7 +132,9 @@ class Post {
         try {
             $db = Database::getConnection();
             $stmt = $db->prepare("
-                SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug, u.name AS author_name, d.name_bn AS district_name
+                SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug, 
+                       COALESCE(NULLIF(p.custom_author, ''), u.name, 'স্টাফ রিপোর্টার') AS author_name, 
+                       d.name_bn AS district_name
                 FROM `posts` p
                 JOIN `categories` c ON p.category_id = c.id
                 LEFT JOIN `users` u ON p.author_id = u.id
@@ -188,7 +193,8 @@ class Post {
             $db = Database::getConnection();
             $stmt = $db->prepare("
                 SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug, 
-                       u.name AS author_name, u.photo AS author_photo,
+                       COALESCE(NULLIF(p.custom_author, ''), u.name, 'স্টাফ রিপোর্টার') AS author_name, 
+                       u.photo AS author_photo,
                        d.name_bn AS district_name, dv.name_bn AS division_name
                 FROM `posts` p
                 JOIN `categories` c ON p.category_id = c.id
@@ -251,7 +257,8 @@ class Post {
             $db = Database::getConnection();
             $sql = "
                 SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug, 
-                       u.name AS author_name, d.name_bn AS district_name, dv.name_bn AS division_name
+                       COALESCE(NULLIF(p.custom_author, ''), u.name, 'স্টাফ রিপোর্টার') AS author_name, 
+                       d.name_bn AS district_name, dv.name_bn AS division_name
                 FROM `posts` p
                 JOIN `categories` c ON p.category_id = c.id
                 LEFT JOIN `users` u ON p.author_id = u.id

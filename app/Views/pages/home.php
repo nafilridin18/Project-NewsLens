@@ -28,9 +28,14 @@ $videoPosts = $videoPosts ?? [];
           </h1>
           <p class="hero-excerpt"><?= htmlspecialchars($mainLead['excerpt']) ?></p>
           <div class="meta-row">
-            <span class="meta-author">✍️ <?= htmlspecialchars($mainLead['author_name'] ?? 'স্টাফ রিপোর্টার') ?></span>
-            <span class="meta-time">⏱️ <?= BanglaDate::timeAgo($mainLead['published_at']) ?></span>
-            <span class="meta-views">👁️ <?= BanglaDate::bnNum($mainLead['views'] ?? 0) ?> বার পঠিত</span>
+            <?php
+              $leadAuthor = $mainLead['author_name'] ?? 'স্টাফ রিপোর্টার';
+              $leadAuthorEn = ($leadAuthor === 'বেনামী') ? 'Anonymous' : ($mainLead['author_name_en'] ?? $leadAuthor);
+              if ($leadAuthor === 'স্টাফ রিপোর্টার') $leadAuthorEn = 'Staff Reporter';
+            ?>
+            <span class="meta-author" data-bn="✍️ <?= htmlspecialchars($leadAuthor) ?>" data-en="✍️ <?= htmlspecialchars($leadAuthorEn) ?>">✍️ <?= htmlspecialchars($leadAuthor) ?></span>
+            <span class="meta-time" data-time="<?= htmlspecialchars($mainLead['published_at']) ?>">⏱️ <?= BanglaDate::timeAgo($mainLead['published_at']) ?></span>
+            <span class="meta-views" data-views="<?= (int)($mainLead['views'] ?? 0) ?>" data-bn="👁️ <?= BanglaDate::bnNum($mainLead['views'] ?? 0) ?> বার পঠিত" data-en="👁️ <?= (int)($mainLead['views'] ?? 0) ?> views">👁️ <?= BanglaDate::bnNum($mainLead['views'] ?? 0) ?> বার পঠিত</span>
           </div>
         </div>
       </article>
@@ -60,11 +65,9 @@ $videoPosts = $videoPosts ?? [];
     </div>
   </section>
 
-  <!-- Middle Banner Ad Slot (970x90) -->
+  <!-- Middle Banner Ad Slot (970x90 / In-Feed Sponsor) -->
   <div class="banner-ad-container" aria-label="বিজ্ঞাপন">
-    <div class="ad-placeholder banner-ad">
-      <span class="ad-label" data-bn="বিজ্ঞাপন (৯৭০ × ৯০)" data-en="ADVERTISEMENT (970 × 90)">বিজ্ঞাপন (৯৭০ × ৯০)</span>
-    </div>
+    <?= \App\Helpers\AdBanner::render('in_article', ['label' => 'বিজ্ঞাপন (৯৭০ × ৯০)']) ?>
   </div>
 
   <!-- ================= 2. MAIN CONTENT + SIDEBAR ================= -->
@@ -234,12 +237,6 @@ $videoPosts = $videoPosts ?? [];
         </div>
       </div>
 
-      <!-- 2. Sidebar Ad Slot (300x250) -->
-      <div class="sidebar-widget ad-widget">
-        <div class="ad-placeholder square-ad">
-          <span class="ad-label" data-bn="বিজ্ঞাপন (৩০০ × ২৫০)" data-en="ADVERTISEMENT (300 × 250)">বিজ্ঞাপন (৩০০ × ২৫০)</span>
-        </div>
-      </div>
 
       <!-- 3. Online Reader Poll (অনলাইন জরিপ - Picture 4 Fix with Real DB) -->
       <?php if ($activePoll): ?>
@@ -277,60 +274,20 @@ $videoPosts = $videoPosts ?? [];
               </div>
             <?php endforeach; ?>
             <div class="poll-total-note">
-              <small>মোট ভোট: <?= BanglaDate::bnNum($activePoll['total_votes']) ?> টি</small>
+              <small data-bn="মোট ভোট: <?= BanglaDate::bnNum($activePoll['total_votes']) ?> টি" data-en="Total Votes: <?= $activePoll['total_votes'] ?>">মোট ভোট: <?= BanglaDate::bnNum($activePoll['total_votes']) ?> টি</small>
             </div>
           </div>
         </div>
       </div>
       <?php endif; ?>
 
-      <!-- 4. Sidebar Advertisement (Admin Controlled: Picture or Video with Hyperlink) -->
-      <?php
-      $sidebarAd = \App\Models\Ad::getByPosition('sidebar');
-      ?>
+      <!-- 3. Sidebar Advertisement (Admin Controlled: Picture or Video with Hyperlink) -->
       <div class="sidebar-widget sidebar-ad-widget">
         <div class="widget-header">
           <h4 class="widget-title" data-bn="বিজ্ঞাপন" data-en="Advertisement">বিজ্ঞাপন</h4>
-          <span class="ad-tag-badge">বিজ্ঞাপন</span>
         </div>
         <div class="sidebar-ad-content">
-          <?php if ($sidebarAd && (!empty($sidebarAd['image']) || !empty($sidebarAd['video_url']))): ?>
-            <?php if ($sidebarAd['type'] === 'video' && !empty($sidebarAd['video_url'])): ?>
-              <?php 
-                preg_match('/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/', $sidebarAd['video_url'], $sMatch);
-                $ytSidebarId = $sMatch[1] ?? '';
-              ?>
-              <div class="sidebar-ad-media">
-                <?php if ($ytSidebarId): ?>
-                  <iframe src="https://www.youtube.com/embed/<?= $ytSidebarId ?>?autoplay=0" title="<?= htmlspecialchars($sidebarAd['title']) ?>" frameborder="0" allowfullscreen class="sidebar-ad-iframe"></iframe>
-                <?php else: ?>
-                  <video src="<?= htmlspecialchars($sidebarAd['video_url']) ?>" controls class="sidebar-ad-video"></video>
-                <?php endif; ?>
-                <?php if (!empty($sidebarAd['link'])): ?>
-                  <a href="<?= htmlspecialchars($sidebarAd['link']) ?>" target="_blank" rel="noopener" class="ad-visit-btn" title="বিজ্ঞাপনের বিস্তারিত দেখুন">
-                    🌐 বিস্তারিত দেখতে ভিজিট করুন →
-                  </a>
-                <?php endif; ?>
-              </div>
-            <?php elseif (!empty($sidebarAd['image'])): ?>
-              <div class="sidebar-ad-media">
-                <a href="<?= htmlspecialchars($sidebarAd['link'] ?: '#') ?>" target="_blank" rel="noopener" class="sidebar-ad-link" title="<?= htmlspecialchars($sidebarAd['title']) ?> (ক্লিক করে বিস্তারিত দেখুন)">
-                  <img src="<?= htmlspecialchars($sidebarAd['image']) ?>" alt="<?= htmlspecialchars($sidebarAd['title']) ?>" class="sidebar-ad-img" width="300" height="250">
-                </a>
-                <?php if (!empty($sidebarAd['link'])): ?>
-                  <a href="<?= htmlspecialchars($sidebarAd['link']) ?>" target="_blank" rel="noopener" class="ad-visit-btn">
-                    🌐 বিস্তারিত দেখতে ভিজিট করুন →
-                  </a>
-                <?php endif; ?>
-              </div>
-            <?php endif; ?>
-          <?php else: ?>
-            <div class="ad-placeholder sidebar-ad-placeholder">
-              <a href="<?= $appUrl ?>/page/advertise" class="ad-placeholder-link">
-                <span class="ad-label" data-bn="বিজ্ঞাপন দিন (৩০০ × ২৫০)" data-en="ADVERTISE HERE (300 × 250)">বিজ্ঞাপন দিন (৩০০ × ২৫০)</span>
-              </a>
-            </div>
-          <?php endif; ?>
+          <?= \App\Helpers\AdBanner::render('sidebar') ?>
         </div>
       </div>
 
@@ -344,7 +301,7 @@ $videoPosts = $videoPosts ?? [];
         </p>
         <div id="newsletter-feedback" class="newsletter-feedback-msg" style="display:none;"></div>
         <form action="<?= $appUrl ?>/api/newsletter/subscribe" method="post" class="newsletter-form" id="sidebar-newsletter">
-          <input type="email" name="email" placeholder="আপনার ইমেইল ঠিকানা" required>
+          <input type="email" name="email" placeholder="আপনার ইমেইল ঠিকানা" data-placeholder-bn="আপনার ইমেইল ঠিকানা" data-placeholder-en="Your email address" required>
           <button type="submit" data-bn="যুক্ত হোন" data-en="Subscribe">যুক্ত হোন</button>
         </form>
       </div>
@@ -388,7 +345,7 @@ $videoPosts = $videoPosts ?? [];
 <div id="video-lightbox-modal" class="video-modal-overlay" style="display:none;" aria-hidden="true">
   <div class="video-modal-dialog">
     <div class="video-modal-header">
-      <h3 id="video-modal-heading" class="video-modal-title">ভিডিও প্রতিবেদন</h3>
+      <h3 id="video-modal-heading" class="video-modal-title" data-bn="ভিডিও প্রতিবেদন" data-en="Video Report">ভিডিও প্রতিবেদন</h3>
       <button type="button" id="video-modal-close" class="video-modal-close-btn" aria-label="Close Video">✕</button>
     </div>
     <div class="video-modal-body" id="video-modal-body">

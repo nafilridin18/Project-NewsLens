@@ -7,7 +7,7 @@ if (!empty($breakingNews)):
   <div class="container breaking-inner">
     <div class="breaking-badge">
       <span class="live-dot" aria-hidden="true"></span>
-      <span class="badge-text">ব্রেকিং</span>
+      <span class="badge-text" data-bn="ব্রেকিং" data-en="BREAKING">ব্রেকিং</span>
     </div>
     <div class="breaking-ticker-viewport" id="ticker-viewport">
       <ul class="breaking-list" id="breaking-list">
@@ -21,8 +21,8 @@ if (!empty($breakingNews)):
       </ul>
     </div>
     <div class="ticker-controls">
-      <button type="button" class="ticker-nav-btn prev" id="ticker-prev" aria-label="পূর্ববর্তী সংবাদ">❮</button>
-      <button type="button" class="ticker-nav-btn next" id="ticker-next" aria-label="পরবর্তী সংবাদ">❯</button>
+      <button type="button" class="ticker-nav-btn prev" id="ticker-prev" aria-label="পূর্ববর্তী সংবাদ" title="পূর্ববর্তী" data-title-bn="পূর্ববর্তী" data-title-en="Previous">❮</button>
+      <button type="button" class="ticker-nav-btn next" id="ticker-next" aria-label="পরবর্তী সংবাদ" title="পরবর্তী" data-title-bn="পরবর্তী" data-title-en="Next">❯</button>
     </div>
   </div>
 </section>

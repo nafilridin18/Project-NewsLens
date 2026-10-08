@@ -29,6 +29,14 @@ $xUrl  = htmlspecialchars($settings['social_x'] ?? 'https://twitter.com');
 $copyBn = htmlspecialchars($settings['copyright_text_bn'] ?? '© ২০২৬ Newslensbd (নিউজলেন্সবিডি)। সর্বস্বত্ব সংরক্ষিত।');
 $copyEn = htmlspecialchars($settings['copyright_text_en'] ?? '© 2026 Newslensbd. All rights reserved.');
 ?>
+<?php
+// Optional Footer / Bottom Banner (renders dynamically if active in database)
+$footerAdHtml = \App\Helpers\AdBanner::render('footer', ['show_placeholder' => false]);
+if (!empty($footerAdHtml)): ?>
+  <div class="site-footer-ad-container container" aria-label="স্পন্সরড ব্যানার">
+    <?= $footerAdHtml ?>
+  </div>
+<?php endif; ?>
 <footer class="site-footer">
   <div class="footer-primary">
     <div class="container footer-grid">
@@ -59,6 +67,7 @@ $copyEn = htmlspecialchars($settings['copyright_text_en'] ?? '© 2026 Newslensbd
           <li><a href="<?= $appUrl ?>/category/international" data-bn="আন্তর্জাতিক" data-en="International">আন্তর্জাতিক</a></li>
           <li><a href="<?= $appUrl ?>/category/sports" data-bn="খেলা" data-en="Sports">খেলা</a></li>
           <li><a href="<?= $appUrl ?>/category/tech" data-bn="বিজ্ঞান ও প্রযুক্তি" data-en="Tech">বিজ্ঞান ও প্রযুক্তি</a></li>
+          <li><a href="<?= $appUrl ?>/category/crime" data-bn="অপরাধ" data-en="Crime">অপরাধ</a></li>
         </ul>
       </div>
 

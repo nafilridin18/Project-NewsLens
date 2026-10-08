@@ -8,7 +8,7 @@ $appUrl = rtrim($config['app']['url'] ?? '', '/');
     <ol class="breadcrumb-list">
       <li><a href="<?= $appUrl ?>/" data-bn="প্রচ্ছদ" data-en="Home">প্রচ্ছদ</a></li>
       <li><span class="sep">/</span></li>
-      <li class="active"><?= htmlspecialchars($currentCategory['name_bn']) ?></li>
+      <li class="active" data-bn="<?= htmlspecialchars($currentCategory['name_bn']) ?>" data-en="<?= htmlspecialchars($currentCategory['name_en'] ?? $currentCategory['name_bn']) ?>"><?= htmlspecialchars($currentCategory['name_bn']) ?></li>
     </ol>
   </nav>
 
@@ -16,7 +16,7 @@ $appUrl = rtrim($config['app']['url'] ?? '', '/');
   <header class="category-header-banner">
     <h1 class="cat-page-title">
       <span class="cat-accent-bar"></span>
-      <?= htmlspecialchars($currentCategory['name_bn']) ?>
+      <span class="cat-page-title-text" data-bn="<?= htmlspecialchars($currentCategory['name_bn']) ?>" data-en="<?= htmlspecialchars($currentCategory['name_en'] ?? $currentCategory['name_bn']) ?>"><?= htmlspecialchars($currentCategory['name_bn']) ?></span>
     </h1>
     <span class="cat-news-count" data-bn="মোট সংবাদ: <?= BanglaDate::bnNum(count($posts)) ?> টি" data-en="Total News: <?= count($posts) ?>">
       মোট সংবাদ: <?= BanglaDate::bnNum(count($posts)) ?> টি
@@ -87,9 +87,12 @@ $appUrl = rtrim($config['app']['url'] ?? '', '/');
       </div>
 
       <!-- Advertisement Slot -->
-      <div class="sidebar-widget ad-widget" aria-label="বিজ্ঞাপন">
-        <div class="ad-placeholder sidebar-ad">
-          <span class="ad-label" data-bn="বিজ্ঞাপন (৩০০ × ২৫০)" data-en="ADVERTISEMENT (300 × 250)">বিজ্ঞাপন (৩০০ × ২৫০)</span>
+      <div class="sidebar-widget sidebar-ad-widget" aria-label="বিজ্ঞাপন">
+        <div class="widget-header">
+          <h4 class="widget-title" data-bn="বিজ্ঞাপন" data-en="Advertisement">বিজ্ঞাপন</h4>
+        </div>
+        <div class="sidebar-ad-content">
+          <?= \App\Helpers\AdBanner::render('sidebar') ?>
         </div>
       </div>
     </aside>

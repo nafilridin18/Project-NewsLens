@@ -36,33 +36,245 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ================= 1.5 BILINGUAL SWITCHER (BANGLA / ENGLISH) =================
+  // ================= 1.5 COMPREHENSIVE BILINGUAL TRANSLATION ENGINE =================
   const btnPortalBn = document.getElementById('portal-lang-bn');
   const btnPortalEn = document.getElementById('portal-lang-en');
+
+  const bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+  const enDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+  const bnToEnNum = (str) => {
+    let s = String(str);
+    for (let i = 0; i < 10; i++) s = s.replaceAll(bnDigits[i], enDigits[i]);
+    return s;
+  };
+
+  const enToBnNum = (str) => {
+    let s = String(str);
+    for (let i = 0; i < 10; i++) s = s.replaceAll(enDigits[i], bnDigits[i]);
+    return s;
+  };
+
+  const categoryMap = {
+    'জাতীয়': 'National',
+    'রাজনীতি': 'Politics',
+    'সারাদেশ': 'Countrywide',
+    'অর্থনীতি': 'Economy',
+    'আন্তর্জাতিক': 'International',
+    'খেলা': 'Sports',
+    'বিনোদন': 'Entertainment',
+    'বিজ্ঞান ও প্রযুক্তি': 'Tech',
+    'শিক্ষা': 'Education',
+    'স্বাস্থ্য': 'Health',
+    'চাকরি': 'Jobs',
+    'মতামত': 'Opinion',
+    'লাইফস্টাইল': 'Lifestyle',
+    'প্রবাস': 'Probash'
+  };
+
+  const divisionMap = {
+    'ঢাকা': 'Dhaka',
+    'চট্টগ্রাম': 'Chattogram',
+    'রাজশাহী': 'Rajshahi',
+    'খুলনা': 'Khulna',
+    'বরিশাল': 'Barishal',
+    'সিলেট': 'Sylhet',
+    'রংপুর': 'Rangpur',
+    'ময়মনসিংহ': 'Mymensingh'
+  };
+
+  const districtMap = {
+    'গাজীপুর': 'Gazipur',
+    'নারায়ণগঞ্জ': 'Narayanganj',
+    'নরসিংদী': 'Narsingdi',
+    'মুন্সীগঞ্জ': 'Munshiganj',
+    'মানিকগঞ্জ': 'Manikganj',
+    'টাঙ্গাইল': 'Tangail',
+    'কিশোরগঞ্জ': 'Kishoreganj',
+    'ফরিদপুর': 'Faridpur',
+    'গোপালগঞ্জ': 'Gopalganj',
+    'মাদারীপুর': 'Madaripur',
+    'রাজবাড়ী': 'Rajbari',
+    'শরীয়তপুর': 'Shariatpur',
+    'কক্সবাজার': "Cox's Bazar",
+    'কুমিল্লা': 'Cumilla',
+    'ফেনী': 'Feni',
+    'ব্রাহ্মণবাড়িয়া': 'Brahmanbaria',
+    'নোয়াখালী': 'Noakhali',
+    'চাঁদপুর': 'Chandpur',
+    'লক্ষ্মীপুর': 'Lakshmipur',
+    'বগুড়া': 'Bogura',
+    'জয়পুরহাট': 'Joypurhat',
+    'পাবনা': 'Pabna',
+    'সিরাজগঞ্জ': 'Sirajganj',
+    'নওগাঁ': 'Naogaon',
+    'নাটোর': 'Natore',
+    'চাঁপাইনবাবগঞ্জ': 'Chapai Nawabganj',
+    'যশোর': 'Jashore',
+    'সাতক্ষীরা': 'Satkhira',
+    'মেহেরপুর': 'Meherpur',
+    'নড়াইল': 'Narail',
+    'চুয়াডাঙ্গা': 'Chuadanga',
+    'কুষ্টিয়া': 'Kushtia',
+    'মাগুরা': 'Magura',
+    'বাগেরহাট': 'Bagerhat',
+    'ঝিনাইদহ': 'Jhenaidah',
+    'ঝালকাঠি': 'Jhalokati',
+    'পটুয়াখালী': 'Patuakhali',
+    'পিরোজপুর': 'Pirojpur',
+    'বরগুনা': 'Barguna',
+    'ভোলা': 'Bhola',
+    'মৌলভীবাজার': 'Moulvibazar',
+    'হবিগঞ্জ': 'Habiganj',
+    'সুনামগঞ্জ': 'Sunamganj',
+    'পঞ্চগড়': 'Panchagarh',
+    'দিনাজপুর': 'Dinajpur',
+    'লালমনিরহাট': 'Lalmonirhat',
+    'নীলফামারী': 'Nilphamari',
+    'গাইবান্ধা': 'Gaibandha',
+    'ঠাকুরগাঁও': 'Thakurgaon',
+    'কুড়িগ্রাম': 'Kurigram',
+    'শেরপুর': 'Sherpur',
+    'জামালপুর': 'Jamalpur',
+    'নেত্রকোণা': 'Netrokona'
+  };
+
+  const translateTimeAgo = (text) => {
+    if (!text) return text;
+    let s = text.trim();
+    if (s.includes('এইমাত্র')) return '⏱️ Just now';
+    s = bnToEnNum(s);
+    s = s.replace(/বছর আগে/g, 'years ago')
+         .replace(/মাস আগে/g, 'months ago')
+         .replace(/সপ্তাহ আগে/g, 'weeks ago')
+         .replace(/দিন আগে/g, 'days ago')
+         .replace(/ঘণ্টা আগে/g, 'hrs ago')
+         .replace(/ঘন্টা আগে/g, 'hrs ago')
+         .replace(/মিনিট আগে/g, 'mins ago')
+         .replace(/সেকেন্ড আগে/g, 'secs ago');
+    return s;
+  };
+
+  const translateViews = (text) => {
+    if (!text) return text;
+    let s = bnToEnNum(text.trim());
+    return s.replace(/বার পঠিত/g, 'views');
+  };
 
   const applyPortalLanguage = (lang) => {
     htmlRoot.setAttribute('lang', lang);
     localStorage.setItem('newslens_lang', lang);
+    document.cookie = 'newslens_lang=' + lang + '; path=/; max-age=31536000; SameSite=Lax';
 
     btnPortalBn?.classList.toggle('active', lang === 'bn');
     btnPortalEn?.classList.toggle('active', lang === 'en');
 
-    // Update all elements with data-bn and data-en
+    // 1. Explicit data-bn and data-en elements
     document.querySelectorAll('[data-bn]').forEach(el => {
       const text = el.getAttribute('data-' + lang);
       if (text) el.innerHTML = text;
     });
 
-    // Update input placeholders
+    // 2. Input Placeholders
     document.querySelectorAll('[data-placeholder-bn]').forEach(el => {
       const ph = el.getAttribute('data-placeholder-' + lang);
       if (ph) el.placeholder = ph;
     });
 
+    // 3. Tooltips and titles
+    document.querySelectorAll('[data-title-bn]').forEach(el => {
+      const title = el.getAttribute('data-title-' + lang);
+      if (title) el.title = title;
+    });
+
+    // 4. Dynamic category badges
+    document.querySelectorAll('.category-badge, .category-badge-sm, .topic-pill').forEach(el => {
+      if (!el.hasAttribute('data-bn')) {
+        if (!el.dataset.origText) el.dataset.origText = el.textContent.trim();
+        if (lang === 'en') {
+          const raw = el.dataset.origText;
+          if (categoryMap[raw]) el.textContent = categoryMap[raw];
+        } else {
+          if (el.dataset.origText) el.textContent = el.dataset.origText;
+        }
+      }
+    });
+
+    // 5. Dynamic Relative Time Stamps (e.g., ⏱️ ৫ মিনিট আগে)
+    document.querySelectorAll('.meta-time, .meta-time-sm, .meta-time-tiny').forEach(el => {
+      if (!el.hasAttribute('data-bn')) {
+        if (!el.dataset.origText) el.dataset.origText = el.innerHTML.trim();
+        if (lang === 'en') {
+          el.innerHTML = translateTimeAgo(el.dataset.origText);
+        } else {
+          if (el.dataset.origText) el.innerHTML = el.dataset.origText;
+        }
+      }
+    });
+
+    // 6. Dynamic View Counters (e.g., 👁️ ১২ বার পঠিত)
+    document.querySelectorAll('.meta-views, .views-counter-badge').forEach(el => {
+      if (!el.hasAttribute('data-bn')) {
+        if (!el.dataset.origText) el.dataset.origText = el.innerHTML.trim();
+        if (lang === 'en') {
+          el.innerHTML = translateViews(el.dataset.origText);
+        } else {
+          if (el.dataset.origText) el.innerHTML = el.dataset.origText;
+        }
+      }
+    });
+
+    // 7. Dynamic District Badges & Locations (e.g., 📍 ঢাকা)
+    document.querySelectorAll('.meta-dist, .district-badge').forEach(el => {
+      if (!el.hasAttribute('data-bn')) {
+        if (!el.dataset.origText) el.dataset.origText = el.textContent.trim();
+        if (lang === 'en') {
+          let s = el.dataset.origText;
+          for (const [bnName, enName] of Object.entries(districtMap)) {
+            s = s.replace(bnName, enName);
+          }
+          for (const [bnName, enName] of Object.entries(divisionMap)) {
+            s = s.replace(bnName, enName);
+          }
+          s = s.replace('সারাদেশ', 'Countrywide');
+          el.textContent = s;
+        } else {
+          if (el.dataset.origText) el.textContent = el.dataset.origText;
+        }
+      }
+    });
+
+    // 8. Author tags
+    document.querySelectorAll('.meta-author, .author-name').forEach(el => {
+      if (!el.hasAttribute('data-bn')) {
+        if (!el.dataset.origText) el.dataset.origText = el.textContent.trim();
+        if (lang === 'en') {
+          el.textContent = el.dataset.origText.replace('স্টাফ রিপোর্টার', 'Staff Reporter');
+        } else {
+          if (el.dataset.origText) el.textContent = el.dataset.origText;
+        }
+      }
+    });
+
+    // 9. Numeric Counters (e.g., 1, 2, 3 in tab list)
+    document.querySelectorAll('.num-counter').forEach(el => {
+      if (!el.dataset.origText) el.dataset.origText = el.textContent.trim();
+      el.textContent = (lang === 'en') ? bnToEnNum(el.dataset.origText) : el.dataset.origText;
+    });
+
+    // 10. Font Resizer button glyphs
+    const btnDecEl = document.getElementById('font-decrease');
+    const btnResetEl = document.getElementById('font-reset');
+    const btnIncEl = document.getElementById('font-increase');
+    if (btnDecEl) btnDecEl.textContent = (lang === 'en') ? 'A-' : 'অ-';
+    if (btnResetEl) btnResetEl.textContent = (lang === 'en') ? 'A' : 'অ';
+    if (btnIncEl) btnIncEl.textContent = (lang === 'en') ? 'A+' : 'অ+';
+
     updateThemeText();
   };
 
-  const savedLang = localStorage.getItem('newslens_lang') || 'bn';
+  const savedLang = localStorage.getItem('newslens_lang') || 
+                    (document.cookie.match(/newslens_lang=([^;]+)/)?.[1]) || 'bn';
   applyPortalLanguage(savedLang);
 
   btnPortalBn?.addEventListener('click', () => applyPortalLanguage('bn'));

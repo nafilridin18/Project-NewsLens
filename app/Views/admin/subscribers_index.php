@@ -30,18 +30,18 @@ require __DIR__ . '/partials/header.php';
 <main class="admin-container">
   <?php if (isset($_GET['msg']) && $_GET['msg'] === 'deleted'): ?>
     <div class="alert-banner">
-      ✅ গ্রাহকের ইমেইল সফলভাবে তালিকা থেকে মুছে ফেলা হয়েছে!
+      <span data-bn="✅ গ্রাহকের ইমেইল সফলভাবে তালিকা থেকে মুছে ফেলা হয়েছে!" data-en="✅ Subscriber email successfully deleted from list!">✅ গ্রাহকের ইমেইল সফলভাবে তালিকা থেকে মুছে ফেলা হয়েছে!</span>
     </div>
   <?php endif; ?>
 
   <div class="page-title-row">
     <div>
-      <h2>✉️ নিউজলেটার গ্রাহক তালিকা</h2>
-      <p style="color:var(--adm-text-muted);font-size:0.9rem;">ওয়েবসাইট থেকে পাঠকদের সাবস্ক্রিপশন তালিকা</p>
+      <h2 data-bn="✉️ নিউজলেটার গ্রাহক তালিকা" data-en="✉️ Newsletter Subscribers List">✉️ নিউজলেটার গ্রাহক তালিকা</h2>
+      <p style="color:var(--adm-text-muted);font-size:0.9rem;" data-bn="ওয়েবসাইট থেকে পাঠকদের সাবস্ক্রিপশন তালিকা" data-en="List of reader subscriptions from website">ওয়েবসাইট থেকে পাঠকদের সাবস্ক্রিপশন তালিকা</p>
     </div>
     <div>
       <span style="background:var(--adm-nav-bg);padding:6px 14px;border-radius:20px;border:1px solid var(--adm-border);font-weight:700;color:var(--adm-accent);">
-        মোট সাবস্ক্রাইবার: <?= count($subscribers) ?> জন
+        <span data-bn="মোট সাবস্ক্রাইবার:" data-en="Total Subscribers:">মোট সাবস্ক্রাইবার:</span> <?= count($subscribers) ?> <span data-bn="জন" data-en="Subscribers">জন</span>
       </span>
     </div>
   </div>
@@ -51,11 +51,11 @@ require __DIR__ . '/partials/header.php';
       <table>
         <thead>
           <tr>
-            <th>#ID</th>
-            <th>ইমেইল ঠিকানা</th>
-            <th>যুক্ত হওয়ার সময়</th>
-            <th>স্ট্যাটাস</th>
-            <th>অ্যাকশন</th>
+            <th data-bn="#ID" data-en="#ID">#ID</th>
+            <th data-bn="ইমেইল ঠিকানা" data-en="Email Address">ইমেইল ঠিকানা</th>
+            <th data-bn="যুক্ত হওয়ার সময়" data-en="Subscribed At">যুক্ত হওয়ার সময়</th>
+            <th data-bn="স্ট্যাটাস" data-en="Status">স্ট্যাটাস</th>
+            <th data-bn="অ্যাকশন" data-en="Action">অ্যাকশন</th>
           </tr>
         </thead>
         <tbody>
@@ -64,12 +64,12 @@ require __DIR__ . '/partials/header.php';
               <td><?= $sub['id'] ?></td>
               <td><strong><?= htmlspecialchars($sub['email']) ?></strong></td>
               <td><?= htmlspecialchars($sub['created_at']) ?></td>
-              <td><span style="color:#22c55e;font-weight:600;">সক্রিয় (Subscribed)</span></td>
+              <td><span style="color:#22c55e;font-weight:600;" data-bn="সক্রিয় (Subscribed)" data-en="Active (Subscribed)">সক্রিয় (Subscribed)</span></td>
               <td>
                 <form action="<?= $appUrl ?>/<?= $adminPath ?>/subscribers/delete" method="POST" onsubmit="return confirm('আপনি কি নিশ্চিত যে এই গ্রাহকটি মুছে ফেলতে চান?');" style="display:inline;">
                   <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
                   <input type="hidden" name="id" value="<?= $sub['id'] ?>">
-                  <button type="submit" class="btn-del">🗑️ মুছুন</button>
+                  <button type="submit" class="btn-del" title="মুছুন" data-title-bn="মুছুন" data-title-en="Delete" data-bn="🗑️ মুছুন" data-en="🗑️ Delete">🗑️ মুছুন</button>
                 </form>
               </td>
             </tr>
@@ -77,10 +77,10 @@ require __DIR__ . '/partials/header.php';
         </tbody>
       </table>
     <?php else: ?>
-      <p style="text-align:center;padding:30px;color:var(--adm-text-muted);">এখনও কোনো পাঠক নিউজলেটার সাবস্ক্রাইব করেননি।</p>
+      <p style="text-align:center;padding:30px;color:var(--adm-text-muted);" data-bn="এখনও কোনো পাঠক নিউজলেটার সাবস্ক্রাইব করেননি।" data-en="No readers have subscribed to the newsletter yet.">এখনও কোনো পাঠক নিউজলেটার সাবস্ক্রাইব করেননি।</p>
     <?php endif; ?>
   </div>
 </main>
-
+<?php require __DIR__ . '/partials/footer.php'; ?>
 </body>
 </html>

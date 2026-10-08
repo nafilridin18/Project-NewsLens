@@ -1,7 +1,9 @@
 <?php
 use App\Helpers\BanglaDate;
-$appUrl = rtrim($config['app']['url'] ?? '', '/');
-$currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$reqUri = $_SERVER['REQUEST_URI'] ?? '';
+$scheme = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https' : 'http';
+$currentUrl = "{$scheme}://{$host}{$reqUri}";
 ?>
 <div class="single-article-container container">
   <!-- Breadcrumb -->
@@ -9,7 +11,7 @@ $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" 
     <ol class="breadcrumb-list">
       <li><a href="<?= $appUrl ?>/" data-bn="প্রচ্ছদ" data-en="Home">প্রচ্ছদ</a></li>
       <li><span class="sep">/</span></li>
-      <li><a href="<?= $appUrl ?>/category/<?= htmlspecialchars($post['category_slug']) ?>"><?= htmlspecialchars($post['category_name']) ?></a></li>
+      <li><a href="<?= $appUrl ?>/category/<?= htmlspecialchars($post['category_slug']) ?>" data-category-slug="<?= htmlspecialchars($post['category_slug']) ?>" data-bn="<?= htmlspecialchars($post['category_name']) ?>" data-en="<?= htmlspecialchars($post['category_name_en'] ?? $post['category_name']) ?>"><?= htmlspecialchars($post['category_name']) ?></a></li>
       <?php if (!empty($post['district_name'])): ?>
         <li><span class="sep">/</span></li>
         <li><a href="<?= $appUrl ?>/saradesh?district=<?= $post['district_id'] ?>"><?= htmlspecialchars($post['district_name']) ?></a></li>
@@ -24,7 +26,7 @@ $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" 
         <!-- Header -->
         <header class="article-header">
           <div class="article-category-badge-wrap">
-            <span class="category-badge"><?= htmlspecialchars($post['category_name']) ?></span>
+            <span class="category-badge" data-category-slug="<?= htmlspecialchars($post['category_slug']) ?>" data-bn="<?= htmlspecialchars($post['category_name']) ?>" data-en="<?= htmlspecialchars($post['category_name_en'] ?? $post['category_name']) ?>"><?= htmlspecialchars($post['category_name']) ?></span>
             <?php if (!empty($post['is_breaking'])): ?>
               <span class="breaking-badge-pill" data-bn="● ব্রেকিং" data-en="● BREAKING">● ব্রেকিং</span>
             <?php endif; ?>
@@ -41,16 +43,26 @@ $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" 
             <div class="author-meta-box">
               <span class="author-avatar">✍️</span>
               <div class="author-text">
-                <span class="author-name"><?= htmlspecialchars($post['author_name'] ?? 'স্টাফ রিপোর্টার') ?></span>
+                <?php 
+                  $authorName = $post['author_name'] ?? 'স্টাফ রিপোর্টার';
+                  $authorNameEn = ($authorName === 'বেনামী') ? 'Anonymous' : ($post['author_name_en'] ?? $authorName);
+                  if ($authorName === 'স্টাফ রিপোর্টার') $authorNameEn = 'Staff Reporter';
+                ?>
+                <span class="author-name" data-bn="<?= htmlspecialchars($authorName) ?>" data-en="<?= htmlspecialchars($authorNameEn) ?>"><?= htmlspecialchars($authorName) ?></span>
                 <?php if (!empty($post['district_name'])): ?>
                   <span class="author-loc">| <?= htmlspecialchars($post['district_name']) ?></span>
                 <?php endif; ?>
               </div>
             </div>
 
+            <?php 
+              $pubDt = $post['published_at'] ?? $post['created_at'];
+              $pubBn = BanglaDate::formatBnDate($pubDt);
+              $pubEn = date('l, d F Y, h:i A', strtotime($pubDt));
+            ?>
             <div class="time-meta-box">
-              <span class="publish-time">⏱️ <?= BanglaDate::formatBnDate($post['published_at'] ?? $post['created_at']) ?></span>
-              <span class="views-counter-badge">👁️ <?= BanglaDate::bnNum($post['views'] ?? 1) ?> বার পঠিত</span>
+              <span class="publish-time" data-bn="⏱️ <?= $pubBn ?>" data-en="⏱️ <?= $pubEn ?>">⏱️ <?= $pubBn ?></span>
+              <span class="views-counter-badge" data-views="<?= (int)($post['views'] ?? 1) ?>" data-bn="👁️ <?= BanglaDate::bnNum($post['views'] ?? 1) ?> বার পঠিত" data-en="👁️ <?= (int)($post['views'] ?? 1) ?> views">👁️ <?= BanglaDate::bnNum($post['views'] ?? 1) ?> বার পঠিত</span>
             </div>
           </div>
 
@@ -114,6 +126,11 @@ $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" 
           <?= $post['body'] ?>
         </div>
 
+        <!-- In-Article Advertisement Slot -->
+        <div class="in-article-ad-box">
+          <?= \App\Helpers\AdBanner::render('in_article') ?>
+        </div>
+
         <!-- Article Bottom Share & Tags -->
         <footer class="article-footer-meta">
           <div class="tag-pills-list">
@@ -172,9 +189,12 @@ $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" 
       </div>
 
       <!-- Advertisement Slot -->
-      <div class="sidebar-widget ad-widget" aria-label="বিজ্ঞাপন">
-        <div class="ad-placeholder sidebar-ad">
-          <span class="ad-label" data-bn="বিজ্ঞাপন (৩০০ × ২৫০)" data-en="ADVERTISEMENT (300 × 250)">বিজ্ঞাপন (৩০০ × ২৫০)</span>
+      <div class="sidebar-widget sidebar-ad-widget" aria-label="বিজ্ঞাপন">
+        <div class="widget-header">
+          <h4 class="widget-title" data-bn="বিজ্ঞাপন" data-en="Advertisement">বিজ্ঞাপন</h4>
+        </div>
+        <div class="sidebar-ad-content">
+          <?= \App\Helpers\AdBanner::render('sidebar') ?>
         </div>
       </div>
     </aside>

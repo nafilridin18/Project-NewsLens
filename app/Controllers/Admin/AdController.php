@@ -29,11 +29,13 @@ class AdController {
     public function index(): void {
         $user = Auth::user();
         $ads = Ad::getAll();
+        $stats = Ad::getStats();
 
         View::render('admin.ads_index', [
             'pageTitle' => 'বিজ্ঞাপন ব্যবস্থাপনা (Advertisements) | Admin',
             'user'      => $user,
             'ads'       => $ads,
+            'stats'     => $stats,
             'adminPath' => $this->adminPath,
             'appUrl'    => $this->appUrl,
             'csrfToken' => Auth::generateCsrf()
@@ -56,12 +58,13 @@ class AdController {
         $link = trim($_POST['link'] ?? '');
         $videoUrl = trim($_POST['video_url'] ?? '');
         $imageUrl = trim($_POST['image_url'] ?? '');
+        $code = trim($_POST['code'] ?? '');
 
         // Handle Image File Upload if provided
         if (!empty($_FILES['image_file']) && $_FILES['image_file']['error'] === UPLOAD_ERR_OK) {
             $file = $_FILES['image_file'];
             $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-            if (in_array($ext, ['png', 'jpg', 'jpeg', 'webp', 'gif'])) {
+            if (in_array($ext, ['png', 'jpg', 'jpeg', 'webp', 'gif', 'svg'])) {
                 $uploadDir = dirname(CONFIG_PATH) . '/public/uploads/ads/';
                 if (!is_dir($uploadDir)) {
                     @mkdir($uploadDir, 0777, true);
@@ -82,11 +85,71 @@ class AdController {
                 'image'     => $imageUrl,
                 'video_url' => $videoUrl,
                 'link'      => $link,
+                'code'      => $code,
                 'is_active' => !empty($_POST['is_active']) ? 1 : 0
             ]);
         }
 
         header("Location: {$this->appUrl}/{$this->adminPath}/ads?msg=created");
+        exit;
+    }
+
+    public function update(): void {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: {$this->appUrl}/{$this->adminPath}/ads");
+            exit;
+        }
+
+        if (!Auth::verifyCsrf($_POST['csrf_token'] ?? '')) {
+            die('CSRF validation failed');
+        }
+
+        $id = (int) ($_POST['id'] ?? 0);
+        $ad = Ad::find($id);
+        if (!$ad) {
+            header("Location: {$this->appUrl}/{$this->adminPath}/ads");
+            exit;
+        }
+
+        $title = trim($_POST['title'] ?? '');
+        $position = $_POST['position'] ?? $ad['position'];
+        $type = $_POST['type'] ?? $ad['type'];
+        $link = trim($_POST['link'] ?? '');
+        $videoUrl = trim($_POST['video_url'] ?? '');
+        $imageUrl = trim($_POST['image_url'] ?? $ad['image']);
+        $code = trim($_POST['code'] ?? '');
+
+        // Handle Image File Upload if provided
+        if (!empty($_FILES['image_file']) && $_FILES['image_file']['error'] === UPLOAD_ERR_OK) {
+            $file = $_FILES['image_file'];
+            $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            if (in_array($ext, ['png', 'jpg', 'jpeg', 'webp', 'gif', 'svg'])) {
+                $uploadDir = dirname(CONFIG_PATH) . '/public/uploads/ads/';
+                if (!is_dir($uploadDir)) {
+                    @mkdir($uploadDir, 0777, true);
+                }
+                $filename = 'ad_' . time() . '_' . rand(100, 999) . '.' . $ext;
+                $dest = $uploadDir . $filename;
+                if (move_uploaded_file($file['tmp_name'], $dest)) {
+                    $imageUrl = 'uploads/ads/' . $filename;
+                }
+            }
+        }
+
+        if (!empty($title)) {
+            Ad::update($id, [
+                'title'     => $title,
+                'position'  => $position,
+                'type'      => $type,
+                'image'     => $imageUrl,
+                'video_url' => $videoUrl,
+                'link'      => $link,
+                'code'      => $code,
+                'is_active' => !empty($_POST['is_active']) ? 1 : 0
+            ]);
+        }
+
+        header("Location: {$this->appUrl}/{$this->adminPath}/ads?msg=updated");
         exit;
     }
 

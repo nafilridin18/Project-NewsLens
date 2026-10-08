@@ -62,13 +62,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update all text elements with data-bn and data-en
     document.querySelectorAll('[data-bn]').forEach(el => {
       const text = el.getAttribute('data-' + lang);
-      if (text) el.innerHTML = text;
+      if (text !== null && text !== undefined) {
+        if (el.tagName === 'INPUT' && (el.type === 'submit' || el.type === 'button' || el.type === 'reset')) {
+          el.value = text;
+        } else if (el.tagName === 'OPTION') {
+          el.textContent = text;
+        } else {
+          el.innerHTML = text;
+        }
+      }
     });
 
     // Update placeholders
     document.querySelectorAll('[data-placeholder-bn]').forEach(el => {
       const ph = el.getAttribute('data-placeholder-' + lang);
-      if (ph) el.placeholder = ph;
+      if (ph !== null && ph !== undefined) el.placeholder = ph;
+    });
+
+    // Update titles
+    document.querySelectorAll('[data-title-bn]').forEach(el => {
+      const t = el.getAttribute('data-title-' + lang);
+      if (t !== null && t !== undefined) el.title = t;
     });
 
     updateThemeLabel();

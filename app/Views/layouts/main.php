@@ -1,9 +1,10 @@
 <?php
 $appUrl = rtrim($config['app']['url'] ?? '', '/');
 $pageTitle = $pageTitle ?? 'Newslensbd | সাধারণের বাইরে, সত্যের খোঁজে';
+$initialLang = (isset($_COOKIE['newslens_lang']) && $_COOKIE['newslens_lang'] === 'en') ? 'en' : 'bn';
 ?>
 <!DOCTYPE html>
-<html lang="bn" data-theme="light">
+<html lang="<?= $initialLang ?>" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">

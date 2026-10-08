@@ -140,12 +140,20 @@ $currentUrl = htmlspecialchars($_SERVER['REQUEST_URI'] ?? ($appUrl . '/' . $admi
     letter-spacing: 0.5px;
   }
 
+  /* Admin Left Group: Hamburger + Logo + Dashboard Button Locked Together */
+  .admin-left-group {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+
   /* Admin Nav Items (Desktop) */
   .admin-nav-bar {
     display: flex;
     align-items: center;
     gap: 6px;
-    flex-shrink: 1;
+    flex-shrink: 0;
   }
 
   .admin-nav-item {
@@ -268,20 +276,21 @@ $currentUrl = htmlspecialchars($_SERVER['REQUEST_URI'] ?? ($appUrl . '/' . $admi
     background: rgba(248, 113, 113, 0.15);
   }
 
-  /* 3-Line Hamburger Button */
+  /* 3-Line Hamburger Button (Always visible) */
   .admin-hamburger-btn {
-    display: none;
+    display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 38px;
-    height: 36px;
+    width: 36px;
+    height: 34px;
     background: var(--adm-pill-bg);
     border: 1px solid var(--adm-border);
     border-radius: 6px;
-    padding: 8px 7px;
+    padding: 7px 6px;
     cursor: pointer;
     transition: all 0.2s ease;
     box-sizing: border-box;
+    flex-shrink: 0;
   }
   .admin-hamburger-btn:hover {
     border-color: var(--adm-accent);
@@ -595,85 +604,66 @@ $currentUrl = htmlspecialchars($_SERVER['REQUEST_URI'] ?? ($appUrl . '/' . $admi
     to { transform: translateY(0); opacity: 1; }
   }
 
-  /* Responsive Rules: On compact screen, hide horizontal nav & show 3-line hamburger */
-  @media (max-width: 1024px) {
-    .admin-nav-bar {
-      display: none !important;
+  /* Responsive Rules: Keep essential controls clean and compact */
+  @media (max-width: 900px) {
+    .btn-portal-link .tool-text,
+    .btn-logout-link .tool-text,
+    .tool-btn .tool-text {
+      display: none;
     }
-    .admin-right-tools .admin-user-pill,
-    .admin-right-tools .btn-portal-link,
-    .admin-right-tools .btn-logout-link,
-    .admin-right-tools #admLangBtn {
-      display: none !important;
-    }
-    .admin-hamburger-btn {
-      display: flex !important;
+    .admin-user-pill .admin-role-tag {
+      display: none;
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 680px) {
     header.admin-top {
       padding: 8px 12px;
+      gap: 8px;
     }
     .admin-brand-logo-img {
-      height: 28px;
-      max-width: 110px;
+      height: 26px;
+      max-width: 100px;
     }
-    .admin-brand-badge {
-      font-size: 0.65rem;
-      padding: 1px 5px;
-    }
-    .tool-btn {
-      padding: 5px 8px;
-      font-size: 0.8rem;
-    }
-    .tool-btn .tool-text {
+    .admin-user-pill .user-label {
       display: none;
+    }
+    .admin-nav-bar {
+      display: none !important;
     }
   }
 </style>
 
 <!-- Top Sticky Header -->
 <header class="admin-top">
-  <!-- Dynamic Logo Brand with crisp white background badge -->
-  <div class="admin-brand-area">
-    <a href="<?= $appUrl ?>/<?= $adminPath ?>" class="admin-brand-link" title="Newslens CMS Dashboard">
-      <div class="admin-logo-badge">
-        <img src="<?= $siteLogo ?>" alt="Newslensbd" class="admin-brand-logo-img">
-      </div>
-      <span class="admin-brand-badge">CMS</span>
-    </a>
+  <!-- Left Group: Brand Logo & Dashboard Button Always Locked Beside Each Other on the Left -->
+  <div class="admin-left-group">
+    <!-- Brand Area: 3-line hamburger menu + Dynamic Logo (CMS badge removed per user request) -->
+    <div class="admin-brand-area">
+      <!-- 3-Line Hamburger Button that opens the slide-in sidebar -->
+      <button type="button" class="admin-hamburger-btn" id="adminDrawerOpenBtn" aria-label="মেনু খুলুন" title="মেনু বার (সকল ফিচার)">
+        <span class="ham-line"></span>
+        <span class="ham-line"></span>
+        <span class="ham-line"></span>
+      </button>
+
+      <a href="<?= $appUrl ?>/<?= $adminPath ?>" class="admin-brand-link" title="Newslensbd অ্যাডমিন প্যানেল">
+        <div class="admin-logo-badge">
+          <img src="<?= $siteLogo ?>" alt="Newslensbd" class="admin-brand-logo-img">
+        </div>
+      </a>
+    </div>
+
+    <!-- Navigation Bar: ONLY Dashboard as requested (Always strictly adjacent to Logo on widescreen/landscape) -->
+    <nav class="admin-nav-bar" aria-label="Admin Navigation">
+      <a href="<?= $appUrl ?>/<?= $adminPath ?>" class="admin-nav-item <?= $activeTab === 'dashboard' ? 'active' : '' ?>" title="ড্যাশবোর্ড / Dashboard">
+        <span class="nav-icon">📊</span>
+        <span class="nav-text" data-bn="ড্যাশবোর্ড" data-en="Dashboard">ড্যাশবোর্ড</span>
+      </a>
+    </nav>
   </div>
 
-  <!-- Navigation Bar (Desktop View) -->
-  <nav class="admin-nav-bar" aria-label="Admin Navigation">
-    <a href="<?= $appUrl ?>/<?= $adminPath ?>" class="admin-nav-item <?= $activeTab === 'dashboard' ? 'active' : '' ?>" title="ড্যাশবোর্ড / Dashboard">
-      <span class="nav-icon">📊</span>
-      <span class="nav-text" data-bn="ড্যাশবোর্ড" data-en="Dashboard">ড্যাশবোর্ড</span>
-    </a>
-    <a href="<?= $appUrl ?>/<?= $adminPath ?>/posts" class="admin-nav-item <?= $activeTab === 'posts' ? 'active' : '' ?>" title="সংবাদ তালিকা / News List">
-      <span class="nav-icon">📝</span>
-      <span class="nav-text" data-bn="সংবাদ তালিকা" data-en="News List">সংবাদ তালিকা</span>
-    </a>
-    <a href="<?= $appUrl ?>/<?= $adminPath ?>/ads" class="admin-nav-item <?= $activeTab === 'ads' ? 'active' : '' ?>" title="বিজ্ঞাপন / Ads">
-      <span class="nav-icon">📢</span>
-      <span class="nav-text" data-bn="বিজ্ঞাপন" data-en="Ads">বিজ্ঞাপন</span>
-    </a>
-    <a href="<?= $appUrl ?>/<?= $adminPath ?>/polls" class="admin-nav-item <?= $activeTab === 'polls' ? 'active' : '' ?>" title="অনলাইন জরিপ / Polls">
-      <span class="nav-icon">📈</span>
-      <span class="nav-text" data-bn="অনলাইন জরিপ" data-en="Polls">অনলাইন জরিপ</span>
-    </a>
-    <a href="<?= $appUrl ?>/<?= $adminPath ?>/subscribers" class="admin-nav-item <?= $activeTab === 'subscribers' ? 'active' : '' ?>" title="নিউজলেটার / Newsletter">
-      <span class="nav-icon">✉️</span>
-      <span class="nav-text" data-bn="নিউজলেটার" data-en="Newsletter">নিউজলেটার</span>
-    </a>
-    <a href="<?= $appUrl ?>/<?= $adminPath ?>/settings" class="admin-nav-item <?= $activeTab === 'settings' ? 'active' : '' ?>" title="সাইট ও লোগো / Settings">
-      <span class="nav-icon">⚙️</span>
-      <span class="nav-text" data-bn="সাইট ও লোগো" data-en="Settings">সাইট ও লোগো</span>
-    </a>
-  </nav>
-
-  <!-- Right Tools & User Profile -->
+  <!-- Right Tools: Theme (Light/Dark), Lang (BN/EN), Admin Name, Live Visit, Logout -->
   <div class="admin-right-tools">
     <!-- Dark / Light Mode Switcher -->
     <button type="button" class="tool-btn" id="admThemeBtn" title="Toggle Light / Navy Dark Theme">
@@ -697,7 +687,7 @@ $currentUrl = htmlspecialchars($_SERVER['REQUEST_URI'] ?? ($appUrl . '/' . $admi
     <!-- Live Site Link -->
     <a href="<?= $appUrl ?>/" target="_blank" class="btn-portal-link" title="লাইভ সাইট দেখুন">
       <span>🌐</span>
-      <span class="tool-text" data-bn="লাইভ সাইট" data-en="Live Site">লাইভ সাইট</span>
+      <span class="tool-text" data-bn="লাইভ সাইট" data-en="Live Site">লাইভ সাইট ↗</span>
     </a>
 
     <!-- Logout -->
@@ -705,13 +695,6 @@ $currentUrl = htmlspecialchars($_SERVER['REQUEST_URI'] ?? ($appUrl . '/' . $admi
       <span>🚪</span>
       <span class="tool-text" data-bn="লগআউট" data-en="Logout">লগআউট</span>
     </a>
-
-    <!-- 3-Line Hamburger Button for Small Screens / Tabs -->
-    <button type="button" class="admin-hamburger-btn" id="adminDrawerOpenBtn" aria-label="মেনু খুলুন" title="মেনু বার">
-      <span class="ham-line"></span>
-      <span class="ham-line"></span>
-      <span class="ham-line"></span>
-    </button>
   </div>
 </header>
 
@@ -855,6 +838,10 @@ $currentUrl = htmlspecialchars($_SERVER['REQUEST_URI'] ?? ($appUrl . '/' . $admi
 
 <script>
   (function() {
+    // 0. Initial State (Read from localStorage first)
+    let currentLang = localStorage.getItem('nl_admin_lang') || 'bn';
+    const savedTheme = localStorage.getItem('nl_admin_theme') || 'dark';
+
     // 1. Theme Management (Navy Dark default vs Light Mode)
     const themeBtn = document.getElementById('admThemeBtn');
     const themeIcon = document.getElementById('admThemeIcon');
@@ -862,21 +849,21 @@ $currentUrl = htmlspecialchars($_SERVER['REQUEST_URI'] ?? ($appUrl . '/' . $admi
     const drawerThemeBtn = document.getElementById('drawerThemeBtn');
     const drawerThemeIcon = document.getElementById('drawerThemeIcon');
     const drawerThemeText = document.getElementById('drawerThemeText');
-    const savedTheme = localStorage.getItem('nl_admin_theme') || 'dark';
 
     function applyTheme(theme) {
+      const isEn = (currentLang === 'en');
       if (theme === 'light') {
         document.body.classList.add('admin-light');
         if (themeIcon) themeIcon.textContent = '☀️';
-        if (themeText) themeText.textContent = 'লাইট';
+        if (themeText) themeText.textContent = isEn ? 'Light' : 'লাইট';
         if (drawerThemeIcon) drawerThemeIcon.textContent = '☀️';
-        if (drawerThemeText) drawerThemeText.textContent = 'লাইট মোড';
+        if (drawerThemeText) drawerThemeText.textContent = isEn ? 'Light Mode' : 'লাইট মোড';
       } else {
         document.body.classList.remove('admin-light');
         if (themeIcon) themeIcon.textContent = '🌙';
-        if (themeText) themeText.textContent = 'ডার্ক';
+        if (themeText) themeText.textContent = isEn ? 'Dark' : 'ডার্ক';
         if (drawerThemeIcon) drawerThemeIcon.textContent = '🌙';
-        if (drawerThemeText) drawerThemeText.textContent = 'ডার্ক মোড';
+        if (drawerThemeText) drawerThemeText.textContent = isEn ? 'Dark Mode' : 'ডার্ক মোড';
       }
       localStorage.setItem('nl_admin_theme', theme);
     }
@@ -896,23 +883,54 @@ $currentUrl = htmlspecialchars($_SERVER['REQUEST_URI'] ?? ($appUrl . '/' . $admi
     const langText = document.getElementById('admLangText');
     const drawerLangBtn = document.getElementById('drawerLangBtn');
     const drawerLangText = document.getElementById('drawerLangText');
-    let currentLang = localStorage.getItem('nl_admin_lang') || 'bn';
 
     function applyLanguage(lang) {
       currentLang = lang;
       localStorage.setItem('nl_admin_lang', lang);
+      document.cookie = "admin_lang=" + lang + ";path=/;max-age=31536000";
+      document.documentElement.lang = lang;
+
       if (langText) langText.textContent = lang === 'bn' ? 'EN' : 'বাং';
       if (drawerLangText) drawerLangText.textContent = lang === 'bn' ? 'English' : 'বাংলা';
 
-      document.querySelectorAll('[data-bn][data-en]').forEach(el => {
+      // Update theme texts according to language
+      const isLight = document.body.classList.contains('admin-light');
+      if (themeText) themeText.textContent = lang === 'en' ? (isLight ? 'Light' : 'Dark') : (isLight ? 'লাইট' : 'ডার্ক');
+      if (drawerThemeText) drawerThemeText.textContent = lang === 'en' ? (isLight ? 'Light Mode' : 'Dark Mode') : (isLight ? 'লাইট মোড' : 'ডার্ক মোড');
+
+      // Update all elements with data-bn and data-en
+      document.querySelectorAll('[data-bn]').forEach(el => {
         const text = el.getAttribute('data-' + lang);
-        if (text) {
-          el.textContent = text;
+        if (text !== null && text !== undefined) {
+          if (el.tagName === 'INPUT' && (el.type === 'submit' || el.type === 'button' || el.type === 'reset')) {
+            el.value = text;
+          } else if (el.tagName === 'OPTION') {
+            el.textContent = text;
+          } else {
+            el.innerHTML = text;
+          }
         }
+      });
+
+      // Update placeholder attributes
+      document.querySelectorAll('[data-placeholder-bn]').forEach(el => {
+        const ph = el.getAttribute('data-placeholder-' + lang);
+        if (ph !== null && ph !== undefined) el.placeholder = ph;
+      });
+
+      // Update title attributes
+      document.querySelectorAll('[data-title-bn]').forEach(el => {
+        const t = el.getAttribute('data-title-' + lang);
+        if (t !== null && t !== undefined) el.title = t;
       });
     }
 
+    // Apply language immediately for header elements and after DOM loads
     applyLanguage(currentLang);
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => applyLanguage(currentLang));
+    }
+    window.addEventListener('load', () => applyLanguage(currentLang));
 
     function toggleLanguage() {
       applyLanguage(currentLang === 'bn' ? 'en' : 'bn');

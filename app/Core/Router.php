@@ -48,11 +48,7 @@ class Router {
 
         // 404 Not Found
         http_response_code(404);
-        if (file_exists(APP_PATH . '/Views/errors/404.php')) {
-            require APP_PATH . '/Views/errors/404.php';
-        } else {
-            echo '<h1>৪০৪ - পেজটি পাওয়া যায়নি</h1><p>দুঃখিত, আপনি যে পাতাটি খুঁজছেন তা সরানো হয়েছে বা মুছে ফেলা হয়েছে।</p>';
-        }
+        View::render('errors.404', ['pageTitle' => '৪০৪ - পাতাটি পাওয়া যায়নি | Newslensbd']);
     }
 
     private function invokeHandler($handler, array $params = []): void {

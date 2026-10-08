@@ -51,7 +51,7 @@ $appUrl = rtrim($config['app']['url'] ?? '', '/');
     <span class="pills-label" data-bn="দ্রুত দেখুন:" data-en="Quick View:">দ্রুত দেখুন:</span>
     <a href="<?= $appUrl ?>/saradesh" class="div-pill <?= empty($selectedDiv) ? 'active' : '' ?>" data-bn="সব" data-en="All">সব</a>
     <?php foreach ($divisions as $div): ?>
-      <a href="<?= $appUrl ?>/saradesh?division=<?= $div['id'] ?>" class="div-pill <?= ($selectedDiv == $div['id']) ? 'active' : '' ?>">
+      <a href="<?= $appUrl ?>/saradesh?division=<?= $div['id'] ?>" class="div-pill <?= ($selectedDiv == $div['id']) ? 'active' : '' ?>" data-bn="<?= htmlspecialchars($div['name_bn']) ?>" data-en="<?= htmlspecialchars($div['name_en'] ?? $div['name_bn']) ?>">
         <?= htmlspecialchars($div['name_bn']) ?>
       </a>
     <?php endforeach; ?>
@@ -61,7 +61,7 @@ $appUrl = rtrim($config['app']['url'] ?? '', '/');
   <section class="district-news-section" aria-label="সংবাদ তালিকা">
     <?php if (empty($newsList)): ?>
       <div class="no-news-box">
-        <p>দুঃখিত, এই জেলায় এই মুহূর্তে কোনো সংবাদ পাওয়া যায়নি। অন্য বিভাগ বা জেলা নির্বাচন করুন।</p>
+        <p data-bn="দুঃখিত, এই জেলায় এই মুহূর্তে কোনো সংবাদ পাওয়া যায়নি। অন্য বিভাগ বা জেলা নির্বাচন করুন।" data-en="Sorry, no news found in this district at this moment. Please select another division or district.">দুঃখিত, এই জেলায় এই মুহূর্তে কোনো সংবাদ পাওয়া যায়নি। অন্য বিভাগ বা জেলা নির্বাচন করুন।</p>
       </div>
     <?php else: ?>
       <div class="district-news-grid">
@@ -104,8 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const distSelect = document.getElementById('district-select');
 
   divSelect?.addEventListener('change', async () => {
-    const divId = divSelect.value;
-    distSelect.innerHTML = '<option value="">-- সব জেলা --</option>';
+    const isEn = document.documentElement.getAttribute('lang') === 'en';
+    distSelect.innerHTML = `<option value="" data-bn="-- সব জেলা --" data-en="-- All Districts --">${isEn ? '-- All Districts --' : '-- সব জেলা --'}</option>`;
 
     if (!divId) return;
 
@@ -116,7 +116,9 @@ document.addEventListener('DOMContentLoaded', () => {
         districts.forEach(d => {
           const opt = document.createElement('option');
           opt.value = d.id;
-          opt.textContent = d.name_bn;
+          opt.textContent = isEn ? (d.name_en || d.name_bn) : d.name_bn;
+          opt.setAttribute('data-bn', d.name_bn);
+          opt.setAttribute('data-en', d.name_en || d.name_bn);
           distSelect.appendChild(opt);
         });
       }

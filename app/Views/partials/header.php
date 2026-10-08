@@ -23,10 +23,10 @@ $currentLogo = !empty($settings['site_logo']) ? $appUrl . '/' . htmlspecialchars
         </div>
         <span class="sep">|</span>
         <!-- Font resize tools -->
-        <div class="font-resizer" title="ফন্ট সাইজ পরিবর্তন">
-          <button type="button" class="font-btn" id="font-decrease" aria-label="ছোট ফন্ট">অ-</button>
-          <button type="button" class="font-btn active" id="font-reset" aria-label="স্বাভাবিক ফন্ট">অ</button>
-          <button type="button" class="font-btn" id="font-increase" aria-label="বড় ফন্ট">অ+</button>
+        <div class="font-resizer" title="ফন্ট সাইজ পরিবর্তন" data-title-bn="ফন্ট সাইজ পরিবর্তন" data-title-en="Change Font Size">
+          <button type="button" class="font-btn" id="font-decrease" aria-label="ছোট ফন্ট" data-bn="অ-" data-en="A-">অ-</button>
+          <button type="button" class="font-btn active" id="font-reset" aria-label="স্বাভাবিক ফন্ট" data-bn="অ" data-en="A">অ</button>
+          <button type="button" class="font-btn" id="font-increase" aria-label="বড় ফন্ট" data-bn="অ+" data-en="A+">অ+</button>
         </div>
         <span class="sep">|</span>
         <!-- Sleek Dark Mode Toggle (Navy Blue Theme - Picture 1 Fix) -->
@@ -54,38 +54,8 @@ $currentLogo = !empty($settings['site_logo']) ? $appUrl . '/' . htmlspecialchars
       </div>
 
       <!-- Header Ad Slot (728x90 Dynamic Admin-Controlled with Hyperlink) -->
-      <?php
-      $headerAd = \App\Models\Ad::getByPosition('header');
-      ?>
       <div class="header-ad-slot" aria-label="বিজ্ঞাপন">
-        <?php if ($headerAd && (!empty($headerAd['image']) || !empty($headerAd['video_url']))): ?>
-          <div class="ad-banner-box">
-            <span class="ad-tag-badge">বিজ্ঞাপন</span>
-            <?php if ($headerAd['type'] === 'video' && !empty($headerAd['video_url'])): ?>
-              <?php 
-                preg_match('/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/', $headerAd['video_url'], $hVmatch);
-                $ytHeaderId = $hVmatch[1] ?? '';
-              ?>
-              <?php if ($ytHeaderId): ?>
-                <iframe src="https://www.youtube.com/embed/<?= $ytHeaderId ?>?autoplay=0&mute=1" title="<?= htmlspecialchars($headerAd['title']) ?>" frameborder="0" allowfullscreen class="header-ad-frame"></iframe>
-              <?php else: ?>
-                <a href="<?= htmlspecialchars($headerAd['link'] ?: '#') ?>" target="_blank" rel="noopener" class="ad-click-wrapper" title="<?= htmlspecialchars($headerAd['title']) ?>">
-                  <video src="<?= htmlspecialchars($headerAd['video_url']) ?>" autoplay muted loop playsinline class="header-ad-img"></video>
-                </a>
-              <?php endif; ?>
-            <?php elseif (!empty($headerAd['image'])): ?>
-              <a href="<?= htmlspecialchars($headerAd['link'] ?: '#') ?>" target="_blank" rel="noopener" class="ad-click-wrapper" title="<?= htmlspecialchars($headerAd['title']) ?> (ক্লিক করে বিস্তারিত দেখুন)">
-                <img src="<?= htmlspecialchars($headerAd['image']) ?>" alt="<?= htmlspecialchars($headerAd['title']) ?>" class="header-ad-img" width="728" height="90">
-              </a>
-            <?php endif; ?>
-          </div>
-        <?php else: ?>
-          <div class="ad-placeholder">
-            <a href="<?= $appUrl ?>/page/advertise" class="ad-placeholder-link">
-              <span class="ad-label" data-bn="বিজ্ঞাপন দিন (৭২৮ × ৯০)" data-en="ADVERTISE HERE (728 × 90)">বিজ্ঞাপন দিন (৭২৮ × ৯০)</span>
-            </a>
-          </div>
-        <?php endif; ?>
+        <?= \App\Helpers\AdBanner::render('header') ?>
       </div>
     </div>
   </div>

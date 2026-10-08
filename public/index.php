@@ -112,9 +112,22 @@ $router->post('/' . $adminPath . '/subscribers/delete', 'Admin\SubscriberControl
 $router->get('/' . $adminPath . '/settings', 'Admin\SettingsController@index');
 $router->post('/' . $adminPath . '/settings', 'Admin\SettingsController@update');
 
+// Advertisement Click Tracker & Redirection (Optimized Analytics)
+$router->get('/ad/click/{id}', function($params) {
+    $id = (int) ($params['id'] ?? 0);
+    $url = \App\Models\Ad::recordClick($id);
+    if (!empty($url)) {
+        header("Location: " . $url, true, 302);
+        exit;
+    }
+    header("Location: /", true, 302);
+    exit;
+});
+
 // Advertisement Management (Admin Control: Test Video / Picture / Hyperlinks)
 $router->get('/' . $adminPath . '/ads', 'Admin\AdController@index');
 $router->post('/' . $adminPath . '/ads/store', 'Admin\AdController@store');
+$router->post('/' . $adminPath . '/ads/update', 'Admin\AdController@update');
 $router->post('/' . $adminPath . '/ads/toggle', 'Admin\AdController@toggle');
 $router->post('/' . $adminPath . '/ads/delete', 'Admin\AdController@delete');
 

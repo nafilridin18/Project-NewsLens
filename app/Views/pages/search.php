@@ -165,7 +165,8 @@ document.addEventListener('DOMContentLoaded', function() {
   if (divSelect && distSelect) {
     divSelect.addEventListener('change', function() {
       const divId = this.value;
-      distSelect.innerHTML = '<option value="">সকল জেলা</option>';
+      const isEn = document.documentElement.getAttribute('lang') === 'en';
+      distSelect.innerHTML = `<option value="" data-bn="সকল জেলা" data-en="All Districts">${isEn ? 'All Districts' : 'সকল জেলা'}</option>`;
       if (!divId) return;
       fetch('<?= $appUrl ?>/api/districts?division_id=' + divId)
         .then(r => r.json())
@@ -173,7 +174,9 @@ document.addEventListener('DOMContentLoaded', function() {
           data.forEach(d => {
             const opt = document.createElement('option');
             opt.value = d.id;
-            opt.textContent = d.name_bn;
+            opt.textContent = isEn ? (d.name_en || d.name_bn) : d.name_bn;
+            opt.setAttribute('data-bn', d.name_bn);
+            opt.setAttribute('data-en', d.name_en || d.name_bn);
             distSelect.appendChild(opt);
           });
         });
