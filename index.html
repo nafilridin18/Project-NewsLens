@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Newslensbd | খুব শিগগিরই আসছে</title>
+  <meta name="description" content="Newslensbd, News Beyond the Ordinary. বাংলাদেশের খবর নতুন দৃষ্টিতে, খুব শিগগিরই আসছে।">
+  <meta name="theme-color" content="#0b1f44">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Newslensbd | খুব শিগগিরই আসছে">
+  <meta property="og:description" content="News Beyond the Ordinary. লঞ্চের দিন সবার আগে জানতে ইমেইল দিন।">
+  <meta property="og:image" content="assets/img/logo.png">
+
+  <link rel="icon" type="image/png" href="assets/img/favicon.png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600&family=Instrument+Sans:wght@500;600;700&family=Noto+Serif+Bengali:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <main class="page">
+
+    <section class="copy">
+      <header class="brand">
+        <img src="assets/img/logo.png" alt="Newslensbd, News Beyond the Ordinary" width="1400" height="299">
+      </header>
+
+      <div class="message">
+        <h1>খবর দেখুন<br>নতুন চোখে</h1>
+        <p class="lead">সাধারণ খবরের বাইরে, অন্য এক দৃষ্টিতে বাংলাদেশকে দেখার জন্য আমরা প্রস্তুত হচ্ছি। Newslensbd খুব শিগগিরই আসছে।</p>
+
+        <form class="notify" id="notify-form" action="subscribe.php" method="post" novalidate>
+          <label for="email">লঞ্চের দিন ইমেইলে জানতে চান?</label>
+          <div class="notify-row">
+            <input type="email" id="email" name="email" placeholder="আপনার ইমেইল ঠিকানা" autocomplete="email" inputmode="email" required>
+            <button type="submit" id="notify-btn">জানিয়ে দিন</button>
+          </div>
+          <div class="hp" aria-hidden="true">
+            <label for="website">ওয়েবসাইট</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+          </div>
+          <p class="note" id="notify-note">আপনার ইমেইল শুধু লঞ্চের আপডেট জানানোর জন্য ব্যবহার করা হবে।</p>
+        </form>
+
+        <nav class="social" aria-label="সোশ্যাল মিডিয়া">
+          <a href="#" target="_blank" rel="noopener">Facebook</a>
+          <a href="#" target="_blank" rel="noopener">YouTube</a>
+          <a href="#" target="_blank" rel="noopener">Instagram</a>
+        </nav>
+      </div>
+
+      <footer class="partner">
+        <div class="partner-brand">
+          <span>টেকনোলজি পার্টনার</span>
+          <a href="https://stratifyxglobal.com" target="_blank" rel="noopener" aria-label="StratifyX Global ওয়েবসাইট">
+            <img src="assets/img/stratifyx-global.png" alt="StratifyX Global" width="700" height="218">
+          </a>
+        </div>
+        <small>© 2026 Newslensbd। সর্বস্বত্ব সংরক্ষিত।</small>
+      </footer>
+    </section>
+
+    <section class="finder" aria-labelledby="finder-title">
+      <h2 id="finder-title" class="sr-only">লঞ্চ কাউন্টডাউন</h2>
+      <div class="frame">
+        <span class="corner tl" aria-hidden="true"></span>
+        <span class="corner tr" aria-hidden="true"></span>
+        <span class="corner bl" aria-hidden="true"></span>
+        <span class="corner br" aria-hidden="true"></span>
+        <span class="ring" aria-hidden="true"></span>
+
+        <div class="hud hud-top">
+          <span class="rec"><i aria-hidden="true"></i>লাইভ হতে বাকি</span>
+          <time id="launch-date" datetime="2026-10-23">২৩ অক্টোবর ২০২৬</time>
+        </div>
+
+        <div class="timecode" id="timer" role="timer" aria-label="লঞ্চ হতে বাকি সময়">
+          <div class="unit"><span class="num" id="t-days">15</span><span class="lab">দিন</span></div>
+          <span class="sep" aria-hidden="true">:</span>
+          <div class="unit"><span class="num" id="t-hours">00</span><span class="lab">ঘণ্টা</span></div>
+          <span class="sep" aria-hidden="true">:</span>
+          <div class="unit"><span class="num" id="t-mins">00</span><span class="lab">মিনিট</span></div>
+          <span class="sep" aria-hidden="true">:</span>
+          <div class="unit"><span class="num" id="t-secs">00</span><span class="lab">সেকেন্ড</span></div>
+        </div>
+
+        <div class="hud hud-bottom">
+          <div class="bar" aria-hidden="true"><span id="bar-fill"></span></div>
+          <span id="bar-text">লঞ্চের পথে</span>
+        </div>
+      </div>
+      <p class="sr-only" id="sr-time" aria-live="polite"></p>
+    </section>
+
+  </main>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
