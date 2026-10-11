@@ -22,13 +22,26 @@ class OtpController {
             exit;
         }
 
+        $config = require dirname(__DIR__, 2) . '/config/config.php';
+        $simulatedCode = null;
+        if (empty($config['mail']['username'])) {
+            $logFile = dirname(__DIR__, 2) . '/storage/logs/mail.log';
+            if (file_exists($logFile)) {
+                $content = file_get_contents($logFile);
+                if (preg_match_all('/SUBJECT:.*কোড:\s*([0-9]{6})/u', $content, $m)) {
+                    $simulatedCode = end($m[1]);
+                }
+            }
+        }
+
         View::render('auth.otp_verify', [
-            'pageTitle' => 'ইমেইল ওটিপি যাচাই | Newslensbd',
-            'email'     => $email,
-            'purpose'   => $purpose,
-            'error'     => $_SESSION['otp_error'] ?? null,
-            'success'   => $_SESSION['otp_success'] ?? null,
-            'csrfToken' => Auth::generateCsrf()
+            'pageTitle'     => 'ইমেইল ওটিপি যাচাই | Newslensbd',
+            'email'         => $email,
+            'purpose'       => $purpose,
+            'simulatedCode' => $simulatedCode,
+            'error'         => $_SESSION['otp_error'] ?? null,
+            'success'       => $_SESSION['otp_success'] ?? null,
+            'csrfToken'     => Auth::generateCsrf()
         ]);
         unset($_SESSION['otp_error'], $_SESSION['otp_success']);
     }
