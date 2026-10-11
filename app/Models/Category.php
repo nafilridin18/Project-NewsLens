@@ -36,4 +36,17 @@ class Category {
             ['id' => 15, 'name_bn' => 'অপরাধ', 'name_en' => 'Crime', 'slug' => 'crime']
         ];
     }
+
+    public static function all(): array {
+        try {
+            $db = Database::getConnection();
+            $stmt = $db->query("SELECT * FROM `categories` ORDER BY `sort_order` ASC, `id` ASC");
+            $results = $stmt->fetchAll();
+            if (!empty($results)) {
+                return $results;
+            }
+        } catch (Exception $e) {}
+
+        return self::getMenuCategories();
+    }
 }

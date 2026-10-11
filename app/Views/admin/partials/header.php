@@ -695,13 +695,26 @@ $currentUrl = htmlspecialchars($_SERVER['REQUEST_URI'] ?? ($appUrl . '/' . $admi
       🌐 <span id="admLangText">EN</span>
     </button>
 
-    <!-- User Profile with quick edit trigger on click (No Gulam Sakaria) -->
-    <div class="admin-user-pill" id="admUserPillBtn" title="নাম পরিবর্তন করতে ক্লিক করুন">
-      <span>👤</span>
-      <span class="user-label"><?= $displayName ?></span>
-      <span class="admin-role-tag"><?= htmlspecialchars(strtoupper($user['role'] ?? 'ADMIN')) ?></span>
-      <span style="font-size: 0.75rem; color: var(--adm-accent);" title="নাম পরিবর্তন">✏️</span>
-    </div>
+    <!-- User Profile with quick edit trigger on click -->
+    <?php if (\App\Core\Auth::isWriter()): ?>
+      <a href="<?= $appUrl ?>/profile" class="admin-user-pill" title="আমার প্রোফাইল ও সেটিংস" style="text-decoration: none;">
+        <span>👤</span>
+        <span class="user-label"><?= $displayName ?></span>
+        <span class="admin-role-tag" style="background: #0E7A3A; color: #fff;">✍️ WRITER</span>
+        <?php if (($user['permission_level'] ?? '') === 'direct_publish'): ?>
+          <span style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; font-size: 0.72rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(56,189,248,0.4);" title="সরাসরি প্রকাশ">⚡ DIRECT</span>
+        <?php else: ?>
+          <span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; font-size: 0.72rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(245,158,11,0.4);" title="সম্পাদকীয় রিভিউ">👁️ REVIEW</span>
+        <?php endif; ?>
+      </a>
+    <?php else: ?>
+      <div class="admin-user-pill" id="admUserPillBtn" title="নাম পরিবর্তন করতে ক্লিক করুন">
+        <span>👤</span>
+        <span class="user-label"><?= $displayName ?></span>
+        <span class="admin-role-tag"><?= htmlspecialchars(strtoupper($user['role'] ?? 'ADMIN')) ?></span>
+        <span style="font-size: 0.75rem; color: var(--adm-accent);" title="নাম পরিবর্তন">✏️</span>
+      </div>
+    <?php endif; ?>
 
     <!-- Live Site Link -->
     <a href="<?= $appUrl ?>/" target="_blank" class="btn-portal-link" title="লাইভ সাইট দেখুন">
@@ -709,8 +722,8 @@ $currentUrl = htmlspecialchars($_SERVER['REQUEST_URI'] ?? ($appUrl . '/' . $admi
       <span class="tool-text" data-bn="লাইভ সাইট" data-en="Live Site">লাইভ সাইট ↗</span>
     </a>
 
-    <!-- Logout -->
-    <a href="<?= $appUrl ?>/<?= $adminPath ?>/logout" class="btn-logout-link" title="লগআউট">
+    <!-- Universal Logout -->
+    <a href="<?= $appUrl ?>/logout" class="btn-logout-link" title="লগআউট">
       <span>🚪</span>
       <span class="tool-text" data-bn="লগআউট" data-en="Logout">লগআউট</span>
     </a>
@@ -827,7 +840,7 @@ $currentUrl = htmlspecialchars($_SERVER['REQUEST_URI'] ?? ($appUrl . '/' . $admi
       <span data-bn="লাইভ নিউজ পোর্টাল" data-en="Live News Portal">লাইভ নিউজ পোর্টাল</span>
     </a>
 
-    <a href="<?= $appUrl ?>/<?= $adminPath ?>/logout" class="btn-logout-link" style="justify-content: center;">
+    <a href="<?= $appUrl ?>/logout" class="btn-logout-link" style="justify-content: center;">
       <span>🚪</span>
       <span data-bn="লগআউট" data-en="Logout">লগআউট</span>
     </a>

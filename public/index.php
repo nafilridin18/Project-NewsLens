@@ -87,6 +87,7 @@ $router->post('/writer/register', 'WriterAuthController@register');
 $router->get('/writer/pending', 'WriterAuthController@showPending');
 
 // Writer Panel (Restricted to Writers, Strictly Scoped Ownership)
+$router->get('/writer', 'Writer\WriterPanelController@index');
 $router->get('/writer/dashboard', 'Writer\WriterPanelController@index');
 $router->get('/writer/posts', 'Writer\WriterPanelController@posts');
 $router->get('/writer/posts/create', 'Writer\WriterPanelController@create');

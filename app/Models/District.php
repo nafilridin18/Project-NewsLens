@@ -181,4 +181,26 @@ class District {
             ]
         ];
     }
+
+    public static function all(): array {
+        try {
+            $db = Database::getConnection();
+            $stmt = $db->query("
+                SELECT d.*, divn.name_bn as division_name 
+                FROM `districts` d 
+                LEFT JOIN `divisions` divn ON d.division_id = divn.id 
+                ORDER BY divn.id, d.name_bn ASC
+            ");
+            $res = $stmt->fetchAll();
+            if (!empty($res)) return $res;
+        } catch (Exception $e) {}
+
+        $list = [];
+        for ($i = 1; $i <= 8; $i++) {
+            foreach (self::getDistrictsByDivision($i) as $d) {
+                $list[] = $d;
+            }
+        }
+        return $list;
+    }
 }

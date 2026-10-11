@@ -148,15 +148,18 @@ $permLevel = $user['permission_level'] ?? 'editor_review';
   </style>
 </head>
 <body>
-  <?php require APP_PATH . '/Views/admin/partials/header.php'; ?>
+  <?php 
+  $activeTab = 'writer_posts';
+  require dirname(__DIR__) . '/admin/partials/header.php'; 
+  ?>
 
   <div class="form-wrap">
     <div class="header-row">
       <div class="header-title">
         <span><?= $isEdit ? '✏️' : '✍️' ?></span>
-        <span><?= $isEdit ? 'সংবাদ সম্পাদনা' : 'নতুন সংবাদ রচনা' ?></span>
+        <span data-bn="<?= $isEdit ? 'সংবাদ সম্পাদনা' : 'নতুন সংবাদ রচনা' ?>" data-en="<?= $isEdit ? 'Edit Post' : 'Write New Article' ?>"><?= $isEdit ? 'সংবাদ সম্পাদনা' : 'নতুন সংবাদ রচনা' ?></span>
       </div>
-      <a href="<?= $appUrl ?>/writer/posts" class="back-link">← সংবাদ তালিকায় ফিরে যান</a>
+      <a href="<?= $appUrl ?>/writer/posts" class="back-link" data-bn="← সংবাদ তালিকায় ফিরে যান" data-en="← Back to My Posts">← সংবাদ তালিকায় ফিরে যান</a>
     </div>
 
     <?php if (!empty($error)): ?>
@@ -182,10 +185,23 @@ $permLevel = $user['permission_level'] ?? 'editor_review';
           <input type="hidden" name="id" value="<?= (int)($post['id'] ?? 0) ?>">
         <?php endif; ?>
 
+        <!-- Author Attribution (Locked to Writer) -->
+        <div class="form-group" style="background: rgba(255,255,255,0.02); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--adm-border); display: flex; align-items: center; justify-content: space-between; flex-wrap: gap; gap: 10px;">
+          <div>
+            <label style="margin: 0; font-size: 0.85rem; color: var(--adm-text-muted);" data-bn="👤 লেখক / বাইলাইন (Author Attribution)" data-en="👤 Author Attribution">👤 লেখক / বাইলাইন (Author Attribution)</label>
+            <div style="font-weight: 700; color: #fff; font-size: 1rem; margin-top: 2px;">
+              <?= htmlspecialchars($user['name'] ?? 'Writer') ?>
+            </div>
+          </div>
+          <span style="font-size: 0.75rem; background: rgba(14, 122, 58, 0.25); border: 1px solid #10b981; color: #86efac; padding: 3px 10px; border-radius: 20px; font-weight: 700;">
+            ✓ আপনার নামে নিবন্ধিত (Locked)
+          </span>
+        </div>
+
         <!-- Headline -->
         <div class="form-group">
-          <label for="title">খবরের প্রধান শিরোনাম <span class="required">*</span></label>
-          <input type="text" id="title" name="title" required placeholder="বস্তুনিষ্ঠ ও আকর্ষণীয় শিরোনাম লিখুন..." value="<?= htmlspecialchars($post['title'] ?? '') ?>">
+          <label for="title" data-bn="খবরের প্রধান শিরোনাম *" data-en="News Headline *">খবরের প্রধান শিরোনাম <span class="required">*</span></label>
+          <input type="text" id="title" name="title" required placeholder="বস্তুনিষ্ঠ ও আকর্ষণীয় শিরোনাম লিখুন..." data-placeholder-bn="বস্তুনিষ্ঠ ও আকর্ষণীয় শিরোনাম লিখুন..." data-placeholder-en="Write an objective and engaging headline..." value="<?= htmlspecialchars($post['title'] ?? '') ?>">
         </div>
 
         <!-- Category & District -->

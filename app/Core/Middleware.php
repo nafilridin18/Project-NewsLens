@@ -26,6 +26,8 @@ class Middleware {
             exit;
         }
 
+        // ALWAYS refresh user data from DB so that newly approved writers or updated roles are immediately active
+        Auth::refreshUser();
         $user = Auth::user();
         $role = $user['role'] ?? 'user';
         $status = $user['status'] ?? 'active';

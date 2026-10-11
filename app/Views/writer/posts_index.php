@@ -168,7 +168,10 @@ $activeTab = 'writer_posts';
   </style>
 </head>
 <body>
-  <?php require APP_PATH . '/Views/admin/partials/header.php'; ?>
+  <?php 
+  $activeTab = 'writer_posts';
+  require dirname(__DIR__) . '/admin/partials/header.php'; 
+  ?>
 
   <div class="posts-wrap">
     <div class="header-row">

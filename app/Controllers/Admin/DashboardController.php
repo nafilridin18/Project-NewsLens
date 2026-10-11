@@ -17,7 +17,17 @@ class DashboardController {
             exit;
         }
 
+        Auth::refreshUser();
         $user = Auth::user();
+
+        // Role-based routing: Writers go to their own writer dashboard
+        if (($user['role'] ?? '') === 'writer') {
+            header("Location: " . (($user['status'] ?? '') === 'pending' ? '/writer/pending' : '/writer/dashboard'));
+            exit;
+        } elseif (!in_array($user['role'] ?? '', ['super_admin', 'admin', 'editor'], true)) {
+            header("Location: /");
+            exit;
+        }
 
         // Fetch counts from DB
         $stats = [

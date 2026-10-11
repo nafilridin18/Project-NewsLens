@@ -145,9 +145,7 @@ class WriterAuthController {
     public function showPending(): void {
         Auth::init();
         if (!Auth::check()) {
-            $config = require dirname(__DIR__, 2) . '/config/config.php';
-            $adminPath = trim($config['app']['admin_path'] ?? 'lens-desk', '/');
-            header("Location: /{$adminPath}/login");
+            header("Location: /login");
             exit;
         }
 

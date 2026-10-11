@@ -178,7 +178,10 @@ $activeTab = 'writer_dashboard';
   </style>
 </head>
 <body>
-  <?php require APP_PATH . '/Views/admin/partials/header.php'; ?>
+  <?php 
+  $activeTab = 'writer_dashboard';
+  require dirname(__DIR__) . '/admin/partials/header.php'; 
+  ?>
 
   <div class="writer-wrap">
     <!-- Welcome Card -->
