@@ -17,11 +17,11 @@ class Middleware {
             $config = require dirname(__DIR__, 2) . '/config/config.php';
             $adminPath = trim($config['app']['admin_path'] ?? 'lens-desk', '/');
             
-            // Check if asking for writer/admin or regular user
-            if (in_array('user', $allowedRoles, true) && count($allowedRoles) === 1) {
-                header("Location: /user/login");
-            } else {
+            // Check if asking for admin roles or public/writer
+            if (in_array('super_admin', $allowedRoles, true) || in_array('admin', $allowedRoles, true) || in_array('editor', $allowedRoles, true)) {
                 header("Location: /{$adminPath}/login");
+            } else {
+                header("Location: /login");
             }
             exit;
         }

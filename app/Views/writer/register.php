@@ -192,14 +192,20 @@
       </div>
 
       <div class="form-grid">
-        <div class="form-group">
+        <div class="form-group" style="position: relative;">
           <label for="password">পাসওয়ার্ড <span class="required">*</span></label>
-          <input type="password" name="password" id="password" class="form-control" placeholder="কমপক্ষে ৬ অক্ষর" required minlength="6">
+          <div style="position: relative;">
+            <input type="password" name="password" id="password" class="form-control" placeholder="কমপক্ষে ৬ অক্ষর" required minlength="6" style="padding-right: 42px;">
+            <button type="button" onclick="togglePass('password', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: transparent; border: none; font-size: 1.15rem; cursor: pointer; color: var(--text-muted);">👁️</button>
+          </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" style="position: relative;">
           <label for="password_confirm">পাসওয়ার্ড নিশ্চিত করুন <span class="required">*</span></label>
-          <input type="password" name="password_confirm" id="password_confirm" class="form-control" placeholder="পুনরায় লিখুন" required minlength="6">
+          <div style="position: relative;">
+            <input type="password" name="password_confirm" id="password_confirm" class="form-control" placeholder="পুনরায় লিখুন" required minlength="6" style="padding-right: 42px;">
+            <button type="button" onclick="togglePass('password_confirm', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: transparent; border: none; font-size: 1.15rem; cursor: pointer; color: var(--text-muted);">👁️</button>
+          </div>
         </div>
       </div>
 
@@ -217,9 +223,22 @@
     </form>
 
     <div class="bottom-hint">
-      পূর্বেই অ্যাকাউন্ট আছে? <a href="/lens-desk/login">লগইন করুন ➔</a>
+      পূর্বেই অ্যাকাউন্ট আছে? <a href="/login">লগইন করুন ➔</a>
     </div>
   </div>
 
+  <script>
+  function togglePass(id, btn) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.type === 'password') {
+      el.type = 'text';
+      btn.textContent = '🙈';
+    } else {
+      el.type = 'password';
+      btn.textContent = '👁️';
+    }
+  }
+  </script>
 </body>
 </html>

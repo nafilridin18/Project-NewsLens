@@ -3,52 +3,186 @@ $appUrl = rtrim($config['app']['url'] ?? '', '/');
 $old = $old ?? [];
 $error = $error ?? null;
 ?>
-<div class="container" style="max-width: 520px; margin: 40px auto 80px; padding: 0 16px;">
-  <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 36px 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.06);">
-    <div style="text-align: center; margin-bottom: 24px;">
-      <h1 style="font-size: 1.6rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">পাঠক অ্যাকাউন্ট তৈরি করুন</h1>
-      <p style="color: #64748b; font-size: 0.92rem;">সংবাদ সংরক্ষণ, নোটিফিকেশন ও ব্যক্তিকেন্দ্রিক অভিজ্ঞতার জন্য সাইন আপ করুন।</p>
+<div class="auth-page-container" style="min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 40px 16px;">
+  <div class="auth-card" style="width: 100%; max-width: 520px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 38px 32px; box-shadow: 0 15px 40px rgba(8, 30, 66, 0.12); position: relative; overflow: hidden;">
+    
+    <!-- Decorative top accent bar -->
+    <div style="position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, var(--color-secondary), #10b981, var(--color-accent-red));"></div>
+
+    <!-- Header & Badge -->
+    <div style="text-align: center; margin-bottom: 26px;">
+      <div style="display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 16px; background: rgba(0, 106, 56, 0.12); color: var(--color-secondary); font-size: 26px; margin-bottom: 14px; border: 1px solid rgba(0, 106, 56, 0.25);">
+        📝
+      </div>
+      <h1 style="font-size: 1.65rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px; letter-spacing: -0.3px;">পাঠক অ্যাকাউন্ট তৈরি করুন</h1>
+      <p style="color: var(--text-muted); font-size: 0.94rem;">সংবাদ সংরক্ষণ, গুরুত্বপূর্ণ নোটিফিকেশন ও দ্রুততম আপডেটের জন্য যোগ দিন</p>
     </div>
 
+    <!-- Role Switch Segmented Pills -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: var(--bg-alt); padding: 5px; border-radius: 12px; margin-bottom: 24px; border: 1px solid var(--border-color);">
+      <button type="button" class="auth-role-tab active" style="border: none; background: var(--bg-card); color: var(--color-secondary); padding: 9px; border-radius: 9px; font-weight: 700; font-size: 0.88rem; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.06); display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+        <span>👤</span> <span>পাঠক অ্যাকাউন্ট</span>
+      </button>
+      <a href="<?= $appUrl ?>/writer/register" class="auth-role-tab" style="text-decoration: none; border: none; background: transparent; color: var(--text-muted); padding: 9px; border-radius: 9px; font-weight: 700; font-size: 0.88rem; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: color 0.2s;">
+        <span>✍️</span> <span>লেখক আবেদন</span>
+      </a>
+    </div>
+
+    <!-- Error Alert -->
     <?php if (!empty($error)): ?>
-      <div style="background: #fef2f2; border: 1px solid #f87171; color: #dc2626; padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-weight: 600; font-size: 0.9rem;">
-        ✕ <?= htmlspecialchars($error) ?>
+      <div style="background: rgba(225, 27, 34, 0.12); border: 1px solid var(--color-accent-red); color: #f87171; padding: 12px 16px; border-radius: 10px; margin-bottom: 22px; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 1.1rem;">✕</span>
+        <div><?= htmlspecialchars($error) ?></div>
       </div>
     <?php endif; ?>
 
-    <form method="POST" action="<?= $appUrl ?>/register">
+    <form method="POST" action="<?= $appUrl ?>/register" id="registerForm">
       <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
 
+      <!-- Full Name -->
       <div style="margin-bottom: 18px;">
-        <label style="display: block; font-weight: 700; margin-bottom: 6px; font-size: 0.9rem; color: #334155;">আপনার পূর্ণ নাম *</label>
-        <input type="text" name="name" required value="<?= htmlspecialchars($old['name'] ?? '') ?>" placeholder="উদাঃ মোঃ সাব্বির রহমান" style="width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; box-sizing: border-box; outline: none;">
+        <label for="reg-name" style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-main);">
+          আপনার পূর্ণ নাম <span style="color: var(--color-accent-red);">*</span>
+        </label>
+        <div style="position: relative;">
+          <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 1rem; color: var(--text-muted); pointer-events: none;">👤</span>
+          <input 
+            type="text" 
+            name="name" 
+            id="reg-name" 
+            required 
+            value="<?= htmlspecialchars($old['name'] ?? '') ?>"
+            placeholder="উদাঃ মোঃ নাফিল উদ্দিন" 
+            autocomplete="name"
+            style="width: 100%; padding: 12px 14px 12px 42px; background: var(--bg-alt); border: 1.5px solid var(--border-color); border-radius: 10px; font-size: 0.95rem; color: var(--text-main); outline: none; transition: border-color 0.2s, box-shadow 0.2s;"
+            onfocus="this.style.borderColor='var(--color-secondary)'; this.style.boxShadow='0 0 0 3px rgba(0, 106, 56, 0.2)';"
+            onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none';"
+          >
+        </div>
       </div>
 
+      <!-- Email Input -->
       <div style="margin-bottom: 18px;">
-        <label style="display: block; font-weight: 700; margin-bottom: 6px; font-size: 0.9rem; color: #334155;">ইমেইল ঠিকানা *</label>
-        <input type="email" name="email" required value="<?= htmlspecialchars($old['email'] ?? '') ?>" placeholder="yourname@domain.com" style="width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; box-sizing: border-box; outline: none;">
+        <label for="reg-email" style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-main);">
+          ইমেইল ঠিকানা <span style="color: var(--color-accent-red);">*</span>
+        </label>
+        <div style="position: relative;">
+          <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 1rem; color: var(--text-muted); pointer-events: none;">📧</span>
+          <input 
+            type="email" 
+            name="email" 
+            id="reg-email" 
+            required 
+            value="<?= htmlspecialchars($old['email'] ?? '') ?>"
+            placeholder="yourname@gmail.com" 
+            autocomplete="email"
+            style="width: 100%; padding: 12px 14px 12px 42px; background: var(--bg-alt); border: 1.5px solid var(--border-color); border-radius: 10px; font-size: 0.95rem; color: var(--text-main); outline: none; transition: border-color 0.2s, box-shadow 0.2s;"
+            onfocus="this.style.borderColor='var(--color-secondary)'; this.style.boxShadow='0 0 0 3px rgba(0, 106, 56, 0.2)';"
+            onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none';"
+          >
+        </div>
       </div>
 
+      <!-- Password Input with Toggle -->
       <div style="margin-bottom: 18px;">
-        <label style="display: block; font-weight: 700; margin-bottom: 6px; font-size: 0.9rem; color: #334155;">পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর) *</label>
-        <input type="password" name="password" required minlength="6" placeholder="••••••••" style="width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; box-sizing: border-box; outline: none;">
+        <label for="reg-password" style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-main);">
+          পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর) <span style="color: var(--color-accent-red);">*</span>
+        </label>
+        <div style="position: relative;">
+          <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 1rem; color: var(--text-muted); pointer-events: none;">🔒</span>
+          <input 
+            type="password" 
+            name="password" 
+            id="reg-password" 
+            required 
+            minlength="6"
+            placeholder="••••••••" 
+            autocomplete="new-password"
+            style="width: 100%; padding: 12px 44px 12px 42px; background: var(--bg-alt); border: 1.5px solid var(--border-color); border-radius: 10px; font-size: 0.95rem; color: var(--text-main); outline: none; transition: border-color 0.2s, box-shadow 0.2s;"
+            onfocus="this.style.borderColor='var(--color-secondary)'; this.style.boxShadow='0 0 0 3px rgba(0, 106, 56, 0.2)';"
+            onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none';"
+          >
+          <button 
+            type="button" 
+            onclick="togglePasswordVisibility('reg-password', this)"
+            title="পাসওয়ার্ড দেখুন বা লুকান"
+            aria-label="পাসওয়ার্ড দেখুন বা লুকান"
+            style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: transparent; border: none; font-size: 1.15rem; cursor: pointer; color: var(--text-muted); padding: 4px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center;"
+          >
+            👁️
+          </button>
+        </div>
       </div>
 
+      <!-- Confirm Password Input with Toggle -->
       <div style="margin-bottom: 24px;">
-        <label style="display: block; font-weight: 700; margin-bottom: 6px; font-size: 0.9rem; color: #334155;">পাসওয়ার্ড নিশ্চিত করুন *</label>
-        <input type="password" name="password_confirm" required minlength="6" placeholder="••••••••" style="width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; box-sizing: border-box; outline: none;">
+        <label for="reg-confirm-password" style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-main);">
+          পাসওয়ার্ড নিশ্চিত করুন <span style="color: var(--color-accent-red);">*</span>
+        </label>
+        <div style="position: relative;">
+          <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 1rem; color: var(--text-muted); pointer-events: none;">🛡️</span>
+          <input 
+            type="password" 
+            name="password_confirm" 
+            id="reg-confirm-password" 
+            required 
+            minlength="6"
+            placeholder="••••••••" 
+            autocomplete="new-password"
+            style="width: 100%; padding: 12px 44px 12px 42px; background: var(--bg-alt); border: 1.5px solid var(--border-color); border-radius: 10px; font-size: 0.95rem; color: var(--text-main); outline: none; transition: border-color 0.2s, box-shadow 0.2s;"
+            onfocus="this.style.borderColor='var(--color-secondary)'; this.style.boxShadow='0 0 0 3px rgba(0, 106, 56, 0.2)';"
+            onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none';"
+          >
+          <button 
+            type="button" 
+            onclick="togglePasswordVisibility('reg-confirm-password', this)"
+            title="পাসওয়ার্ড দেখুন বা লুকান"
+            aria-label="পাসওয়ার্ড দেখুন বা লুকান"
+            style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: transparent; border: none; font-size: 1.15rem; cursor: pointer; color: var(--text-muted); padding: 4px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center;"
+          >
+            👁️
+          </button>
+        </div>
       </div>
 
-      <button type="submit" style="width: 100%; background: #0E7A3A; color: #fff; border: none; padding: 13px; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.2s;">
-        নিবন্ধন করুন ও ওটিপি পাঠান ➔
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        id="regSubmitBtn"
+        style="width: 100%; background: linear-gradient(135deg, var(--color-secondary) 0%, #0E7A3A 100%); color: #ffffff; border: none; padding: 14px; border-radius: 11px; font-size: 1.05rem; font-weight: 800; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 4px 15px rgba(0, 106, 56, 0.35); display: inline-flex; align-items: center; justify-content: center; gap: 8px;"
+        onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 24px rgba(0, 106, 56, 0.45)';"
+        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0, 106, 56, 0.35)';"
+      >
+        <span>নিবন্ধন করুন ও ওটিপি পাঠান</span>
+        <span style="font-size: 1.1rem;" class="btn-arrow">➔</span>
       </button>
     </form>
 
-    <div style="text-align: center; margin-top: 24px; padding-top: 18px; border-top: 1px solid #f1f5f9; font-size: 0.9rem; color: #64748b;">
-      ইতিমধ্যে অ্যাকাউন্ট আছে? <a href="<?= $appUrl ?>/login" style="color: #0E7A3A; font-weight: 700; text-decoration: none;">লগইন করুন</a>
-      <div style="margin-top: 8px;">
-        লেখা প্রকাশ করতে চান? <a href="<?= $appUrl ?>/writer/register" style="color: #0284c7; font-weight: 700; text-decoration: none;">লেখক হিসেবে আবেদন করুন ↗</a>
+    <!-- Footer Links -->
+    <div style="text-align: center; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border-color); font-size: 0.92rem; color: var(--text-muted);">
+      <p style="margin-bottom: 10px;">
+        ইতিমধ্যে অ্যাকাউন্ট আছে? <a href="<?= $appUrl ?>/login" style="color: var(--color-secondary); font-weight: 800; text-decoration: none;" onmouseover="this.style.textDecoration='underline';" onmouseout="this.style.textDecoration='none';">লগইন করুন ➔</a>
+      </p>
+      <div style="background: var(--bg-alt); padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-color); font-size: 0.86rem;">
+        ✍️ সরাসরি সংবাদ লিখতে চান? <a href="<?= $appUrl ?>/writer/register" style="color: #0284c7; font-weight: 800; text-decoration: none;">লেখক হিসেবে আবেদন করুন ↗</a>
       </div>
     </div>
+
   </div>
 </div>
+
+<script>
+function togglePasswordVisibility(inputId, btn) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🙈';
+    btn.style.color = 'var(--color-secondary)';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁️';
+    btn.style.color = 'var(--text-muted)';
+  }
+}
+</script>

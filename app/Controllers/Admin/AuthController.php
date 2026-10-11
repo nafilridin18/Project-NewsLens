@@ -13,6 +13,14 @@ class AuthController {
         $appUrl = rtrim($config['app']['url'] ?? '', '/');
 
         if (Auth::check()) {
+            $user = Auth::user();
+            if (($user['role'] ?? '') === 'writer') {
+                header("Location: " . (($user['status'] ?? '') === 'pending' ? '/writer/pending' : '/writer/dashboard'));
+                exit;
+            } elseif (!in_array($user['role'] ?? '', ['super_admin', 'admin', 'editor'], true)) {
+                header("Location: /");
+                exit;
+            }
             header("Location: {$appUrl}/{$adminPath}");
             exit;
         }
@@ -25,11 +33,26 @@ class AuthController {
 
             if (!Auth::verifyCsrf($csrf)) {
                 $error = 'নিরাপত্তা যাচাই ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।';
-            } elseif (Auth::login($email, $password)) {
-                header("Location: {$appUrl}/{$adminPath}");
-                exit;
             } else {
-                $error = 'ইমেইল বা পাসওয়ার্ড সঠিক নয়।';
+                $res = Auth::attempt($email, $password);
+                if ($res['success']) {
+                    $user = $res['user'];
+                    if (($user['role'] ?? '') === 'writer') {
+                        if (($user['status'] ?? '') === 'pending') {
+                            header("Location: /writer/pending");
+                            exit;
+                        }
+                        header("Location: /writer/dashboard");
+                        exit;
+                    } elseif (!in_array($user['role'] ?? '', ['super_admin', 'admin', 'editor'], true)) {
+                        header("Location: /");
+                        exit;
+                    }
+                    header("Location: {$appUrl}/{$adminPath}");
+                    exit;
+                } else {
+                    $error = $res['message'] ?? 'ইমেইল বা পাসওয়ার্ড সঠিক নয়।';
+                }
             }
         }
 

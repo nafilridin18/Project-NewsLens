@@ -172,8 +172,13 @@ class WriterControlController {
         Mailer::sendWriterStatus($writer['email'], $writer['name'], 'approved', $level);
 
         $_SESSION['writer_action_msg'] = "{$writer['name']}-কে সফলভাবে অনুমোদন দেওয়া হয়েছে।";
-        header("Location: /lens-desk/writers");
+        header("Location: /" . $this->adminPath() . "/writers");
         exit;
+    }
+
+    private function adminPath(): string {
+        $c = require dirname(__DIR__, 3) . '/config/config.php';
+        return trim($c['app']['admin_path'] ?? 'lens-desk', '/');
     }
 
     /**
@@ -183,7 +188,7 @@ class WriterControlController {
         $admin = Middleware::requireAdmin();
         if (!Auth::verifyCsrf($_POST['csrf_token'] ?? null)) {
             $_SESSION['writer_action_err'] = 'নিরাপত্তা টোকেন সঠিক নয়।';
-            header("Location: /lens-desk/writers");
+            header("Location: /" . $this->adminPath() . "/writers");
             exit;
         }
 
@@ -197,7 +202,7 @@ class WriterControlController {
 
         if (!$writer) {
             $_SESSION['writer_action_err'] = 'লেখক পাওয়া যায়নি।';
-            header("Location: /lens-desk/writers");
+            header("Location: /" . $this->adminPath() . "/writers");
             exit;
         }
 
@@ -224,7 +229,7 @@ class WriterControlController {
         Mailer::sendWriterStatus($writer['email'], $writer['name'], 'rejected', null, $reason);
 
         $_SESSION['writer_action_msg'] = "{$writer['name']}-এর আবেদন প্রত্যাখ্যান করা হয়েছে।";
-        header("Location: /lens-desk/writers");
+        header("Location: /" . $this->adminPath() . "/writers");
         exit;
     }
 
@@ -235,7 +240,7 @@ class WriterControlController {
         $admin = Middleware::requireAdmin();
         if (!Auth::verifyCsrf($_POST['csrf_token'] ?? null)) {
             $_SESSION['writer_action_err'] = 'নিরাপত্তা টোকেন সঠিক নয়।';
-            header("Location: /lens-desk/writers");
+            header("Location: /" . $this->adminPath() . "/writers");
             exit;
         }
 
@@ -252,7 +257,7 @@ class WriterControlController {
 
         if (!$writer) {
             $_SESSION['writer_action_err'] = 'লেখক পাওয়া যায়নি।';
-            header("Location: /lens-desk/writers");
+            header("Location: /" . $this->adminPath() . "/writers");
             exit;
         }
 
@@ -269,7 +274,7 @@ class WriterControlController {
         Mailer::sendWriterStatus($writer['email'], $writer['name'], 'approved', $level);
 
         $_SESSION['writer_action_msg'] = "{$writer['name']}-এর পারমিশন লেভেল আপডেট করা হয়েছে।";
-        header("Location: /lens-desk/writers");
+        header("Location: /" . $this->adminPath() . "/writers");
         exit;
     }
 
@@ -280,7 +285,7 @@ class WriterControlController {
         $admin = Middleware::requireAdmin();
         if (!Auth::verifyCsrf($_POST['csrf_token'] ?? null)) {
             $_SESSION['writer_action_err'] = 'নিরাপত্তা টোকেন সঠিক নয়।';
-            header("Location: /lens-desk/writers");
+            header("Location: /" . $this->adminPath() . "/writers");
             exit;
         }
 
@@ -295,7 +300,7 @@ class WriterControlController {
 
         if (!$writer) {
             $_SESSION['writer_action_err'] = 'লেখক পাওয়া যায়নি।';
-            header("Location: /lens-desk/writers");
+            header("Location: /" . $this->adminPath() . "/writers");
             exit;
         }
 
@@ -313,7 +318,7 @@ class WriterControlController {
             $_SESSION['writer_action_msg'] = "{$writer['name']}-কে পুনরায় সক্রিয় করা হয়েছে।";
         }
 
-        header("Location: /lens-desk/writers");
+        header("Location: /" . $this->adminPath() . "/writers");
         exit;
     }
 
@@ -324,7 +329,7 @@ class WriterControlController {
         $admin = Middleware::requireAdmin();
         if (!Auth::verifyCsrf($_POST['csrf_token'] ?? null)) {
             $_SESSION['writer_action_err'] = 'নিরাপত্তা টোকেন সঠিক নয়।';
-            header("Location: /lens-desk/writers");
+            header("Location: /" . $this->adminPath() . "/writers");
             exit;
         }
 
@@ -338,7 +343,7 @@ class WriterControlController {
 
         if (!$writer) {
             $_SESSION['writer_action_err'] = 'লেখক পাওয়া যায়নি।';
-            header("Location: /lens-desk/writers");
+            header("Location: /" . $this->adminPath() . "/writers");
             exit;
         }
 
@@ -363,7 +368,7 @@ class WriterControlController {
         ]);
 
         $_SESSION['writer_action_msg'] = "{$writer['name']}-কে সফলভাবে অপসারন করা হয়েছে।";
-        header("Location: /lens-desk/writers");
+        header("Location: /" . $this->adminPath() . "/writers");
         exit;
     }
 }

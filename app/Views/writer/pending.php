@@ -168,7 +168,7 @@
 
     <div>
       <a href="/writer/pending" class="btn-refresh">🔄 স্ট্যাটাস রিফ্রেশ করুন</a>
-      <a href="/lens-desk/logout" class="btn-logout">লগআউট ➔</a>
+      <a href="/logout" class="btn-logout">লগআউট ➔</a>
     </div>
   </div>
 

@@ -52,8 +52,12 @@ $router->get('/news/{id}', 'NewsController@show');
 // Public Reader Authentication & Bookmarks
 $router->get('/register', 'UserAuthController@showRegister');
 $router->post('/register', 'UserAuthController@register');
+$router->get('/user/register', 'UserAuthController@showRegister');
+$router->post('/user/register', 'UserAuthController@register');
 $router->get('/login', 'UserAuthController@showLogin');
 $router->post('/login', 'UserAuthController@login');
+$router->get('/user/login', 'UserAuthController@showLogin');
+$router->post('/user/login', 'UserAuthController@login');
 $router->get('/logout', 'UserAuthController@logout');
 $router->get('/user/bookmarks', 'UserAuthController@bookmarks');
 $router->post('/api/bookmark/toggle', 'UserAuthController@toggleBookmark');
@@ -148,8 +152,10 @@ $router->get('/' . $adminPath . '/writers/show', 'Admin\WriterControlController@
 $router->post('/' . $adminPath . '/writers/approve', 'Admin\WriterControlController@approve');
 $router->post('/' . $adminPath . '/writers/reject', 'Admin\WriterControlController@reject');
 $router->post('/' . $adminPath . '/writers/permission', 'Admin\WriterControlController@updatePermission');
-$router->post('/' . $adminPath . '/writers/status', 'Admin\WriterControlController@updateStatus');
-$router->post('/' . $adminPath . '/writers/remove', 'Admin\WriterControlController@remove');
+$router->post('/' . $adminPath . '/writers/update-permission', 'Admin\WriterControlController@updatePermission');
+$router->post('/' . $adminPath . '/writers/status', 'Admin\WriterControlController@toggleStatus');
+$router->post('/' . $adminPath . '/writers/toggle-status', 'Admin\WriterControlController@toggleStatus');
+$router->post('/' . $adminPath . '/writers/remove', 'Admin\WriterControlController@removeWriter');
 
 // Post Management (List, Create, Store, Edit, Update, Delete, Status)
 $router->get('/' . $adminPath . '/posts', 'Admin\PostController@index');
