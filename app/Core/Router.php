@@ -33,8 +33,16 @@ class Router {
         if ($scriptDir !== '' && stripos($parsedUri, $scriptDir) === 0) {
             $parsedUri = substr($parsedUri, strlen($scriptDir));
         }
+
+        // Handle case where user or rewrite includes /public prefix
+        if (stripos($parsedUri, '/public/') === 0) {
+            $parsedUri = substr($parsedUri, 7);
+        } elseif ($parsedUri === '/public') {
+            $parsedUri = '/';
+        }
+
         $parsedUri = '/' . trim($parsedUri, '/');
-        if ($parsedUri === '//') $parsedUri = '/';
+        if ($parsedUri === '//' || $parsedUri === '') $parsedUri = '/';
 
         foreach ($this->routes as $route) {
             if ($route['method'] !== $method) continue;

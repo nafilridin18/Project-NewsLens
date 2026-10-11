@@ -1,7 +1,11 @@
 .env
+.env.production
+composer.phar
 storage/logs/*.log
 storage/cache/*
 !storage/cache/.gitkeep
 !storage/logs/.gitkeep
 .DS_Store
 Thumbs.db
+*.zip
+*.tar.gz

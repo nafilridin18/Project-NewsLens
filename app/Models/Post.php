@@ -214,6 +214,34 @@ class Post {
     }
 
     /**
+     * Find single post by slug
+     */
+    public static function findBySlug(string $slug): ?array {
+        try {
+            $db = Database::getConnection();
+            $stmt = $db->prepare("
+                SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug, 
+                       COALESCE(NULLIF(p.custom_author, ''), u.name, 'স্টাফ রিপোর্টার') AS author_name, 
+                       u.photo AS author_photo,
+                       d.name_bn AS district_name, dv.name_bn AS division_name
+                FROM `posts` p
+                JOIN `categories` c ON p.category_id = c.id
+                LEFT JOIN `users` u ON p.author_id = u.id
+                LEFT JOIN `districts` d ON p.district_id = d.id
+                LEFT JOIN `divisions` dv ON d.division_id = dv.id
+                WHERE p.slug = :slug
+                LIMIT 1
+            ");
+            $stmt->bindValue(':slug', $slug);
+            $stmt->execute();
+            $post = $stmt->fetch();
+            return $post ?: null;
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+    /**
      * Increment post view count
      */
     public static function incrementViews(int $id): void {

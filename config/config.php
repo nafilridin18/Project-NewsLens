@@ -84,5 +84,19 @@ return [
         'max_size' => (int) env('UPLOAD_MAX_SIZE', 5242880), // 5MB
         'allowed_types' => ['image/jpeg', 'image/png', 'image/webp'],
         'path' => PUBLIC_PATH . '/uploads',
+    ],
+    'mail' => [
+        'host'       => env('MAIL_HOST', 'smtp.gmail.com'),
+        'port'       => (int) env('MAIL_PORT', 587),
+        'username'   => env('MAIL_USER', ''),
+        'password'   => env('MAIL_PASS', ''),
+        'from_email' => env('MAIL_FROM', 'no-reply@newslensbd.com'),
+        'from_name'  => env('MAIL_FROM_NAME', 'Newslensbd (নিউজলেন্সবিডি)'),
+        'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+    ],
+    'push' => [
+        'public_key'  => env('VAPID_PUBLIC_KEY', ''),
+        'private_key' => env('VAPID_PRIVATE_KEY', ''),
+        'subject'     => env('VAPID_SUBJECT', 'mailto:admin@newslensbd.com'),
     ]
 ];

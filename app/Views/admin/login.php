@@ -471,20 +471,6 @@ $error = $error ?? '';
     }
     .bottom-hint-row a:hover { text-decoration: underline; }
 
-    .test-credentials-pill {
-      margin-top: 14px;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      text-align: center;
-      background: var(--bg-input);
-      border: 1px dashed var(--border-color);
-      padding: 8px 12px;
-      border-radius: 6px;
-    }
-    .test-credentials-pill code {
-      color: var(--text-main);
-      font-weight: 700;
-    }
   </style>
 </head>
 <body>
@@ -542,7 +528,7 @@ $error = $error ?? '';
         
         <div class="form-group">
           <label for="email" id="txt-label-email" data-bn="অ্যাডমিন ইমেইল" data-en="Admin Email">অ্যাডমিন ইমেইল</label>
-          <input type="email" name="email" id="email" class="form-control" required placeholder="admin@newslensbd.com" autocomplete="email">
+          <input type="email" name="email" id="email" class="form-control" required placeholder="email@domain.com" autocomplete="email">
         </div>
 
         <div class="form-group">
@@ -567,10 +553,6 @@ $error = $error ?? '';
 
       <div class="bottom-hint-row">
         <span id="txt-hint-need" data-bn="নতুন অ্যাকাউন্ট প্রয়োজন?" data-en="Need a new account?">নতুন অ্যাকাউন্ট প্রয়োজন?</span> <a href="<?= $appUrl ?>/<?= $adminPath ?>/register" id="txt-hint-link" data-bn="রেজিস্ট্রেশন করুন ➔" data-en="Register here ➔">রেজিস্ট্রেশন করুন ➔</a>
-      </div>
-
-      <div class="test-credentials-pill">
-        <span id="txt-demo-login" data-bn="পরীক্ষামূলক লগইন:" data-en="Demo Login:">পরীক্ষামূলক লগইন:</span> <code>admin@newslensbd.com</code> / <code>password123</code>
       </div>
     </div>
 

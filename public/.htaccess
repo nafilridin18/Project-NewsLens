@@ -1,6 +1,5 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /NewsLens/public/
 
     # Send Requests To Front Controller
     RewriteCond %{REQUEST_FILENAME} !-d

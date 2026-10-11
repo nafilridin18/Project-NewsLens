@@ -166,6 +166,17 @@ class PostController {
                 ':isBreaking'   => $isBreaking,
                 ':publishedAt'  => $publishedAt
             ]);
+            $newId = (int) $db->lastInsertId();
+
+            if ($status === 'published' && $isBreaking) {
+                \App\Helpers\PushNotifier::notifyBreakingNews([
+                    'id'      => $newId,
+                    'title'   => $title,
+                    'slug'    => $slug,
+                    'excerpt' => $excerpt
+                ]);
+            }
+
             header("Location: {$this->appUrl}/{$this->adminPath}/posts?msg=created");
             exit;
         } catch (\Throwable $e) {
@@ -280,6 +291,18 @@ class PostController {
                 ':isBreaking'   => $isBreaking,
                 ':id'           => $id
             ]);
+
+            if ($status === 'published' && $isBreaking) {
+                // Fetch slug for the post
+                $postRow = $db->query("SELECT slug FROM `posts` WHERE id = " . (int)$id)->fetch();
+                \App\Helpers\PushNotifier::notifyBreakingNews([
+                    'id'      => $id,
+                    'title'   => $title,
+                    'slug'    => $postRow['slug'] ?? 'news-' . $id,
+                    'excerpt' => $excerpt
+                ]);
+            }
+
             header("Location: {$this->appUrl}/{$this->adminPath}/posts?msg=updated");
             exit;
         } catch (\Throwable $e) {

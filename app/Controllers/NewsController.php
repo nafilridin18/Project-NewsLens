@@ -13,23 +13,31 @@ class NewsController {
      * Show single news article
      */
     public function show(array $params = []): void {
-        $id = (int) ($params['id'] ?? $_GET['id'] ?? 0);
-        if ($id <= 0) {
-            http_response_code(404);
-            View::render('errors.404', ['pageTitle' => 'খবর পাওয়া যায়নি | Newslensbd']);
-            return;
+        $rawId = $params['id'] ?? $_GET['id'] ?? 0;
+        $post = null;
+
+        if (is_numeric($rawId) && (int)$rawId > 0) {
+            $post = Post::find((int)$rawId);
         }
 
-        $post = Post::find($id);
+        // If not found by ID or rawId is a string slug, try finding by slug
+        if (!$post) {
+            $slugCandidate = $params['slug'] ?? (!is_numeric($rawId) ? $rawId : null);
+            if (!empty($slugCandidate)) {
+                $post = Post::findBySlug((string)$slugCandidate);
+            }
+        }
+
         if (!$post) {
             http_response_code(404);
             View::render('errors.404', ['pageTitle' => 'খবর পাওয়া যায়নি | Newslensbd']);
             return;
         }
 
-        // Increment view count on each visit
-        Post::incrementViews($id);
-        $post['views'] = ($post['views'] ?? 0) + 1;
+        $id = (int) $post['id'];
+
+        // Record view with 30-minute duplicate protection
+        \App\Models\PostView::recordView($id);
 
         $categories   = Category::getMenuCategories();
         $breakingNews = Post::getBreakingNews(6);

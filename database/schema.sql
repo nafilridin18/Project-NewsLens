@@ -14,16 +14,28 @@ CREATE TABLE `users` (
     `email` VARCHAR(191) NOT NULL UNIQUE,
     `phone` VARCHAR(30) NULL,
     `password_hash` VARCHAR(255) NOT NULL,
-    `role` ENUM('super_admin', 'editor', 'sub_editor', 'reporter', 'district_rep') NOT NULL DEFAULT 'reporter',
+    `role` ENUM('super_admin', 'admin', 'editor', 'sub_editor', 'reporter', 'district_rep', 'writer', 'user') NOT NULL DEFAULT 'user',
     `district_id` INT UNSIGNED NULL,
     `photo` VARCHAR(255) NULL,
+    `avatar` VARCHAR(255) NULL,
+    `cover` VARCHAR(255) NULL,
     `bio` TEXT NULL,
-    `status` ENUM('active', 'inactive', 'banned') NOT NULL DEFAULT 'active',
+    `location` VARCHAR(150) NULL,
+    `social_links` JSON NULL,
+    `writer_reason` TEXT NULL,
+    `rejected_reason` TEXT NULL,
+    `approved_by` BIGINT UNSIGNED NULL,
+    `approved_at` DATETIME NULL,
+    `status` ENUM('pending', 'active', 'suspended', 'removed', 'unverified', 'inactive', 'banned') NOT NULL DEFAULT 'active',
+    `email_verified_at` TIMESTAMP NULL,
+    `permission_level` ENUM('direct_publish', 'editor_review') NULL DEFAULT NULL,
     `last_login` DATETIME NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `deleted_at` TIMESTAMP NULL,
     INDEX `idx_users_role` (`role`),
-    INDEX `idx_users_status` (`status`)
+    INDEX `idx_users_status` (`status`),
+    INDEX `idx_users_permission` (`permission_level`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 2. Divisions table (৮ বিভাগ)
@@ -92,7 +104,8 @@ CREATE TABLE `posts` (
     `upazila_id` INT UNSIGNED NULL,
     `author_id` BIGINT UNSIGNED NOT NULL,
     `custom_author` VARCHAR(150) NULL DEFAULT NULL,
-    `status` ENUM('draft', 'pending', 'published', 'scheduled', 'rejected') NOT NULL DEFAULT 'draft',
+    `status` ENUM('draft', 'pending_review', 'pending', 'published', 'scheduled', 'rejected') NOT NULL DEFAULT 'draft',
+    `rejected_reason` TEXT NULL,
     `is_lead` TINYINT(1) NOT NULL DEFAULT 0,
     `is_breaking` TINYINT(1) NOT NULL DEFAULT 0,
     `views` BIGINT UNSIGNED NOT NULL DEFAULT 0,
@@ -283,13 +296,122 @@ CREATE TABLE `login_attempts` (
     INDEX `idx_login_ip_attempt` (`ip_address`, `attempted_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 20. Security: Password Resets
+-- 20. Security: OTP Codes (রেজিস্ট্রেশন ও পাসওয়ার্ড রিসেট ইমেইল যাচাই)
+DROP TABLE IF EXISTS `otp_codes`;
+CREATE TABLE `otp_codes` (
+    `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `email` VARCHAR(191) NOT NULL,
+    `purpose` ENUM('register', 'forgot_password') NOT NULL,
+    `code_hash` VARCHAR(255) NOT NULL,
+    `attempts` INT UNSIGNED NOT NULL DEFAULT 0,
+    `expires_at` DATETIME NOT NULL,
+    `used_at` DATETIME NULL,
+    `ip` VARCHAR(45) NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX `idx_otp_email_purpose` (`email`, `purpose`),
+    INDEX `idx_otp_expires` (`expires_at`),
+    INDEX `idx_otp_ip_created` (`ip`, `created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 21. Security: Password Resets
 DROP TABLE IF EXISTS `password_resets`;
 CREATE TABLE `password_resets` (
+    `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     `email` VARCHAR(191) NOT NULL,
-    `token` VARCHAR(255) NOT NULL,
+    `token_hash` VARCHAR(255) NOT NULL,
+    `expires_at` DATETIME NOT NULL,
+    `used_at` DATETIME NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    INDEX `idx_pwd_resets_email` (`email`)
+    INDEX `idx_pwd_email` (`email`),
+    INDEX `idx_pwd_token` (`token_hash`),
+    INDEX `idx_pwd_expires` (`expires_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 22. Analytics: Post Views Tracking (৩০ মিনিটের ডুপ্লিকেট সুরক্ষা সহ)
+DROP TABLE IF EXISTS `post_views`;
+CREATE TABLE `post_views` (
+    `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `post_id` BIGINT UNSIGNED NOT NULL,
+    `ip_hash` VARCHAR(64) NOT NULL,
+    `user_id` BIGINT UNSIGNED NULL,
+    `viewed_at` DATETIME NOT NULL,
+    INDEX `idx_pv_post_viewed` (`post_id`, `viewed_at`),
+    INDEX `idx_pv_dedup` (`post_id`, `ip_hash`, `viewed_at`),
+    CONSTRAINT `fk_pv_post` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 23. In-App Notifications (হেডার বেল ও বার্তা তালিকা)
+DROP TABLE IF EXISTS `notifications`;
+CREATE TABLE `notifications` (
+    `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `user_id` BIGINT UNSIGNED NOT NULL,
+    `type` VARCHAR(50) NOT NULL DEFAULT 'breaking_news',
+    `title` VARCHAR(255) NOT NULL,
+    `body` TEXT NOT NULL,
+    `url` VARCHAR(255) NOT NULL,
+    `read_at` DATETIME NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX `idx_notif_user_read` (`user_id`, `read_at`),
+    CONSTRAINT `fk_notif_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 24. Web Push Subscriptions (মোবাইল ও ব্রাউজার পুশ নোটিফিকেশন)
+DROP TABLE IF EXISTS `push_subscriptions`;
+CREATE TABLE `push_subscriptions` (
+    `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `user_id` BIGINT UNSIGNED NOT NULL,
+    `endpoint` TEXT NOT NULL,
+    `p256dh` VARCHAR(255) NOT NULL,
+    `auth` VARCHAR(255) NOT NULL,
+    `user_agent` VARCHAR(255) NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX `idx_push_user` (`user_id`),
+    CONSTRAINT `fk_push_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 25. Notification Queue (ব্যাকগ্রাউন্ড কিউ ও ক্রন জব)
+DROP TABLE IF EXISTS `notification_queue`;
+CREATE TABLE `notification_queue` (
+    `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `post_id` BIGINT UNSIGNED NOT NULL,
+    `title` VARCHAR(255) NOT NULL,
+    `body` TEXT NOT NULL,
+    `url` VARCHAR(255) NOT NULL,
+    `status` ENUM('pending', 'processing', 'completed', 'failed') NOT NULL DEFAULT 'pending',
+    `attempts` INT UNSIGNED NOT NULL DEFAULT 0,
+    `last_error` TEXT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `processed_at` DATETIME NULL,
+    INDEX `idx_nq_status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 26. Audit Logs (অ্যাডমিন ও সম্পাদকীয় কার্যক্রমের রেকর্ড)
+DROP TABLE IF EXISTS `audit_logs`;
+CREATE TABLE `audit_logs` (
+    `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `user_id` BIGINT UNSIGNED NULL,
+    `action` VARCHAR(100) NOT NULL,
+    `target_type` VARCHAR(50) NULL,
+    `target_id` BIGINT UNSIGNED NULL,
+    `details` JSON NULL,
+    `ip` VARCHAR(45) NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX `idx_audit_user` (`user_id`),
+    INDEX `idx_audit_action` (`action`),
+    INDEX `idx_audit_created` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 27. Bookmarks (পাঠকদের সংরক্ষিত সংবাদ)
+DROP TABLE IF EXISTS `bookmarks`;
+CREATE TABLE `bookmarks` (
+    `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `user_id` BIGINT UNSIGNED NOT NULL,
+    `post_id` BIGINT UNSIGNED NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY `uniq_user_post_bookmark` (`user_id`, `post_id`),
+    INDEX `idx_bm_user` (`user_id`),
+    CONSTRAINT `fk_bm_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_bm_post` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;

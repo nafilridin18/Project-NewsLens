@@ -720,34 +720,75 @@ $currentUrl = htmlspecialchars($_SERVER['REQUEST_URI'] ?? ($appUrl . '/' . $admi
 
   <!-- Drawer Nav Menu Buttons -->
   <nav class="admin-drawer-nav">
-    <a href="<?= $appUrl ?>/<?= $adminPath ?>" class="drawer-nav-item <?= $activeTab === 'dashboard' ? 'active' : '' ?>">
-      <span class="drawer-nav-icon">📊</span>
-      <span data-bn="ড্যাশবোর্ড ওভারভিউ" data-en="Dashboard Overview">ড্যাশবোর্ড ওভারভিউ</span>
-    </a>
-    <a href="<?= $appUrl ?>/<?= $adminPath ?>/posts" class="drawer-nav-item <?= $activeTab === 'posts' ? 'active' : '' ?>">
-      <span class="drawer-nav-icon">📝</span>
-      <span data-bn="সংবাদ তালিকা" data-en="News List">সংবাদ তালিকা</span>
-    </a>
-    <a href="<?= $appUrl ?>/<?= $adminPath ?>/posts/create" class="drawer-nav-item" style="color: #4ade80;">
-      <span class="drawer-nav-icon">✍️</span>
-      <span data-bn="নতুন খবর লিখুন" data-en="Create News Post">নতুন খবর লিখুন</span>
-    </a>
-    <a href="<?= $appUrl ?>/<?= $adminPath ?>/ads" class="drawer-nav-item <?= $activeTab === 'ads' ? 'active' : '' ?>">
-      <span class="drawer-nav-icon">📢</span>
-      <span data-bn="বিজ্ঞাপন ম্যানেজমেন্ট" data-en="Advertisements">বিজ্ঞাপন ম্যানেজমেন্ট</span>
-    </a>
-    <a href="<?= $appUrl ?>/<?= $adminPath ?>/polls" class="drawer-nav-item <?= $activeTab === 'polls' ? 'active' : '' ?>">
-      <span class="drawer-nav-icon">📈</span>
-      <span data-bn="অনলাইন জরিপ" data-en="Online Polls">অনলাইন জরিপ</span>
-    </a>
-    <a href="<?= $appUrl ?>/<?= $adminPath ?>/subscribers" class="drawer-nav-item <?= $activeTab === 'subscribers' ? 'active' : '' ?>">
-      <span class="drawer-nav-icon">✉️</span>
-      <span data-bn="নিউজলেটার গ্রাহক" data-en="Newsletter">নিউজলেটার গ্রাহক</span>
-    </a>
-    <a href="<?= $appUrl ?>/<?= $adminPath ?>/settings" class="drawer-nav-item <?= $activeTab === 'settings' ? 'active' : '' ?>">
-      <span class="drawer-nav-icon">⚙️</span>
-      <span data-bn="সাইট সেটিংস ও লোগো" data-en="Settings & Logo">সাইট সেটিংস ও লোগো</span>
-    </a>
+    <?php if (\App\Core\Auth::isWriter()): ?>
+      <!-- WRITER RESTRICTED MENU -->
+      <a href="<?= $appUrl ?>/writer/dashboard" class="drawer-nav-item <?= $activeTab === 'writer_dashboard' ? 'active' : '' ?>">
+        <span class="drawer-nav-icon">📊</span>
+        <span data-bn="ড্যাশবোর্ড" data-en="Dashboard">ড্যাশবোর্ড</span>
+      </a>
+      <a href="<?= $appUrl ?>/writer/posts" class="drawer-nav-item <?= $activeTab === 'writer_posts' ? 'active' : '' ?>">
+        <span class="drawer-nav-icon">📝</span>
+        <span data-bn="আমার সংবাদসমূহ" data-en="My Posts">আমার সংবাদসমূহ</span>
+      </a>
+      <a href="<?= $appUrl ?>/writer/posts/create" class="drawer-nav-item" style="color: #4ade80;">
+        <span class="drawer-nav-icon">✍️</span>
+        <span data-bn="নতুন সংবাদ লিখুন" data-en="New Post">নতুন সংবাদ লিখুন</span>
+      </a>
+      <a href="<?= $appUrl ?>/profile" class="drawer-nav-item <?= $activeTab === 'profile' ? 'active' : '' ?>">
+        <span class="drawer-nav-icon">👤</span>
+        <span data-bn="আমার প্রোফাইল ও অ্যানালিটিক্স" data-en="Profile & Stats">আমার প্রোফাইল ও অ্যানালিটিক্স</span>
+      </a>
+    <?php else: ?>
+      <!-- ADMIN & EDITOR MENU -->
+      <a href="<?= $appUrl ?>/<?= $adminPath ?>" class="drawer-nav-item <?= $activeTab === 'dashboard' ? 'active' : '' ?>">
+        <span class="drawer-nav-icon">📊</span>
+        <span data-bn="ড্যাশবোর্ড ওভারভিউ" data-en="Dashboard Overview">ড্যাশবোর্ড ওভারভিউ</span>
+      </a>
+
+      <?php if (\App\Core\Auth::isAdmin()): ?>
+        <a href="<?= $appUrl ?>/<?= $adminPath ?>/writers" class="drawer-nav-item <?= $activeTab === 'writers' ? 'active' : '' ?>">
+          <span class="drawer-nav-icon">👥</span>
+          <span data-bn="লেখক নিয়ন্ত্রণ" data-en="Writer Control">লেখক নিয়ন্ত্রণ</span>
+          <?php
+            try {
+                $pCount = (int) \App\Core\Database::getConnection()->query("SELECT COUNT(*) FROM `users` WHERE `role` = 'writer' AND `status` = 'pending' AND `deleted_at` IS NULL")->fetchColumn();
+                if ($pCount > 0) {
+                    echo '<span style="background: #f59e0b; color: #000; font-size: 0.72rem; font-weight: 800; padding: 2px 7px; border-radius: 12px; margin-left: auto;">' . $pCount . '</span>';
+                }
+            } catch (\Exception $e) {}
+          ?>
+        </a>
+      <?php endif; ?>
+
+      <a href="<?= $appUrl ?>/<?= $adminPath ?>/posts" class="drawer-nav-item <?= $activeTab === 'posts' ? 'active' : '' ?>">
+        <span class="drawer-nav-icon">📝</span>
+        <span data-bn="সংবাদ তালিকা" data-en="News List">সংবাদ তালিকা</span>
+      </a>
+      <a href="<?= $appUrl ?>/<?= $adminPath ?>/posts/create" class="drawer-nav-item" style="color: #4ade80;">
+        <span class="drawer-nav-icon">✍️</span>
+        <span data-bn="নতুন খবর লিখুন" data-en="Create News Post">নতুন খবর লিখুন</span>
+      </a>
+      <a href="<?= $appUrl ?>/<?= $adminPath ?>/ads" class="drawer-nav-item <?= $activeTab === 'ads' ? 'active' : '' ?>">
+        <span class="drawer-nav-icon">📢</span>
+        <span data-bn="বিজ্ঞাপন ম্যানেজমেন্ট" data-en="Advertisements">বিজ্ঞাপন ম্যানেজমেন্ট</span>
+      </a>
+      <a href="<?= $appUrl ?>/<?= $adminPath ?>/polls" class="drawer-nav-item <?= $activeTab === 'polls' ? 'active' : '' ?>">
+        <span class="drawer-nav-icon">📈</span>
+        <span data-bn="অনলাইন জরিপ" data-en="Online Polls">অনলাইন জরিপ</span>
+      </a>
+      <a href="<?= $appUrl ?>/<?= $adminPath ?>/subscribers" class="drawer-nav-item <?= $activeTab === 'subscribers' ? 'active' : '' ?>">
+        <span class="drawer-nav-icon">✉️</span>
+        <span data-bn="নিউজলেটার গ্রাহক" data-en="Newsletter">নিউজলেটার গ্রাহক</span>
+      </a>
+      <a href="<?= $appUrl ?>/<?= $adminPath ?>/settings" class="drawer-nav-item <?= $activeTab === 'settings' ? 'active' : '' ?>">
+        <span class="drawer-nav-icon">⚙️</span>
+        <span data-bn="সাইট সেটিংস ও লোগো" data-en="Settings & Logo">সাইট সেটিংস ও লোগো</span>
+      </a>
+      <a href="<?= $appUrl ?>/profile" class="drawer-nav-item <?= $activeTab === 'profile' ? 'active' : '' ?>">
+        <span class="drawer-nav-icon">👤</span>
+        <span data-bn="আমার প্রোফাইল ও অ্যানালিটিক্স" data-en="Profile & Stats">আমার প্রোফাইল ও অ্যানালিটিক্স</span>
+      </a>
+    <?php endif; ?>
   </nav>
 
   <!-- Drawer Footer Actions -->

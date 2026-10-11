@@ -48,7 +48,12 @@ $currentUrl = "{$scheme}://{$host}{$reqUri}";
                   $authorNameEn = ($authorName === 'বেনামী') ? 'Anonymous' : ($post['author_name_en'] ?? $authorName);
                   if ($authorName === 'স্টাফ রিপোর্টার') $authorNameEn = 'Staff Reporter';
                 ?>
-                <span class="author-name" data-bn="<?= htmlspecialchars($authorName) ?>" data-en="<?= htmlspecialchars($authorNameEn) ?>"><?= htmlspecialchars($authorName) ?></span>
+                <?php $authorId = (int)($post['author_id'] ?? 0); ?>
+                <?php if ($authorId > 0 && $authorName !== 'বেনামী'): ?>
+                  <a href="<?= $appUrl ?>/author/<?= $authorId ?>" class="author-name" style="text-decoration:none; color:inherit; font-weight:700;" data-bn="<?= htmlspecialchars($authorName) ?>" data-en="<?= htmlspecialchars($authorNameEn) ?>"><?= htmlspecialchars($authorName) ?></a>
+                <?php else: ?>
+                  <span class="author-name" data-bn="<?= htmlspecialchars($authorName) ?>" data-en="<?= htmlspecialchars($authorNameEn) ?>"><?= htmlspecialchars($authorName) ?></span>
+                <?php endif; ?>
                 <?php if (!empty($post['district_name'])): ?>
                   <span class="author-loc">| <?= htmlspecialchars($post['district_name']) ?></span>
                 <?php endif; ?>
@@ -80,6 +85,15 @@ $currentUrl = "{$scheme}://{$host}{$reqUri}";
             </a>
             <button type="button" class="share-btn copy-share" id="copy-article-link" data-url="<?= htmlspecialchars($currentUrl) ?>" title="লিঙ্ক কপি করুন" data-bn="🔗 কপি লিঙ্ক" data-en="🔗 Copy Link">
               🔗 কপি লিঙ্ক
+            </button>
+
+            <?php
+              $currentUserId = \App\Core\Auth::id();
+              $isBookmarked = $currentUserId ? \App\Models\Bookmark::isBookmarked($currentUserId, (int)$post['id']) : false;
+            ?>
+            <button type="button" class="share-btn bookmark-btn <?= $isBookmarked ? 'bookmarked' : '' ?>" id="bookmark-article-btn" onclick="toggleArticleBookmark(<?= (int)$post['id'] ?>)" title="বুকমার্ক করুন" style="background: <?= $isBookmarked ? '#dcfce7; color: #15803d; border-color: #86efac;' : '#f1f5f9; color: #334155;' ?>;">
+              <span id="bm-icon"><?= $isBookmarked ? '🔖' : '📑' ?></span>
+              <span id="bm-text" data-bn="<?= $isBookmarked ? 'সংরক্ষিত' : 'সংরক্ষণ' ?>" data-en="<?= $isBookmarked ? 'Bookmarked' : 'Bookmark' ?>"><?= $isBookmarked ? 'সংরক্ষিত' : 'সংরক্ষণ' ?></span>
             </button>
           </div>
         </header>
@@ -200,3 +214,46 @@ $currentUrl = "{$scheme}://{$host}{$reqUri}";
     </aside>
   </div>
 </div>
+
+<script>
+  function toggleArticleBookmark(postId) {
+    const btn = document.getElementById('bookmark-article-btn');
+    const icon = document.getElementById('bm-icon');
+    const text = document.getElementById('bm-text');
+
+    const fd = new FormData();
+    fd.append('post_id', postId);
+
+    fetch('<?= $appUrl ?>/api/bookmark/toggle', {
+      method: 'POST',
+      body: fd
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.require_login) {
+        if (confirm(data.message + ' আপনি কি লগইন পাতায় যেতে চান?')) {
+          window.location.href = '<?= $appUrl ?>/login';
+        }
+        return;
+      }
+      if (data.success) {
+        if (data.bookmarked) {
+          btn.style.background = '#dcfce7';
+          btn.style.color = '#15803d';
+          btn.style.borderColor = '#86efac';
+          icon.textContent = '🔖';
+          text.textContent = 'সংরক্ষিত';
+        } else {
+          btn.style.background = '#f1f5f9';
+          btn.style.color = '#334155';
+          btn.style.borderColor = 'inherit';
+          icon.textContent = '📑';
+          text.textContent = 'সংরক্ষণ';
+        }
+      }
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  }
+</script>
