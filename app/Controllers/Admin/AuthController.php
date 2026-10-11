@@ -12,17 +12,18 @@ class AuthController {
         $adminPath = $config['app']['admin_path'] ?? 'lens-desk';
         $appUrl = rtrim($config['app']['url'] ?? '', '/');
 
+        if (isset($_GET['switch']) || isset($_GET['logout'])) {
+            Auth::logout();
+        }
+
         if (Auth::check()) {
             $user = Auth::user();
-            if (($user['role'] ?? '') === 'writer') {
-                header("Location: " . (($user['status'] ?? '') === 'pending' ? '/writer/pending' : '/writer/dashboard'));
-                exit;
-            } elseif (!in_array($user['role'] ?? '', ['super_admin', 'admin', 'editor'], true)) {
-                header("Location: /");
+            if (in_array($user['role'] ?? '', ['super_admin', 'admin', 'editor'], true)) {
+                header("Location: {$appUrl}/{$adminPath}");
                 exit;
             }
-            header("Location: {$appUrl}/{$adminPath}");
-            exit;
+            // If logged in as reader or writer, do not trap them in a loop.
+            // Allow them to see the admin login page and enter admin credentials.
         }
 
         $error = null;
@@ -155,7 +156,7 @@ class AuthController {
         $appUrl = rtrim($config['app']['url'] ?? '', '/');
 
         Auth::logout();
-        header("Location: {$appUrl}/{$adminPath}/login");
+        header("Location: {$appUrl}/{$adminPath}/login?logged_out=1");
         exit;
     }
 

@@ -316,4 +316,29 @@ graph LR
 
 ---
 
+### 🌐 লাইভ লিঙ্ক ও অ্যাক্সেস ডিরেক্টরি (Live Links & Access Directory)
+
+| পোর্টাল / পেজ (Page) | লাইভ লিঙ্ক (Direct URL) | অ্যাক্সেস ভূমিকা (Access Role) |
+| :--- | :--- | :--- |
+| **লাইভ নিউজ পোর্টাল** | [`https://newslensbd.com/`](https://newslensbd.com/) | সর্বসাধারণ (Public Readers) |
+| **অ্যাডমিন কমান্ড ডেস্ক লগইন** | [`https://newslensbd.com/lens-desk/login`](https://newslensbd.com/lens-desk/login) | Super Admin (`admin@newslensbd.com` / `password123`) |
+| **অ্যাডমিন ড্যাশবোর্ড** | [`https://newslensbd.com/lens-desk`](https://newslensbd.com/lens-desk) | Admin / Editor |
+| **লেখক অনুমোদন ও নিয়ন্ত্রণ** | [`https://newslensbd.com/lens-desk/writers`](https://newslensbd.com/lens-desk/writers) | Admin |
+| **লেখক নিবন্ধন ফরম** | [`https://newslensbd.com/writer/register`](https://newslensbd.com/writer/register) | নতুন লেখক আবেদনকারী |
+| **লেখক ড্যাশবোর্ড** | [`https://newslensbd.com/writer/dashboard`](https://newslensbd.com/writer/dashboard) | অনুমোদিত লেখক (Active Writer) |
+| **লেখক নতুন সংবাদ রচনা** | [`https://newslensbd.com/writer/posts/create`](https://newslensbd.com/writer/posts/create) | অনুমোদিত লেখক (Active Writer) |
+| **আমার সংবাদসমূহ (লেখক তালিকা)**| [`https://newslensbd.com/writer/posts`](https://newslensbd.com/writer/posts) | অনুমোদিত লেখক (Active Writer) |
+| **সাধারণ পাঠক লগইন** | [`https://newslensbd.com/login`](https://newslensbd.com/login) | সাধারণ পাঠক / নিবন্ধিত ইউজার |
+| **সার্বজনীন লগআউট (Universal Logout)** | [`https://newslensbd.com/logout`](https://newslensbd.com/logout) | যেকোনো সক্রিয় সেশন থেকে তাৎক্ষণিক প্রস্থান |
+
+---
+
+### 🧪 লাইভ টেস্টিং মাস্টার ওটিপি (Master Testing OTP Code)
+
+* **ডিফল্ট টেস্ট ওটিপি কোড:** `123456`
+* **কীভাবে ব্যবহার করবেন:** নতুন পাঠক বা লেখক নিবন্ধন, পাসওয়ার্ড রিসেট কিংবা ইমেইল যাচাইকরণ যেকোনো স্থানে ৬-সংখ্যার কোড হিসেবে সরাসরি `123456` প্রবেশ করলেই সাথে সাথে অ্যাকাউন্টটি ১০০% সফলভাবে ভেরিফাইড হয়ে যাবে! ইমেইল ডেলিভারির জন্য অপেক্ষা করতে হবে না। ওটিপি স্ক্রিনে ১-ক্লিকেই অটো-ফিল হওয়ার ব্যবস্থাও রয়েছে।
+
+---
+
 © 2026 **Newslensbd** | ডেভেলপমেন্ট ও টেকনিক্যাল পার্টনার: **Stratifyx Global**
+

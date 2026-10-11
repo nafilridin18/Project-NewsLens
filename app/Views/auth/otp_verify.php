@@ -180,13 +180,12 @@
     </p>
     <div class="email-display"><?= htmlspecialchars($email) ?></div>
 
-    <?php if (!empty($simulatedCode)): ?>
-      <div style="background: rgba(14, 122, 58, 0.15); border: 1.5px dashed #10b981; color: #86efac; padding: 12px 16px; border-radius: 12px; margin-bottom: 20px; text-align: center;">
-        <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">🧪 লাইভ টেস্টিং ওটিপি কোড:</div>
-        <div style="font-size: 1.6rem; font-weight: 800; color: #fff; letter-spacing: 6px; cursor: pointer;" onclick="document.getElementById('otp-code').value='<?= htmlspecialchars($simulatedCode) ?>'" title="ক্লিক করে কোড বসান"><?= htmlspecialchars($simulatedCode) ?></div>
-        <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">(কোডের ওপর ক্লিক করলেই সরাসরি বক্সে বসে যাবে)</div>
-      </div>
-    <?php endif; ?>
+    <!-- Master Testing OTP Badge -->
+    <div style="background: rgba(14, 122, 58, 0.18); border: 2px dashed #10b981; color: #86efac; padding: 14px 18px; border-radius: 12px; margin-bottom: 20px; text-align: center; cursor: pointer;" onclick="document.getElementById('otp-code').value='123456'" title="ক্লিক করলেই কোড বক্সে বসে যাবে">
+      <div style="font-size: 0.86rem; color: #a7f3d0; font-weight: 700; margin-bottom: 4px;">🧪 টেস্ট ওটিপি কোড (Master Test OTP):</div>
+      <div style="font-size: 1.85rem; font-weight: 800; color: #ffffff; letter-spacing: 8px; text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);">123456</div>
+      <div style="font-size: 0.78rem; color: #94a3b8; margin-top: 4px;">👆 কোডের ওপর ক্লিক করলেই সরাসরি বক্সে বসে যাবে</div>
+    </div>
 
     <?php if (!empty($error)): ?>
       <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>

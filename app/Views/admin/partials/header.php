@@ -647,19 +647,38 @@ $currentUrl = htmlspecialchars($_SERVER['REQUEST_URI'] ?? ($appUrl . '/' . $admi
         <span class="ham-line"></span>
       </button>
 
-      <a href="<?= $appUrl ?>/<?= $adminPath ?>" class="admin-brand-link" title="Newslensbd অ্যাডমিন প্যানেল">
+      <a href="<?= \App\Core\Auth::isWriter() ? ($appUrl . '/writer/dashboard') : ($appUrl . '/' . $adminPath) ?>" class="admin-brand-link" title="Newslensbd কন্ট্রোল প্যানেল">
         <div class="admin-logo-badge">
           <img src="<?= $siteLogo ?>" alt="Newslensbd" class="admin-brand-logo-img">
         </div>
       </a>
     </div>
 
-    <!-- Navigation Bar: ONLY Dashboard as requested (Always strictly adjacent to Logo on widescreen/landscape) -->
+    <!-- Navigation Bar: Dynamic Quick Links adjacent to Logo -->
     <nav class="admin-nav-bar" aria-label="Admin Navigation">
-      <a href="<?= $appUrl ?>/<?= $adminPath ?>" class="admin-nav-item <?= $activeTab === 'dashboard' ? 'active' : '' ?>" title="ড্যাশবোর্ড / Dashboard">
-        <span class="nav-icon">📊</span>
-        <span class="nav-text" data-bn="ড্যাশবোর্ড" data-en="Dashboard">ড্যাশবোর্ড</span>
-      </a>
+      <?php if (\App\Core\Auth::isWriter()): ?>
+        <a href="<?= $appUrl ?>/writer/dashboard" class="admin-nav-item <?= $activeTab === 'writer_dashboard' ? 'active' : '' ?>" title="ড্যাশবোর্ড">
+          <span class="nav-icon">📊</span>
+          <span class="nav-text" data-bn="ড্যাশবোর্ড" data-en="Dashboard">ড্যাশবোর্ড</span>
+        </a>
+        <a href="<?= $appUrl ?>/writer/posts/create" class="admin-nav-item" style="color: #4ade80;" title="নতুন সংবাদ লিখুন">
+          <span class="nav-icon">✍️</span>
+          <span class="nav-text" data-bn="সংবাদ লিখুন" data-en="Write News">সংবাদ লিখুন</span>
+        </a>
+        <a href="<?= $appUrl ?>/writer/posts" class="admin-nav-item <?= $activeTab === 'writer_posts' ? 'active' : '' ?>" title="আমার সংবাদসমূহ">
+          <span class="nav-icon">📝</span>
+          <span class="nav-text" data-bn="আমার সংবাদ" data-en="My Posts">আমার সংবাদ</span>
+        </a>
+      <?php else: ?>
+        <a href="<?= $appUrl ?>/<?= $adminPath ?>" class="admin-nav-item <?= $activeTab === 'dashboard' ? 'active' : '' ?>" title="ড্যাশবোর্ড / Dashboard">
+          <span class="nav-icon">📊</span>
+          <span class="nav-text" data-bn="ড্যাশবোর্ড" data-en="Dashboard">ড্যাশবোর্ড</span>
+        </a>
+        <a href="<?= $appUrl ?>/<?= $adminPath ?>/posts/create" class="admin-nav-item" style="color: #4ade80;" title="নতুন খবর তৈরি করুন">
+          <span class="nav-icon">✍️</span>
+          <span class="nav-text" data-bn="নতুন খবর লিখুন" data-en="New Post">নতুন খবর লিখুন</span>
+        </a>
+      <?php endif; ?>
     </nav>
   </div>
 

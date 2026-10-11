@@ -17,8 +17,8 @@ class Middleware {
             $config = require dirname(__DIR__, 2) . '/config/config.php';
             $adminPath = trim($config['app']['admin_path'] ?? 'lens-desk', '/');
             
-            // Check if asking for admin roles or public/writer
-            if (in_array('super_admin', $allowedRoles, true) || in_array('admin', $allowedRoles, true) || in_array('editor', $allowedRoles, true)) {
+            $currentUri = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+            if (str_starts_with($currentUri, '/' . $adminPath)) {
                 header("Location: /{$adminPath}/login");
             } else {
                 header("Location: /login");

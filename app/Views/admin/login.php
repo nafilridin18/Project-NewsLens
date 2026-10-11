@@ -515,6 +515,21 @@ $error = $error ?? '';
         <p class="brand-subtitle" id="txt-brand-sub" data-bn="নিউজ ম্যানেজমেন্ট ও সম্পাদকীয় কমান্ড ডেস্ক" data-en="News Management & Editorial Command Desk">নিউজ ম্যানেজমেন্ট ও সম্পাদকীয় কমান্ড ডেস্ক</p>
       </div>
 
+      <?php if (isset($_GET['logged_out'])): ?>
+        <div class="alert-box alert-success" style="background: rgba(14, 122, 58, 0.2); border: 1px solid #10b981; color: #86efac;">
+          ✅ আপনি সফলভাবে লগআউট হয়েছেন।
+        </div>
+      <?php endif; ?>
+
+      <?php if (\App\Core\Auth::check()): 
+        $activeUser = \App\Core\Auth::user();
+      ?>
+        <div style="background: rgba(245, 158, 11, 0.15); border: 1px solid #f59e0b; color: #fbbf24; padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; margin-bottom: 16px; text-align: center;">
+          <span>⚠️ আপনি বর্তমানে <strong><?= htmlspecialchars($activeUser['name'] ?? '') ?></strong> (<?= htmlspecialchars($activeUser['role'] ?? '') ?>) হিসেবে সংযুক্ত আছেন।</span><br>
+          <span style="font-size: 0.82rem; margin-top: 4px; display: inline-block;">এডমিন প্যানেলে প্রবেশ করতে নিচে এডমিন তথ্য দিন অথবা <a href="<?= $appUrl ?>/<?= $adminPath ?>/logout" style="color: #f87171; font-weight: 700; text-decoration: underline;">লগআউট করুন ➔</a></span>
+        </div>
+      <?php endif; ?>
+
       <?php if (isset($_GET['msg']) && $_GET['msg'] === 'registered'): ?>
         <div class="alert-box alert-success" id="txt-reg-success" data-bn="✅ রেজিস্ট্রেশন সম্পন্ন হয়েছে! আপনার ইমেইল ও পাসওয়ার্ড দিয়ে প্রবেশ করুন।" data-en="✅ Registration complete! Please log in with your credentials.">✅ রেজিস্ট্রেশন সম্পন্ন হয়েছে! আপনার ইমেইল ও পাসওয়ার্ড দিয়ে প্রবেশ করুন।</div>
       <?php endif; ?>

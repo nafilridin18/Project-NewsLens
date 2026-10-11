@@ -90,15 +90,21 @@ $currentLogo = !empty($settings['site_logo']) ? $appUrl . '/' . htmlspecialchars
 
               <div style="display: flex; flex-direction: column; padding: 4px 0;">
                 <?php if (($curUser['role'] ?? '') === 'writer'): ?>
+                  <a href="<?= $appUrl ?>/writer/posts/create" style="padding: 8px 14px; color: #4ade80; text-decoration: none; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                    <span>✍️</span> <span>নতুন সংবাদ লিখুন</span>
+                  </a>
                   <a href="<?= $appUrl ?>/writer/dashboard" style="padding: 8px 14px; color: #38bdf8; text-decoration: none; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 8px;">
                     <span>📊</span> <span>লেখক ড্যাশবোর্ড</span>
                   </a>
                   <a href="<?= $appUrl ?>/writer/posts" style="padding: 8px 14px; color: #f8fafc; text-decoration: none; font-size: 0.85rem; display: flex; align-items: center; gap: 8px;">
                     <span>📝</span> <span>আমার সংবাদসমূহ</span>
                   </a>
-                <?php elseif (in_array($curUser['role'] ?? '', ['super_admin', 'editor'], true)): ?>
+                <?php elseif (in_array($curUser['role'] ?? '', ['super_admin', 'admin', 'editor'], true)): ?>
                   <a href="<?= $appUrl ?>/<?= $adminPath ?>" style="padding: 8px 14px; color: #38bdf8; text-decoration: none; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 8px;">
                     <span>⚙️</span> <span>অ্যাডমিন প্যানেল</span>
+                  </a>
+                  <a href="<?= $appUrl ?>/<?= $adminPath ?>/posts/create" style="padding: 8px 14px; color: #4ade80; text-decoration: none; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                    <span>✍️</span> <span>নতুন খবর লিখুন</span>
                   </a>
                 <?php endif; ?>
 

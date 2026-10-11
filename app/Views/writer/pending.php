@@ -96,20 +96,22 @@
       color: #fca5a5;
     }
     .btn-logout {
-      background: transparent;
-      border: 1px solid var(--border-color);
-      color: var(--text-muted);
+      background: rgba(227, 30, 36, 0.15);
+      border: 1px solid var(--color-accent);
+      color: #fca5a5;
       padding: 10px 20px;
       border-radius: 8px;
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.9rem;
       transition: all 0.2s;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
     .btn-logout:hover {
+      background: var(--color-accent);
       color: #fff;
-      border-color: #fff;
     }
     .btn-refresh {
       background: var(--color-primary);
@@ -119,8 +121,30 @@
       text-decoration: none;
       font-weight: 700;
       font-size: 0.9rem;
-      display: inline-block;
-      margin-right: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-refresh:hover {
+      background: #0a5c2b;
+    }
+    .btn-switch-admin {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #38bdf8;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-switch-admin:hover {
+      background: #38bdf8;
+      color: #071630;
     }
   </style>
 </head>
@@ -166,9 +190,10 @@
       </div>
     </div>
 
-    <div>
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
       <a href="/writer/pending" class="btn-refresh">🔄 স্ট্যাটাস রিফ্রেশ করুন</a>
-      <a href="/logout" class="btn-logout">লগআউট ➔</a>
+      <a href="/lens-desk/login?switch=1" class="btn-switch-admin">⚙️ অ্যাডমিন লগইন</a>
+      <a href="/logout" class="btn-logout">🚪 লগআউট</a>
     </div>
   </div>
 

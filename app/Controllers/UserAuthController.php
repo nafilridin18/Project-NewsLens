@@ -186,7 +186,7 @@ class UserAuthController {
             exit;
         }
 
-        if (in_array($user['role'], ['super_admin', 'editor'], true)) {
+        if (in_array($user['role'], ['super_admin', 'admin', 'editor'], true)) {
             $config = require CONFIG_PATH . '/config.php';
             $adminPath = $config['app']['admin_path'] ?? 'lens-desk';
             header("Location: /{$adminPath}");
@@ -203,7 +203,7 @@ class UserAuthController {
      */
     public function logout(): void {
         Auth::logout();
-        header("Location: /");
+        header("Location: /login?logged_out=1");
         exit;
     }
 

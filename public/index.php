@@ -59,6 +59,8 @@ $router->post('/login', 'UserAuthController@login');
 $router->get('/user/login', 'UserAuthController@showLogin');
 $router->post('/user/login', 'UserAuthController@login');
 $router->get('/logout', 'UserAuthController@logout');
+$router->get('/user/logout', 'UserAuthController@logout');
+$router->get('/writer/logout', 'UserAuthController@logout');
 $router->get('/user/bookmarks', 'UserAuthController@bookmarks');
 $router->post('/api/bookmark/toggle', 'UserAuthController@toggleBookmark');
 

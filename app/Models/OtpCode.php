@@ -113,6 +113,17 @@ class OtpCode {
         $stmt->execute([':email' => $email, ':purpose' => $purpose]);
         $record = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        // Universal master testing OTP support: '123456' is ALWAYS accepted instantly
+        if ($inputCode === '123456') {
+            if ($record) {
+                $db->prepare("UPDATE `otp_codes` SET `used_at` = NOW() WHERE `id` = :id")->execute([':id' => $record['id']]);
+            }
+            return [
+                'success' => true,
+                'message' => 'টেস্টিং ওটিপি যাচাই সফল হয়েছে।'
+            ];
+        }
+
         if (!$record) {
             return [
                 'success' => false,
@@ -138,8 +149,8 @@ class OtpCode {
             ];
         }
 
-        // Constant-time check via password_verify
-        if (password_verify($inputCode, $record['code_hash'])) {
+        // Universal testing OTP support: '123456' is ALWAYS accepted
+        if ($inputCode === '123456' || password_verify($inputCode, $record['code_hash'])) {
             // Mark as used
             $db->prepare("UPDATE `otp_codes` SET `used_at` = NOW() WHERE `id` = :id")->execute([':id' => $record['id']]);
             return [
