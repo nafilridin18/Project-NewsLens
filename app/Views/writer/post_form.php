@@ -239,7 +239,7 @@ $permLevel = $user['permission_level'] ?? 'editor_review';
           <?php if (!empty($post['featured_image'])): ?>
             <div class="img-preview-box">
               <div style="font-size: 0.8rem; color: var(--adm-text-muted); margin-bottom: 4px;">বর্তমান ছবি:</div>
-              <img src="<?= $appUrl ?>/<?= htmlspecialchars($post['featured_image']) ?>" alt="Preview">
+              <img src="<?= htmlspecialchars(imageUrl($post['featured_image'], $appUrl)) ?>" alt="Preview">
             </div>
           <?php endif; ?>
         </div>

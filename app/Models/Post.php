@@ -194,7 +194,7 @@ class Post {
             $stmt = $db->prepare("
                 SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug, 
                        COALESCE(NULLIF(p.custom_author, ''), u.name, 'স্টাফ রিপোর্টার') AS author_name, 
-                       u.photo AS author_photo,
+                       COALESCE(u.avatar, u.photo) AS author_photo,
                        d.name_bn AS district_name, dv.name_bn AS division_name
                 FROM `posts` p
                 JOIN `categories` c ON p.category_id = c.id
@@ -222,7 +222,7 @@ class Post {
             $stmt = $db->prepare("
                 SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug, 
                        COALESCE(NULLIF(p.custom_author, ''), u.name, 'স্টাফ রিপোর্টার') AS author_name, 
-                       u.photo AS author_photo,
+                       COALESCE(u.avatar, u.photo) AS author_photo,
                        d.name_bn AS district_name, dv.name_bn AS division_name
                 FROM `posts` p
                 JOIN `categories` c ON p.category_id = c.id

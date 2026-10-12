@@ -21,8 +21,8 @@ class AdController {
         }
 
         $user = Auth::user();
-        if (!in_array($user['role'], ['super_admin', 'editor'])) {
-            die('অনুমতি নেই: শুধুমাত্র সুপার অ্যাডমিন বা এডিটর বিজ্ঞাপন পরিচালনা করতে পারেন।');
+        if (!in_array($user['role'], ['super_admin', 'admin', 'editor'], true)) {
+            die('অনুমতি নেই: শুধুমাত্র সুপার অ্যাডমিন, অ্যাডমিন বা এডিটর বিজ্ঞাপন পরিচালনা করতে পারেন।');
         }
     }
 

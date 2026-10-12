@@ -101,7 +101,7 @@ $currentUrl = "{$scheme}://{$host}{$reqUri}";
         <!-- Media: Featured Image or Video -->
         <?php if (!empty($post['featured_image'])): ?>
           <figure class="article-featured-figure">
-            <img src="<?= htmlspecialchars($post['featured_image']) ?>" alt="<?= htmlspecialchars($post['title']) ?>" class="article-featured-img" width="850" height="480">
+            <img src="<?= htmlspecialchars(imageUrl($post['featured_image'], $appUrl)) ?>" alt="<?= htmlspecialchars($post['title']) ?>" class="article-featured-img" width="850" height="480">
             <?php if (!empty($post['excerpt'])): ?>
               <figcaption class="article-featured-caption"><?= htmlspecialchars($post['excerpt']) ?></figcaption>
             <?php endif; ?>
@@ -168,7 +168,7 @@ $currentUrl = "{$scheme}://{$host}{$reqUri}";
               <article class="news-card related-card">
                 <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($rPost['category_slug']) ?>/<?= $rPost['id'] ?>/<?= htmlspecialchars($rPost['slug']) ?>">
                   <?php if (!empty($rPost['featured_image'])): ?>
-                    <img src="<?= htmlspecialchars($rPost['featured_image']) ?>" alt="<?= htmlspecialchars($rPost['title']) ?>" class="related-thumb" loading="lazy">
+                    <img src="<?= htmlspecialchars(imageUrl($rPost['featured_image'], $appUrl)) ?>" alt="<?= htmlspecialchars($rPost['title']) ?>" class="related-thumb" loading="lazy">
                   <?php endif; ?>
                   <h4 class="card-title"><?= htmlspecialchars($rPost['title']) ?></h4>
                 </a>

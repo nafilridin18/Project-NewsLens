@@ -357,7 +357,7 @@ class WriterPanelController {
         $ext = ($mime === 'image/png') ? 'png' : (($mime === 'image/webp') ? 'webp' : 'jpg');
         $fileName = 'writer_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
         
-        $uploadDir = dirname(__DIR__, 2) . '/public/uploads/news';
+        $uploadDir = (defined('PUBLIC_PATH') ? PUBLIC_PATH : (dirname(__DIR__, 3) . '/public')) . '/uploads/news';
         if (!is_dir($uploadDir)) {
             @mkdir($uploadDir, 0755, true);
         }

@@ -99,7 +99,7 @@ $appUrl = rtrim($config['app']['url'] ?? '', '/');
               <?php if (!empty($res['featured_image'])): ?>
                 <div class="cat-card-thumb">
                   <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($res['category_slug']) ?>/<?= $res['id'] ?>/<?= htmlspecialchars($res['slug']) ?>">
-                    <img src="<?= htmlspecialchars($res['featured_image']) ?>" alt="<?= htmlspecialchars($res['title']) ?>" loading="lazy" width="280" height="175">
+                    <img src="<?= htmlspecialchars(imageUrl($res['featured_image'], $appUrl)) ?>" alt="<?= htmlspecialchars($res['title']) ?>" loading="lazy" width="280" height="175">
                   </a>
                   <span class="category-badge-sm"><?= htmlspecialchars($res['category_name']) ?></span>
                 </div>

@@ -145,6 +145,7 @@ class ProfileController {
                 `bio` = :bio,
                 `social_links` = :social,
                 `avatar` = :avatar,
+                `photo` = :avatar,
                 `updated_at` = NOW()
             WHERE `id` = :id
         ");
@@ -159,14 +160,22 @@ class ProfileController {
         ]);
 
         // Refresh session
+        if (isset($_SESSION['auth_user'])) {
+            $_SESSION['auth_user']['name'] = $name;
+            $_SESSION['auth_user']['avatar'] = $avatarPath;
+            $_SESSION['auth_user']['photo'] = $avatarPath;
+        }
         if (isset($_SESSION['admin_user'])) {
             $_SESSION['admin_user']['name'] = $name;
             $_SESSION['admin_user']['avatar'] = $avatarPath;
+            $_SESSION['admin_user']['photo'] = $avatarPath;
         }
         if (isset($_SESSION['user'])) {
             $_SESSION['user']['name'] = $name;
             $_SESSION['user']['avatar'] = $avatarPath;
+            $_SESSION['user']['photo'] = $avatarPath;
         }
+        Auth::refreshUser();
 
         $_SESSION['profile_msg'] = 'প্রোফাইল তথ্য সফলভাবে আপডেট হয়েছে!';
         header("Location: /profile");

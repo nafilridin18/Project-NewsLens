@@ -16,7 +16,7 @@ $videoPosts = $videoPosts ?? [];
       <article class="hero-lead-card">
         <div class="hero-media">
           <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($mainLead['category_slug']) ?>/<?= $mainLead['id'] ?>/<?= htmlspecialchars($mainLead['slug']) ?>">
-            <img src="<?= htmlspecialchars($mainLead['featured_image']) ?>" alt="<?= htmlspecialchars($mainLead['title']) ?>" loading="eager" width="800" height="450">
+            <img src="<?= htmlspecialchars(imageUrl($mainLead['featured_image'], $appUrl)) ?>" alt="<?= htmlspecialchars($mainLead['title']) ?>" loading="eager" width="800" height="450">
           </a>
           <span class="category-badge"><?= htmlspecialchars($mainLead['category_name']) ?></span>
         </div>
@@ -47,7 +47,7 @@ $videoPosts = $videoPosts ?? [];
           <article class="sub-lead-card">
             <div class="sub-lead-thumb">
               <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($sLead['category_slug']) ?>/<?= $sLead['id'] ?>/<?= htmlspecialchars($sLead['slug']) ?>">
-                <img src="<?= htmlspecialchars($sLead['featured_image']) ?>" alt="<?= htmlspecialchars($sLead['title']) ?>" loading="lazy" width="280" height="175">
+                <img src="<?= htmlspecialchars(imageUrl($sLead['featured_image'], $appUrl)) ?>" alt="<?= htmlspecialchars($sLead['title']) ?>" loading="lazy" width="280" height="175">
               </a>
               <span class="category-badge-sm"><?= htmlspecialchars($sLead['category_name']) ?></span>
             </div>
@@ -88,7 +88,7 @@ $videoPosts = $videoPosts ?? [];
             <article class="news-card">
               <?php if (!empty($post['featured_image'])): ?>
                 <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($post['category_slug']) ?>/<?= $post['id'] ?>/<?= htmlspecialchars($post['slug']) ?>">
-                  <img src="<?= htmlspecialchars($post['featured_image']) ?>" alt="<?= htmlspecialchars($post['title']) ?>" class="card-thumb" loading="lazy">
+                  <img src="<?= htmlspecialchars(imageUrl($post['featured_image'], $appUrl)) ?>" alt="<?= htmlspecialchars($post['title']) ?>" class="card-thumb" loading="lazy">
                 </a>
               <?php endif; ?>
               <h4 class="card-title">
@@ -176,7 +176,7 @@ $videoPosts = $videoPosts ?? [];
                      data-video-url="<?= htmlspecialchars($vPost['video_url'] ?: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ') ?>"
                      data-video-title="<?= htmlspecialchars($vPost['title']) ?>"
                      role="button" tabindex="0" title="ভিডিও চালু করুন">
-                  <img src="<?= htmlspecialchars($vPost['featured_image'] ?: 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=600&q=80') ?>" alt="<?= htmlspecialchars($vPost['title']) ?>" loading="lazy">
+                  <img src="<?= htmlspecialchars(imageUrl($vPost['featured_image'] ?: 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=600&q=80', $appUrl)) ?>" alt="<?= htmlspecialchars($vPost['title']) ?>" loading="lazy">
                   <span class="play-badge" aria-label="Play Video">▶</span>
                 </div>
                 <h4 class="video-title">

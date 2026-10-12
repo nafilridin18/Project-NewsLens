@@ -79,7 +79,7 @@ class WriterControlController {
         $id = (int) ($_GET['id'] ?? 0);
 
         if ($id <= 0) {
-            header("Location: /lens-desk/writers");
+            header("Location: /" . $this->adminPath() . "/writers");
             exit;
         }
 
@@ -88,7 +88,7 @@ class WriterControlController {
         $writer = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$writer) {
-            header("Location: /lens-desk/writers");
+            header("Location: /" . $this->adminPath() . "/writers");
             exit;
         }
 
@@ -126,7 +126,7 @@ class WriterControlController {
         $admin = Middleware::requireAdmin();
         if (!Auth::verifyCsrf($_POST['csrf_token'] ?? null)) {
             $_SESSION['writer_action_err'] = 'নিরাপত্তা টোকেন সঠিক নয়।';
-            header("Location: /lens-desk/writers");
+            header("Location: /" . $this->adminPath() . "/writers");
             exit;
         }
 
@@ -143,7 +143,7 @@ class WriterControlController {
 
         if (!$writer) {
             $_SESSION['writer_action_err'] = 'লেখক পাওয়া যায়নি।';
-            header("Location: /lens-desk/writers");
+            header("Location: /" . $this->adminPath() . "/writers");
             exit;
         }
 
@@ -178,7 +178,10 @@ class WriterControlController {
 
     private function adminPath(): string {
         $c = require dirname(__DIR__, 3) . '/config/config.php';
-        return trim($c['app']['admin_path'] ?? 'lens-desk', '/');
+        $admin = trim($c['app']['admin_path'] ?? 'lens-desk', '/');
+        $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+        $appUrl = rtrim($scriptDir, '/');
+        return ltrim($appUrl . '/' . $admin, '/');
     }
 
     /**

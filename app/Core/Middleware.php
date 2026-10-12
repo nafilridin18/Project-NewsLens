@@ -13,15 +13,17 @@ class Middleware {
     public static function requireRole(array $allowedRoles): array {
         Auth::init();
 
+        $config = require dirname(__DIR__, 2) . '/config/config.php';
+        $adminPath = trim($config['app']['admin_path'] ?? 'lens-desk', '/');
+        $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+        $appUrl = rtrim($scriptDir, '/');
+
         if (!Auth::check()) {
-            $config = require dirname(__DIR__, 2) . '/config/config.php';
-            $adminPath = trim($config['app']['admin_path'] ?? 'lens-desk', '/');
-            
             $currentUri = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
-            if (str_starts_with($currentUri, '/' . $adminPath)) {
-                header("Location: /{$adminPath}/login");
+            if (str_contains($currentUri, '/' . $adminPath)) {
+                header("Location: {$appUrl}/{$adminPath}/login");
             } else {
-                header("Location: /login");
+                header("Location: {$appUrl}/login");
             }
             exit;
         }
@@ -34,7 +36,7 @@ class Middleware {
 
         // Check for unverified email
         if ($status === 'unverified') {
-            header("Location: /otp/verify?email=" . urlencode($user['email']));
+            header("Location: {$appUrl}/otp/verify?email=" . urlencode($user['email']));
             exit;
         }
 
@@ -47,13 +49,10 @@ class Middleware {
 
         // Check for pending writer approval
         if ($role === 'writer' && $status === 'pending') {
-            $config = require dirname(__DIR__, 2) . '/config/config.php';
-            $adminPath = trim($config['app']['admin_path'] ?? 'lens-desk', '/');
-            
             // If writer is requesting anything other than pending screen or logout, redirect to pending screen
             $currentUri = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
             if (!str_contains($currentUri, '/pending') && !str_contains($currentUri, '/logout')) {
-                header("Location: /writer/pending");
+                header("Location: {$appUrl}/writer/pending");
                 exit;
             }
         }

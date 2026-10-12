@@ -115,24 +115,29 @@ class AuthController {
                     if ($stmtCheck->fetch()) {
                         $error = 'এই ইমেইল ঠিকানা দিয়ে ইতোমধ্যে একটি অ্যাকাউন্ট খোলা আছে।';
                     } else {
-                        // Check user count to determine initial role
-                        $userCount = (int) $db->query("SELECT COUNT(*) FROM `users`")->fetchColumn();
+                        // Check admin user count to determine initial role
+                        $userCount = (int) $db->query("SELECT COUNT(*) FROM `users` WHERE `role` IN ('super_admin', 'admin', 'editor')")->fetchColumn();
                         $role = $userCount === 0 ? 'super_admin' : 'editor';
+                        $status = $userCount === 0 ? 'active' : 'pending';
 
                         $stmtInsert = $db->prepare("
                             INSERT INTO `users` (`name`, `email`, `phone`, `password_hash`, `role`, `status`, `created_at`)
-                            VALUES (:name, :email, :phone, :hash, :role, 'active', NOW())
+                            VALUES (:name, :email, :phone, :hash, :role, :status, NOW())
                         ");
                         $stmtInsert->execute([
-                            ':name'  => $name,
-                            ':email' => $email,
-                            ':phone' => $phone,
-                            ':hash'  => password_hash($password, PASSWORD_DEFAULT),
-                            ':role'  => $role
+                            ':name'   => $name,
+                            ':email'  => $email,
+                            ':phone'  => $phone,
+                            ':hash'   => password_hash($password, PASSWORD_DEFAULT),
+                            ':role'   => $role,
+                            ':status' => $status
                         ]);
 
-                        // Redirect to login with success message
-                        header("Location: {$appUrl}/{$adminPath}/login?msg=registered");
+                        if ($status === 'pending') {
+                            header("Location: {$appUrl}/{$adminPath}/login?msg=pending_approval");
+                        } else {
+                            header("Location: {$appUrl}/{$adminPath}/login?msg=registered");
+                        }
                         exit;
                     }
                 } catch (Exception $e) {

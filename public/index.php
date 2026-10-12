@@ -69,11 +69,18 @@ $router->get('/otp/verify', 'OtpController@showVerify');
 $router->post('/otp/verify', 'OtpController@verify');
 $router->post('/otp/resend', 'OtpController@resend');
 
-// Password Reset Flow
+// Password Reset Flow (Supports /forgot-password & /password/forgot, /reset-password & /password/reset)
 $router->get('/forgot-password', 'PasswordResetController@showForgot');
 $router->post('/forgot-password', 'PasswordResetController@sendResetOtp');
+$router->get('/password/forgot', 'PasswordResetController@showForgot');
+$router->post('/password/forgot', 'PasswordResetController@sendResetOtp');
 $router->get('/reset-password', 'PasswordResetController@showReset');
-$router->post('/reset-password', 'PasswordResetController@resetPassword');
+$router->post('/reset-password', 'PasswordResetController@reset');
+$router->get('/password/reset', 'PasswordResetController@showReset');
+$router->post('/password/reset', 'PasswordResetController@reset');
+
+// Static Information Pages (About, Contact, Advertise, Privacy, Terms, Corrections)
+$router->get('/page/{slug}', 'PageController@show');
 
 // User Profile & Analytics (Self-service for readers, writers, editors, admins)
 $router->get('/profile', 'ProfileController@show');
@@ -185,14 +192,15 @@ $router->get('/' . $adminPath . '/settings', 'Admin\SettingsController@index');
 $router->post('/' . $adminPath . '/settings', 'Admin\SettingsController@update');
 
 // Advertisement Click Tracker & Redirection
-$router->get('/ad/click/{id}', function($params) {
+$router->get('/ad/click/{id}', function($params) use ($config) {
     $id = (int) ($params['id'] ?? 0);
     $url = \App\Models\Ad::recordClick($id);
     if (!empty($url)) {
         header("Location: " . $url, true, 302);
         exit;
     }
-    header("Location: /", true, 302);
+    $appUrl = rtrim($config['app']['url'] ?? '', '/');
+    header("Location: " . ($appUrl ?: '/'), true, 302);
     exit;
 });
 

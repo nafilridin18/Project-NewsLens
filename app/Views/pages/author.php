@@ -65,7 +65,7 @@ $avatarUrl = !empty($author['avatar']) ? ($appUrl . '/' . htmlspecialchars($auth
               <?php if (!empty($post['featured_image'])): ?>
                 <div class="cat-card-thumb">
                   <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($post['category_slug'] ?? 'national') ?>/<?= (int)$post['id'] ?>/<?= htmlspecialchars($post['slug']) ?>">
-                    <img src="<?= $appUrl ?>/<?= htmlspecialchars($post['featured_image']) ?>" alt="<?= htmlspecialchars($post['title']) ?>" loading="lazy" width="300" height="190">
+                    <img src="<?= htmlspecialchars(imageUrl($post['featured_image'], $appUrl)) ?>" alt="<?= htmlspecialchars($post['title']) ?>" loading="lazy" width="300" height="190">
                   </a>
                 </div>
               <?php endif; ?>

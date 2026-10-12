@@ -30,7 +30,7 @@ class AuthorController {
                    COALESCE(NULLIF(bio, ''), '') AS short_bio, 
                    social_links, role, created_at
             FROM `users`
-            WHERE id = :id AND status != 'rejected'
+            WHERE id = :id AND status = 'active' AND deleted_at IS NULL
             LIMIT 1
         ");
         $stmt->execute([':id' => $id]);

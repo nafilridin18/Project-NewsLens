@@ -41,7 +41,11 @@ class PostController {
             ";
 
             if ($statusFilter !== '') {
-                $query .= " AND p.status = :status";
+                if ($statusFilter === 'pending') {
+                    $query .= " AND p.status IN ('pending', 'pending_review')";
+                } else {
+                    $query .= " AND p.status = :status";
+                }
             }
 
             if ($user['role'] === 'district_rep' && !empty($user['district_id'])) {
@@ -50,7 +54,7 @@ class PostController {
 
             $query .= " ORDER BY p.id DESC LIMIT 50";
             $stmt = $db->prepare($query);
-            if ($statusFilter !== '') {
+            if ($statusFilter !== '' && $statusFilter !== 'pending') {
                 $stmt->bindValue(':status', $statusFilter);
             }
             $stmt->execute();
@@ -314,8 +318,12 @@ class PostController {
 
     public function delete(): void {
         $user = Auth::user();
-        if (!in_array($user['role'], ['super_admin', 'editor'])) {
+        if (!in_array($user['role'], ['super_admin', 'admin', 'editor'], true)) {
             die('অনুমতি নেই');
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !Auth::verifyCsrf($_POST['csrf_token'] ?? '')) {
+            die('CSRF ভ্যালিডেশন ব্যর্থ হয়েছে');
         }
 
         $id = (int) ($_POST['id'] ?? $_GET['id'] ?? 0);
@@ -333,14 +341,18 @@ class PostController {
 
     public function updateStatus(): void {
         $user = Auth::user();
-        if (!in_array($user['role'], ['super_admin', 'editor'])) {
+        if (!in_array($user['role'], ['super_admin', 'admin', 'editor'], true)) {
             die('অনুমতি নেই');
+        }
+
+        if (!Auth::verifyCsrf($_POST['csrf_token'] ?? '')) {
+            die('CSRF ভ্যালিডেশন ব্যর্থ হয়েছে');
         }
 
         $postId = (int) ($_POST['post_id'] ?? 0);
         $newStatus = $_POST['status'] ?? '';
 
-        if ($postId > 0 && in_array($newStatus, ['published', 'rejected', 'pending'])) {
+        if ($postId > 0 && in_array($newStatus, ['published', 'rejected', 'pending', 'pending_review'], true)) {
             try {
                 $db = Database::getConnection();
                 $stmt = $db->prepare("

@@ -40,7 +40,7 @@ $user = $user ?? \App\Core\Auth::user();
         <article style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s;" class="bookmark-card">
           <?php if (!empty($bm['featured_image'])): ?>
             <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($bm['category_slug'] ?? 'national') ?>/<?= (int)$bm['post_id'] ?>/<?= htmlspecialchars($bm['slug']) ?>" style="display: block; position: relative;">
-              <img src="<?= $appUrl ?>/<?= htmlspecialchars($bm['featured_image']) ?>" alt="<?= htmlspecialchars($bm['title']) ?>" style="width: 100%; height: 180px; object-fit: cover;" loading="lazy">
+              <img src="<?= htmlspecialchars(imageUrl($bm['featured_image'], $appUrl)) ?>" alt="<?= htmlspecialchars($bm['title']) ?>" style="width: 100%; height: 180px; object-fit: cover;" loading="lazy">
             </a>
           <?php endif; ?>
 

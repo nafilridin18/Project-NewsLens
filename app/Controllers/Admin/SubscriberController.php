@@ -36,8 +36,12 @@ class SubscriberController {
 
     public function delete(): void {
         $user = Auth::user();
-        if (!in_array($user['role'], ['super_admin', 'editor'])) {
+        if (!in_array($user['role'], ['super_admin', 'admin', 'editor'], true)) {
             die('অনুমতি নেই');
+        }
+
+        if (!Auth::verifyCsrf($_POST['csrf_token'] ?? '')) {
+            die('CSRF validation failed');
         }
 
         $id = (int) ($_POST['id'] ?? 0);

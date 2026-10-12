@@ -59,10 +59,9 @@ class PushNotifier {
      * Dispatch push notifications directly if VAPID keys exist
      */
     public static function dispatchQueueDirectly(string $payload, array $subscriptions): void {
-        $config = require CONFIG_PATH . '/config.php';
-        $vapidSubject = $config['push']['vapid_subject'] ?? 'mailto:admin@newslensbd.com';
-        $publicKey = $config['push']['vapid_public_key'] ?? '';
-        $privateKey = $config['push']['vapid_private_key'] ?? '';
+        $vapidSubject = $config['push']['vapid_subject'] ?? $config['push']['subject'] ?? 'mailto:admin@newslensbd.com';
+        $publicKey = $config['push']['vapid_public_key'] ?? $config['push']['public_key'] ?? '';
+        $privateKey = $config['push']['vapid_private_key'] ?? $config['push']['private_key'] ?? '';
 
         if (empty($publicKey) || empty($privateKey)) {
             // VAPID keys not configured yet; stays in queue for worker or when configured

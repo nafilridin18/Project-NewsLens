@@ -119,26 +119,60 @@
 
 ```text
 NewsLens/
-├── public/                 # ওয়েব রুট (একমাত্র পাবলিক ফোল্ডার)
+├── public/                 # ওয়েব রুট (একমাত্র পাবলিক ডিরেক্টরি)
 │   ├── index.php           # ফ্রন্ট কন্ট্রোলার ও সেন্ট্রাল রাউটার এন্ট্রি পয়েন্ট
 │   ├── assets/             # স্ট্যাটিক এসেট (CSS, JS, Fonts, Images)
 │   │   ├── css/style.css   # মাস্টার স্টাইলশিট (Dark Mode, Responsive, Brand Tokens)
 │   │   ├── js/main.js      # ক্লায়েন্ট স্ক্রিপ্ট (Theme toggle, Modals, Ajax filters)
 │   │   └── img/            # সাইট লোগো ও ভেক্টর উপাদান
-│   └── uploads/            # সংবাদ ও প্রোফাইলের আপলোডকৃত ছবি
+│   ├── uploads/            # সংবাদ ও প্রোফাইলের আপলোডকৃত ছবি
+│   │   ├── news/           # সংবাদ প্রতিবেদন ও ফিচার ইমেজ
+│   │   └── avatars/        # ব্যবহারকারী ও লেখকদের প্রোফাইল ছবি
+│   ├── sw.js               # সার্ভিস ওয়ার্কার (Web Push & Offline Caching)
+│   └── manifest.json       # PWA ওয়েব অ্যাপ মেনিফেস্ট
 ├── app/
-│   ├── Controllers/        # HomeController, NewsController, SaradeshController, Admin/*
-│   ├── Models/             # Post, Category, District, Setting, User, Ad, Poll
+│   ├── Controllers/        # ওয়েব ও এপিআই কন্ট্রোলারসমূহ
+│   │   ├── HomeController.php          # হোমপেজ কন্ট্রোলার
+│   │   ├── NewsController.php          # সংবাদ বিস্তারিত, ক্যাটাগরি ও সার্চ
+│   │   ├── SaradeshController.php      # সারাদেশ ও ৬৪ জেলার সংবাদ
+│   │   ├── AuthorController.php        # পাবলিক লেখক প্রোফাইল
+│   │   ├── PageController.php          # স্ট্যাটিক পেজ (About, Contact, Advertise, Privacy, Terms)
+│   │   ├── UserAuthController.php      # সাধারণ পাঠক লগইন/রেজিস্ট্রেশন/বুকমার্ক
+│   │   ├── WriterAuthController.php    # লেখক আবেদন ও যাচাই
+│   │   ├── OtpController.php           # ওটিপি ভেরিফিকেশন ও রিসেন্ড
+│   │   ├── PasswordResetController.php # পাসওয়ার্ড রিসেট ফ্লো
+│   │   ├── ProfileController.php       # ইউজার প্রোফাইল ও বায়ো ম্যানেজমেন্ট
+│   │   ├── NotificationController.php  # ওয়েব পুশ ও ইন-অ্যাপ নোটিফিকেশন
+│   │   ├── Admin/                      # অ্যাডমিন CMS কন্ট্রোলারসমূহ
+│   │   │   ├── DashboardController.php
+│   │   │   ├── PostController.php
+│   │   │   ├── WriterControlController.php
+│   │   │   ├── AdController.php
+│   │   │   ├── PollController.php
+│   │   │   ├── SettingsController.php
+│   │   │   ├── SubscriberController.php
+│   │   │   └── AuthController.php
+│   │   └── Writer/                     # লেখক প্যানেল কন্ট্রোলার
+│   │       └── WriterPanelController.php
+│   ├── Models/             # ডাটাবেজ মডেল (Post, Category, District, Setting, User, Ad, Poll, OtpCode, Notification, Bookmark, PushSubscription, Newsletter, AuditLog)
 │   ├── Views/              # MVC টেমপ্লেট ভিউ ফাইল
 │   │   ├── layouts/        # main.php
 │   │   ├── partials/       # header.php, breaking_ticker.php, footer.php
-│   │   ├── pages/          # home.php, saradesh.php, single.php, category.php, author.php
-│   │   └── admin/          # dashboard.php, posts_index.php, writers_index.php, settings.php
+│   │   ├── pages/          # home.php, saradesh.php, single.php, category.php, author.php, search.php, static_page.php
+│   │   ├── admin/          # dashboard.php, posts_index.php, writers_index.php, settings.php, ads_index.php, polls_index.php, subscribers_index.php
+│   │   ├── writer/         # dashboard.php, posts_index.php, post_form.php
+│   │   ├── auth/           # login.php, register.php, otp_verify.php, forgot_password.php, reset_password.php
+│   │   ├── profile/        # show.php, edit.php
+│   │   ├── user/           # bookmarks.php
+│   │   └── errors/         # 404.php, 500.php
 │   ├── Core/               # Router, Database, Auth, View, Middleware
-│   └── Helpers/            # BanglaDate (বাংলা তারিখ, সংখ্যা ও সময় রূপান্তরকারী)
+│   └── Helpers/            # BanglaDate, AdBanner, Mailer, PushNotifier
 ├── config/
-│   ├── config.php          # গ্লোবাল এপ্লিকেশন কনফিগারেশন
-│   └── .env.example        # এনভায়রনমেন্ট ভেরিয়েবল টেমপ্লেট
+│   ├── config.php          # গ্লোবাল এপ্লিকেশন কনফিগারেশন ও imageUrl() হেল্পার
+│   ├── .env.example        # এনভায়রনমেন্ট ভেরিয়েবল টেমপ্লেট
+│   └── .env                # অ্যাক্টিভ এনভায়রনমেন্ট কনফিগারেশন
+├── cron/
+│   └── send_notifications.php # ব্যাকগ্রাউন্ড পুশ ও ইমেইল নোটিফিকেশন ক্রন জব
 ├── database/
 │   ├── schema.sql          # সম্পূর্ণ প্রোডাকশন স্কিমা (টেবিল স্ট্রাকচার)
 │   ├── seed_initial.sql    # ৮ বিভাগ, ৬৪ জেলা, ১৪ ক্যাটাগরি, ডিফল্ট অ্যাডমিন ও সেটিংস সিড
@@ -191,19 +225,30 @@ Newslensbd পোর্টালটি লাইভ cPanel হোস্টিং
 | **সারাদেশ বিভাগ ও জেলা সংবাদ** | [`https://newslensbd.com/saradesh`](https://newslensbd.com/saradesh) | সর্বসাধারণ |
 | **ক্যাটাগরি আর্কাইভ (যেমন: জাতীয়)** | [`https://newslensbd.com/category/national`](https://newslensbd.com/category/national) | সর্বসাধারণ |
 | **পাবলিক লেখক প্রোফাইল** | [`https://newslensbd.com/author/1`](https://newslensbd.com/author/1) | সর্বসাধারণ |
+| **অনুসন্ধান ও ফিল্টার (Search)** | [`https://newslensbd.com/search`](https://newslensbd.com/search) | সর্বসাধারণ |
+| **আমাদের সম্পর্কে (About Us)** | [`https://newslensbd.com/page/about`](https://newslensbd.com/page/about) | সর্বসাধারণ |
+| **যোগাযোগ (Contact Us)** | [`https://newslensbd.com/page/contact`](https://newslensbd.com/page/contact) | সর্বসাধারণ |
+| **বিজ্ঞাপন দিন (Advertise)** | [`https://newslensbd.com/page/advertise`](https://newslensbd.com/page/advertise) | সর্বসাধারণ ও বিজ্ঞাপনী সংস্থা |
+| **গোপনীয়তা নীতি (Privacy Policy)** | [`https://newslensbd.com/page/privacy`](https://newslensbd.com/page/privacy) | সর্বসাধারণ |
+| **ব্যবহারের শর্তাবলী (Terms & Conditions)** | [`https://newslensbd.com/page/terms`](https://newslensbd.com/page/terms) | সর্বসাধারণ |
+| **সম্পাদকীয় ও সংশোধনী নীতি (Corrections)** | [`https://newslensbd.com/page/corrections`](https://newslensbd.com/page/corrections) | সর্বসাধারণ |
 | **অ্যাডমিন কমান্ড ডেস্ক লগইন** | [`https://newslensbd.com/lens-desk/login`](https://newslensbd.com/lens-desk/login) | Super Admin (`admin@newslensbd.com` / `password123`) |
 | **অ্যাডমিন মূল ড্যাশবোর্ড** | [`https://newslensbd.com/lens-desk`](https://newslensbd.com/lens-desk) | Super Admin / Editor |
 | **অ্যাডমিন লেখক নিয়ন্ত্রণ প্যানেল** | [`https://newslensbd.com/lens-desk/writers`](https://newslensbd.com/lens-desk/writers) | Super Admin |
 | **বিজ্ঞাপন ও অ্যানালিটিক্স ডেস্ক** | [`https://newslensbd.com/lens-desk/ads`](https://newslensbd.com/lens-desk/ads) | Super Admin |
+| **অনলাইন পাঠক জরিপ ডেস্ক** | [`https://newslensbd.com/lens-desk/polls`](https://newslensbd.com/lens-desk/polls) | Super Admin / Editor |
+| **নিউজলেটার সাবস্ক্রাইবার তালিকা** | [`https://newslensbd.com/lens-desk/subscribers`](https://newslensbd.com/lens-desk/subscribers) | Super Admin |
+| **সাইট মেটা ও ব্র্যান্ডিং সেটিংস** | [`https://newslensbd.com/lens-desk/settings`](https://newslensbd.com/lens-desk/settings) | Super Admin |
 | **লেখক নিবন্ধন ফরম** | [`https://newslensbd.com/writer/register`](https://newslensbd.com/writer/register) | নতুন আবেদনকারী লেখক |
 | **লেখক ড্যাশবোর্ড** | [`https://newslensbd.com/writer/dashboard`](https://newslensbd.com/writer/dashboard) | অনুমোদিত লেখক (Active Writer) |
 | **লেখক নতুন সংবাদ রচনা** | [`https://newslensbd.com/writer/posts/create`](https://newslensbd.com/writer/posts/create) | অনুমোদিত লেখক |
 | **আমার সংবাদসমূহ (লেখক তালিকা)** | [`https://newslensbd.com/writer/posts`](https://newslensbd.com/writer/posts) | অনুমোদিত লেখক |
 | **সাধারণ পাঠক লগইন** | [`https://newslensbd.com/login`](https://newslensbd.com/login) | পাঠক ও লেখক |
 | **সাধারণ পাঠক নিবন্ধন** | [`https://newslensbd.com/register`](https://newslensbd.com/register) | নতুন সাধারণ পাঠক |
+| **ওটিপি যাচাইকরণ (OTP Verify)** | [`https://newslensbd.com/otp/verify`](https://newslensbd.com/otp/verify) | নতুন নিবন্ধিত ইউজার |
 | **সংরক্ষিত খবর (Bookmarks)** | [`https://newslensbd.com/user/bookmarks`](https://newslensbd.com/user/bookmarks) | লগইনকৃত পাঠক |
 | **ব্যবহারকারী প্রোফাইল ও সেটিংস** | [`https://newslensbd.com/profile`](https://newslensbd.com/profile) | নিবন্ধিত যেকেউ |
-| **পাসওয়ার্ড রিসেট (ইমেইল ওটিপি)** | [`https://newslensbd.com/forgot-password`](https://newslensbd.com/forgot-password) | পাসওয়ার্ড ভুলে যাওয়া ইউজার |
+| **পাসওয়ার্ড রিসেট (ইমেইল ওটিপি)** | [`https://newslensbd.com/password/forgot`](https://newslensbd.com/password/forgot) | পাসওয়ার্ড ভুলে যাওয়া ইউজার |
 | **সার্বজনীন লগআউট (Universal Logout)** | [`https://newslensbd.com/logout`](https://newslensbd.com/logout) | যেকোনো সক্রিয় সেশন |
 
 ---
@@ -243,17 +288,29 @@ graph LR
 
 ---
 
-## 🛠️ সাম্প্রতিক সমস্যা সমাধান ও অপ্টিমাইজেশন (Technical Optimizations)
+## 🛠️ সাম্প্রতিক সমস্যা সমাধান ও অপ্টিমাইজেশন (Technical Optimizations & Bug Fixes)
 
 1. **লেখক পেজে HTTP 500 ত্রুটি সমাধান:**
    - `AuthorController.php`-তে `short_bio` ও `bio` কলামের বৈষম্য দূর করতে `COALESCE` কোয়েরি হ্যান্ডলিং প্রয়োগ।
    - ব্রাউজারে `/public/author/1` কিংবা সরাসরি `/author/1` যেকোনো ফরম্যাটে ভিজিট করলেও `Router.php`-তে পাথ নরমালাইজেশনের মাধ্যমে নিখুঁত রেন্ডারিং নিশ্চিত।
    - `Auth.php`-তে সেশন হেডার প্রেরণের পূর্বে `!headers_sent()` গার্ড যুক্ত করে ওয়ার্নিং ও সেশন লুপ প্রতিরোধ।
-2. **লেখক পোস্ট ক্রিয়েশন ও ড্যাশবোর্ড আর্কিটেকচার ইউনিফিকেশন:**
-   - অ্যাডমিন ও লেখক উভয় প্যানেলের হেডারে প্রিমিয়াম ইউনিফাইড নেভিগেশন ও অফক্যানভাস ড্রয়ার যুক্ত।
-   - লেখক পোস্টে ক্যাটাগরি, জেলা ও ইমেজ ড্রপডাউনে ভ্যালিডেশন শক্তিশালীকরণ এবং সার্ভার-সাইড রোল এনফোর্সমেন্ট।
-3. **ডাইনামিক ক্যানোনিকাল পোস্ট ইউআরএল:**
-   - এসইও ও সাইটের পারফরম্যান্স বজায় রাখতে সকল পোস্ট লিঙ্ক `/news/{category_slug}/{id}/{slug}` প্যাটার্নে সমন্বিত।
+2. **লেখক পোস্ট ক্রিয়েশন ও ইমেজ আপলোড ডিরেক্টরি ফিক্স:**
+   - রাইটার কন্ট্রোলারে আপলোড পাথ লোকাল ও প্রডাকশন উভয় পরিবেশের জন্য `PUBLIC_PATH . '/uploads/news'` ডিরেক্টরিতে সমন্বিত করা হয়েছে।
+   - গ্লোবাল `imageUrl()` হেল্পার ফাংশন যুক্ত করে এক্সটার্নাল URL, রিলেটিভ আপলোড ও লোকাল পাথ ডুপ্লিকেশন দূর করা হয়েছে। হোমপেজ, ক্যাটাগরি, সিঙ্গেল পোস্ট ও বুকমার্কে ভাঙা ইমেজ প্রদর্শন সম্পূর্ণ দূরীভূত।
+3. **স্ট্যাটিক পেজসমূহের ৪MD/404 ত্রুটি সমাধান (`/page/{slug}`):**
+   - ফুটার ও বিজ্ঞাপন স্লটের লিঙ্কগুলোর জন্য `PageController.php` ও `static_page.php` তৈরি করে আমাদের সম্পর্কে, যোগাযোগ, বিজ্ঞাপন, গোপনীয়তা নীতি, ব্যবহারের শর্তাবলী এবং সংশোধনী নীতি সক্রিয় করা হয়েছে।
+4. **পাসওয়ার্ড রিসেট ও রাউট অ্যালাইয়াস ফ্লো ইউনিফিকেশন:**
+   - `/forgot-password` এবং `/password/forgot`, `/reset-password` এবং `/password/reset` উভয় পাথেই নির্বিঘ্ন রিসেট হ্যান্ডলার যুক্ত এবং রিসেট শেষে ভূমিকা অনুযায়ী সঠিক লগইন পেজে রিডাইরেক্ট নিশ্চিত।
+5. **অ্যাডমিন ও এডিটর রোল পারমিশন একীভূতকরণ:**
+   - পোস্ট ডিলিট, স্ট্যাটাস পরিবর্তন, বিজ্ঞাপন, পোল, সাবস্ক্রাইবার ও সেটিংস প্যানেলে `admin` রোলকে অপ্রয়োজনীয়ভাবে ব্লক করার সমস্যা সমাধান করা হয়েছে।
+6. **পেন্ডিং পোস্ট কাউন্ট ও রিভিউ সামঞ্জস্য:**
+   - ড্যাশবোর্ডে `pending` এবং `pending_review` উভয় স্ট্যাটাসকে একীভূত করে সঠিক মোট সংখ্যা প্রদর্শন এবং ফিল্টারে সামঞ্জস্য নিশ্চিত করা হয়েছে।
+7. **পাবলিক এডিটর অ্যাকাউন্ট নিরাপত্তা ও প্রোফাইল ইমেজ সিঙ্ক:**
+   - অ্যাডমিন রেজিস্টার থেকে রেজিস্ট্রেশনকৃত পরবর্তী এডিটর অ্যাকাউন্ট সরাসরি অ্যাক্টিভ না হয়ে `status = 'pending'` হবে (সুপার অ্যাডমিন অনুমোদনের পর সক্রিয় হবে)।
+   - প্রোফাইল আপডেট কন্ট্রোলারে `avatar` এবং `photo` উভয় কলাম আপডেট এবং অথেন্টিক সেশন তাৎক্ষণিক রিফ্রেশ নিশ্চিত করা হয়েছে।
+8. **সাবফোল্ডার রিডাইরেক্ট ও ওয়েব পুশ VAPID কী ফিক্স:**
+   - সাবফোল্ডার হোস্টিংয়ের জন্য মিডলওয়্যার ও রিডাইরেক্টে হার্ডকোডেড `/` পরিহার করে `APP_URL` ভিত্তিক রিডাইরেক্ট নিশ্চিত করা হয়েছে।
+   - ওয়েব পুশ কনফিগারেশনে `public_key` ও `vapid_public_key` উভয় ফিল্ডের সাপোর্ট নিশ্চিত করা হয়েছে।
 
 ---
 

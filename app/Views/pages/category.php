@@ -33,7 +33,7 @@ $appUrl = rtrim($config['app']['url'] ?? '', '/');
               <?php if (!empty($post['featured_image'])): ?>
                 <div class="cat-card-thumb">
                   <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($currentCategory['slug']) ?>/<?= $post['id'] ?>/<?= htmlspecialchars($post['slug']) ?>">
-                    <img src="<?= htmlspecialchars($post['featured_image']) ?>" alt="<?= htmlspecialchars($post['title']) ?>" loading="lazy" width="300" height="190">
+                    <img src="<?= htmlspecialchars(imageUrl($post['featured_image'], $appUrl)) ?>" alt="<?= htmlspecialchars($post['title']) ?>" loading="lazy" width="300" height="190">
                   </a>
                 </div>
               <?php endif; ?>

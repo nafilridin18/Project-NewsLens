@@ -49,7 +49,7 @@ class DashboardController {
             $stmt = $db->query("
                 SELECT 
                     COUNT(CASE WHEN status = 'published' THEN 1 END) as total_published,
-                    COUNT(CASE WHEN status = 'pending' THEN 1 END) as total_pending,
+                    COUNT(CASE WHEN status IN ('pending', 'pending_review') THEN 1 END) as total_pending,
                     COUNT(CASE WHEN status = 'draft' THEN 1 END) as total_drafts,
                     COUNT(CASE WHEN is_breaking = 1 THEN 1 END) as total_breaking,
                     COALESCE(SUM(views), 0) as total_views

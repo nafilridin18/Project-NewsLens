@@ -39,7 +39,7 @@ class PollController {
 
     public function store(): void {
         $user = Auth::user();
-        if (!in_array($user['role'], ['super_admin', 'editor'])) {
+        if (!in_array($user['role'], ['super_admin', 'admin', 'editor'], true)) {
             die('অনুমতি নেই: শুধুমাত্র সুপার অ্যাডমিন বা এডিটর জরিপ তৈরি করতে পারেন।');
         }
 
@@ -79,7 +79,7 @@ class PollController {
 
     public function setActive(): void {
         $user = Auth::user();
-        if (!in_array($user['role'], ['super_admin', 'editor'])) {
+        if (!in_array($user['role'], ['super_admin', 'admin', 'editor'], true)) {
             die('অনুমতি নেই');
         }
 
@@ -103,7 +103,7 @@ class PollController {
 
     public function resetVotes(): void {
         $user = Auth::user();
-        if (!in_array($user['role'], ['super_admin', 'editor'])) {
+        if (!in_array($user['role'], ['super_admin', 'admin', 'editor'], true)) {
             die('অনুমতি নেই');
         }
 
@@ -129,7 +129,7 @@ class PollController {
 
     public function delete(): void {
         $user = Auth::user();
-        if (!in_array($user['role'], ['super_admin', 'editor'])) {
+        if (!in_array($user['role'], ['super_admin', 'admin', 'editor'], true)) {
             die('অনুমতি নেই');
         }
 

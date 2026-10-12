@@ -235,7 +235,7 @@ $activeTab = 'writer_posts';
                 <tr>
                   <td>
                     <?php if (!empty($p['featured_image'])): ?>
-                      <img src="<?= $appUrl ?>/<?= htmlspecialchars($p['featured_image']) ?>" alt="" style="width: 54px; height: 38px; object-fit: cover; border-radius: 4px;">
+                      <img src="<?= htmlspecialchars(imageUrl($p['featured_image'], $appUrl)) ?>" alt="" style="width: 54px; height: 38px; object-fit: cover; border-radius: 4px;">
                     <?php else: ?>
                       <div style="width: 54px; height: 38px; background: rgba(255,255,255,0.06); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--adm-text-muted);">ছবি নেই</div>
                     <?php endif; ?>

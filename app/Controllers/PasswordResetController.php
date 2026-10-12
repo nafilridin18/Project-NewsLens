@@ -155,10 +155,22 @@ class PasswordResetController {
         // Invalidate all active sessions for this account by destroying current session
         session_destroy();
 
-        // Redirect to login with success message
-        $config = require dirname(__DIR__, 2) . '/config/config.php';
-        $adminPath = trim($config['app']['admin_path'] ?? 'lens-desk', '/');
-        header("Location: /{$adminPath}/login?msg=password_reset_success");
+        $uStmt = $db->prepare("SELECT role FROM `users` WHERE `email` = :e LIMIT 1");
+        $uStmt->execute([':e' => $email]);
+        $userRole = $uStmt->fetchColumn() ?: 'user';
+
+        if (in_array($userRole, ['super_admin', 'admin', 'editor'], true)) {
+            header("Location: /{$adminPath}/login?msg=password_reset_success");
+        } else {
+            header("Location: /login?msg=password_reset_success");
+        }
         exit;
+    }
+
+    /**
+     * Alias for router compatibility
+     */
+    public function resetPassword(): void {
+        $this->reset();
     }
 }

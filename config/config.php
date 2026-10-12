@@ -46,6 +46,21 @@ if (!function_exists('env')) {
     }
 }
 
+if (!function_exists('imageUrl')) {
+    function imageUrl(?string $path, ?string $appUrl = null, string $fallback = 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=800&q=80'): string {
+        $path = trim($path ?? '');
+        if ($path === '') return $fallback;
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+        if ($appUrl === null) {
+            $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+            $appUrl = rtrim($scriptDir, '/');
+        }
+        return rtrim($appUrl, '/') . '/' . ltrim($path, '/');
+    }
+}
+
 return [
     'app' => [
         'name'       => env('APP_NAME', 'Newslensbd'),
@@ -95,8 +110,11 @@ return [
         'encryption' => env('MAIL_ENCRYPTION', 'tls'),
     ],
     'push' => [
-        'public_key'  => env('VAPID_PUBLIC_KEY', ''),
-        'private_key' => env('VAPID_PRIVATE_KEY', ''),
-        'subject'     => env('VAPID_SUBJECT', 'mailto:admin@newslensbd.com'),
+        'public_key'        => env('VAPID_PUBLIC_KEY', ''),
+        'private_key'       => env('VAPID_PRIVATE_KEY', ''),
+        'subject'           => env('VAPID_SUBJECT', 'mailto:admin@newslensbd.com'),
+        'vapid_public_key'  => env('VAPID_PUBLIC_KEY', ''),
+        'vapid_private_key' => env('VAPID_PRIVATE_KEY', ''),
+        'vapid_subject'     => env('VAPID_SUBJECT', 'mailto:admin@newslensbd.com'),
     ]
 ];

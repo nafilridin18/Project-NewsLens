@@ -72,9 +72,9 @@ foreach ($jobs as $job) {
             }
         } elseif ($job['type'] === 'webpush') {
             $endpoint = $job['recipient'];
-            $vapidSubject = $config['push']['vapid_subject'] ?? 'mailto:admin@newslensbd.com';
-            $publicKey = $config['push']['vapid_public_key'] ?? '';
-            $privateKey = $config['push']['vapid_private_key'] ?? '';
+            $vapidSubject = $config['push']['vapid_subject'] ?? $config['push']['subject'] ?? 'mailto:admin@newslensbd.com';
+            $publicKey = $config['push']['vapid_public_key'] ?? $config['push']['public_key'] ?? '';
+            $privateKey = $config['push']['vapid_private_key'] ?? $config['push']['private_key'] ?? '';
 
             if (empty($publicKey) || empty($privateKey)) {
                 // Skip if no VAPID keys

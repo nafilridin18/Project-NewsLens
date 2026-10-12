@@ -71,7 +71,7 @@ class NotificationController {
     public function getPublicKey(): void {
         header('Content-Type: application/json; charset=utf-8');
         $config = require CONFIG_PATH . '/config.php';
-        $pubKey = $config['push']['vapid_public_key'] ?? '';
+        $pubKey = $config['push']['vapid_public_key'] ?? $config['push']['public_key'] ?? '';
 
         echo json_encode([
             'publicKey' => $pubKey
