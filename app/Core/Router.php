@@ -27,11 +27,17 @@ class Router {
     public function dispatch(string $uri, string $method): void {
         $parsedUri = parse_url($uri, PHP_URL_PATH);
         
-        // Strip project base path if running in subfolder like /NewsLens/public
+        // Strip project base path if running in subfolder like /NewsLens/public or /NewsLens
         $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
         $scriptDir = rtrim($scriptDir, '/');
         if ($scriptDir !== '' && stripos($parsedUri, $scriptDir) === 0) {
             $parsedUri = substr($parsedUri, strlen($scriptDir));
+        } else {
+            // Also handle rewrite via root directory where scriptDir is /NewsLens/public but URI starts with /NewsLens
+            $parentDir = rtrim(str_replace('\\', '/', dirname($scriptDir)), '/');
+            if ($parentDir !== '' && $parentDir !== '/' && stripos($parsedUri, $parentDir) === 0) {
+                $parsedUri = substr($parsedUri, strlen($parentDir));
+            }
         }
 
         // Handle case where user or rewrite includes /public prefix

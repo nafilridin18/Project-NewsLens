@@ -81,6 +81,12 @@ $router->post('/password/reset', 'PasswordResetController@reset');
 
 // Static Information Pages (About, Contact, Advertise, Privacy, Terms, Corrections)
 $router->get('/page/{slug}', 'PageController@show');
+$router->get('/about', function() { (new App\Controllers\PageController())->show(['slug' => 'about']); });
+$router->get('/contact', function() { (new App\Controllers\PageController())->show(['slug' => 'contact']); });
+$router->get('/advertise', function() { (new App\Controllers\PageController())->show(['slug' => 'advertise']); });
+$router->get('/privacy', function() { (new App\Controllers\PageController())->show(['slug' => 'privacy']); });
+$router->get('/terms', function() { (new App\Controllers\PageController())->show(['slug' => 'terms']); });
+$router->get('/corrections', function() { (new App\Controllers\PageController())->show(['slug' => 'corrections']); });
 
 // User Profile & Analytics (Self-service for readers, writers, editors, admins)
 $router->get('/profile', 'ProfileController@show');
@@ -190,6 +196,15 @@ $router->post('/' . $adminPath . '/subscribers/delete', 'Admin\SubscriberControl
 // Site Branding & Logo Management
 $router->get('/' . $adminPath . '/settings', 'Admin\SettingsController@index');
 $router->post('/' . $adminPath . '/settings', 'Admin\SettingsController@update');
+
+// Institutional Static Pages Management (About, Contact, Advertise, Privacy, Terms, etc.)
+$router->get('/' . $adminPath . '/pages', 'Admin\PageController@index');
+$router->get('/' . $adminPath . '/pages/create', 'Admin\PageController@create');
+$router->post('/' . $adminPath . '/pages/store', 'Admin\PageController@store');
+$router->get('/' . $adminPath . '/pages/edit', 'Admin\PageController@edit');
+$router->post('/' . $adminPath . '/pages/update', 'Admin\PageController@update');
+$router->post('/' . $adminPath . '/pages/delete', 'Admin\PageController@delete');
+$router->post('/' . $adminPath . '/pages/toggle', 'Admin\PageController@toggle');
 
 // Advertisement Click Tracker & Redirection
 $router->get('/ad/click/{id}', function($params) use ($config) {

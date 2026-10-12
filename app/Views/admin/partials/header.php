@@ -816,6 +816,10 @@ $currentUrl = htmlspecialchars($_SERVER['REQUEST_URI'] ?? ($appUrl . '/' . $admi
         <span class="drawer-nav-icon">⚙️</span>
         <span data-bn="সাইট সেটিংস ও লোগো" data-en="Settings & Logo">সাইট সেটিংস ও লোগো</span>
       </a>
+      <a href="<?= $appUrl ?>/<?= $adminPath ?>/pages" class="drawer-nav-item <?= $activeTab === 'pages' ? 'active' : '' ?>">
+        <span class="drawer-nav-icon">📄</span>
+        <span data-bn="প্রাতিষ্ঠানিক পেজসমূহ" data-en="Static Pages">প্রাতিষ্ঠানিক পেজসমূহ</span>
+      </a>
       <a href="<?= $appUrl ?>/profile" class="drawer-nav-item <?= $activeTab === 'profile' ? 'active' : '' ?>">
         <span class="drawer-nav-icon">👤</span>
         <span data-bn="আমার প্রোফাইল ও অ্যানালিটিক্স" data-en="Profile & Stats">আমার প্রোফাইল ও অ্যানালিটিক্স</span>

@@ -239,6 +239,7 @@ Newslensbd পোর্টালটি লাইভ cPanel হোস্টিং
 | **অনলাইন পাঠক জরিপ ডেস্ক** | [`https://newslensbd.com/lens-desk/polls`](https://newslensbd.com/lens-desk/polls) | Super Admin / Editor |
 | **নিউজলেটার সাবস্ক্রাইবার তালিকা** | [`https://newslensbd.com/lens-desk/subscribers`](https://newslensbd.com/lens-desk/subscribers) | Super Admin |
 | **সাইট মেটা ও ব্র্যান্ডিং সেটিংস** | [`https://newslensbd.com/lens-desk/settings`](https://newslensbd.com/lens-desk/settings) | Super Admin |
+| **প্রাতিষ্ঠানিক পেজ ব্যবস্থাপনা (Pages)** | [`https://newslensbd.com/lens-desk/pages`](https://newslensbd.com/lens-desk/pages) | Super Admin / Editor |
 | **লেখক নিবন্ধন ফরম** | [`https://newslensbd.com/writer/register`](https://newslensbd.com/writer/register) | নতুন আবেদনকারী লেখক |
 | **লেখক ড্যাশবোর্ড** | [`https://newslensbd.com/writer/dashboard`](https://newslensbd.com/writer/dashboard) | অনুমোদিত লেখক (Active Writer) |
 | **লেখক নতুন সংবাদ রচনা** | [`https://newslensbd.com/writer/posts/create`](https://newslensbd.com/writer/posts/create) | অনুমোদিত লেখক |

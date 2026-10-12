@@ -277,6 +277,8 @@ DROP TABLE IF EXISTS `pages`;
 CREATE TABLE `pages` (
     `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     `title` VARCHAR(255) NOT NULL,
+    `title_en` VARCHAR(255) NULL,
+    `badge` VARCHAR(100) NULL,
     `slug` VARCHAR(150) NOT NULL UNIQUE,
     `content` LONGTEXT NOT NULL,
     `meta_title` VARCHAR(255) NULL,
