@@ -349,20 +349,44 @@ $error = $error ?? '';
     }
 
     .brand-title {
-      font-size: 1.85rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.95rem;
       font-weight: 800;
+      letter-spacing: -0.03em;
       color: var(--text-main);
-      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
       margin-bottom: 6px;
     }
     .brand-title .hl-green { color: #0E7A3A; }
     .brand-title .badge-red {
       background: #E31E24;
       color: #ffffff;
-      font-size: 0.8rem;
-      padding: 2px 6px;
-      border-radius: 4px;
-      margin-left: 4px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 5px;
+      margin-left: 5px;
+      letter-spacing: 0.04em;
+      display: inline-block;
+      line-height: 1.3;
+      vertical-align: middle;
+    }
+    .brand-title .badge-admin {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 6px;
+      margin-left: 6px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
+      display: inline-block;
+      line-height: 1.3;
       vertical-align: middle;
     }
     .brand-subtitle {
@@ -534,7 +558,7 @@ $error = $error ?? '';
     <!-- ================= RIGHT PANEL: LOGIN FORM ================= -->
     <div class="form-side-panel">
       <div class="brand-header-area">
-        <div class="brand-title">NEWS<span class="hl-green">LENS</span><span class="badge-red">BD</span></div>
+        <div class="brand-title">NEWS<span class="hl-green">LENS</span><span class="badge-red">BD</span><span class="badge-admin">ADMIN</span></div>
         <p class="brand-subtitle" id="txt-brand-sub" data-bn="নিউজ ম্যানেজমেন্ট ও সম্পাদকীয় কমান্ড ডেস্ক" data-en="News Management & Editorial Command Desk">নিউজ ম্যানেজমেন্ট ও সম্পাদকীয় কমান্ড ডেস্ক</p>
       </div>
 

@@ -311,6 +311,19 @@ $error = $error ?? '';
       gap: 3px;
     }
     .brand-title .hl-green { color: #0E7A3A; }
+    .brand-title .badge-red {
+      background: #E31E24;
+      color: #ffffff;
+      font-size: 0.76rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 5px;
+      margin-left: 5px;
+      letter-spacing: 0.04em;
+      display: inline-block;
+      line-height: 1.3;
+      vertical-align: middle;
+    }
     .brand-title .badge-writer {
       background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
       color: #ffffff;
@@ -318,10 +331,13 @@ $error = $error ?? '';
       font-weight: 800;
       padding: 3px 9px;
       border-radius: 6px;
-      margin-left: 8px;
+      margin-left: 6px;
       letter-spacing: 0.05em;
       text-transform: uppercase;
       box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
+      display: inline-block;
+      line-height: 1.3;
+      vertical-align: middle;
     }
     .brand-subtitle {
       font-size: 0.92rem;
@@ -506,7 +522,7 @@ $error = $error ?? '';
     <!-- ================= RIGHT PANEL: LOGIN FORM ================= -->
     <div class="form-side-panel">
       <div class="brand-header-area">
-        <div class="brand-title">NEWS<span class="hl-green">LENS</span><span class="badge-writer">WRITER</span></div>
+        <div class="brand-title">NEWS<span class="hl-green">LENS</span><span class="badge-red">BD</span><span class="badge-writer">WRITER</span></div>
         <p class="brand-subtitle" id="txt-brand-sub" data-bn="স্বতন্ত্র লেখক লগইন ও কনটেন্ট ম্যানেজমেন্ট পোর্টাল" data-en="Dedicated Writer Login & Content Management Portal">স্বতন্ত্র লেখক লগইন ও কনটেন্ট ম্যানেজমেন্ট পোর্টাল</p>
       </div>
 
