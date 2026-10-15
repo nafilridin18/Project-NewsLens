@@ -46,12 +46,12 @@ $error = $error ?? '';
       --text-main: #0f172a;
       --text-muted: #64748b;
 
-      /* MAP COLORS (Light Mode: DYNAMIC GREEN) */
+      /* MAP COLORS (Light Mode: DYNAMIC GREEN WITH BLACK CRISP LINES) */
       --map-fill-primary: #0E7A3A;
       --map-fill-secondary: #064e3b;
-      --map-stroke: #22c55e;
-      --map-glow: rgba(14, 122, 58, 0.3);
-      --map-pulse-dot: #86efac;
+      --map-stroke: #000000;
+      --map-glow: rgba(14, 122, 58, 0.25);
+      --map-pulse-dot: #15803d;
       --map-pin-badge: #0E7A3A;
       --map-caption-accent: #0E7A3A;
     }
@@ -206,6 +206,29 @@ $error = $error ?? '';
     .bd-div-path {
       fill: url(#bdGradient);
       transition: fill 0.4s ease;
+    }
+    [data-theme="light"] .bd-div-path {
+      stroke: #000000 !important;
+      stroke-opacity: 0.65 !important;
+      stroke-width: 1.8 !important;
+    }
+    [data-theme="light"] #Divisional_borders path {
+      stroke: #000000 !important;
+      stroke-width: 7px !important;
+      stroke-opacity: 1 !important;
+    }
+    [data-theme="light"] #National_border path {
+      stroke: #000000 !important;
+      stroke-width: 5px !important;
+      stroke-opacity: 1 !important;
+    }
+    [data-theme="light"] .div-text-label {
+      fill: #000000 !important;
+      font-weight: 900 !important;
+      text-shadow: 0 0 6px #ffffff, 0 0 12px #ffffff, 0 1px 3px #ffffff !important;
+    }
+    [data-theme="light"] .div-label-group circle:not(.pulse-dot) {
+      fill: #000000 !important;
     }
 
     /* RIVERS: Always Light Blue in both dark and light modes as requested */

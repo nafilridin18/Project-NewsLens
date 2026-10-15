@@ -17,6 +17,87 @@
     <filter id="glowFilter" x="-10%" y="-10%" width="120%" height="120%">
       <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="var(--map-glow)" />
     </filter>
+
+    <style>
+      /* Base Land Mass Fill */
+      .bd-div-path {
+        fill: url(#bdGradient);
+        stroke: rgba(255, 255, 255, 0.45);
+        stroke-width: 1.5;
+        transition: fill 0.3s ease, stroke 0.3s ease;
+      }
+      .bd-div-path:hover {
+        fill: var(--map-fill-primary) !important;
+        filter: brightness(1.2);
+      }
+
+      /* Divisional Borders (Crisp Lines) */
+      #Divisional_borders path {
+        stroke: #ffffff;
+        stroke-width: 5px;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        transition: stroke 0.3s ease;
+      }
+
+      /* Division Text Labels */
+      .div-text-label {
+        fill: #ffffff;
+        font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif;
+        font-size: 26px;
+        font-weight: 800;
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+      }
+      .capital-label {
+        font-size: 32px;
+        fill: #fef08a;
+      }
+
+      /* ================= LIGHT MODE: PURE BLACK / DARK CRISP LINES & TEXT ================= */
+      [data-theme="light"] .bd-div-path {
+        stroke: #000000 !important;
+        stroke-opacity: 0.65 !important;
+        stroke-width: 1.8 !important;
+      }
+
+      [data-theme="light"] #Divisional_borders path {
+        stroke: #000000 !important;
+        stroke-width: 7px !important;
+        stroke-opacity: 1 !important;
+      }
+
+      [data-theme="light"] #National_border path {
+        stroke: #000000 !important;
+        stroke-width: 5px !important;
+        stroke-opacity: 1 !important;
+      }
+
+      [data-theme="light"] .div-text-label {
+        fill: #000000 !important;
+        font-weight: 900 !important;
+        text-shadow: 0 0 6px #ffffff, 0 0 12px #ffffff, 0 1px 3px #ffffff !important;
+      }
+
+      [data-theme="light"] .capital-label {
+        fill: #78350f !important;
+        font-weight: 900 !important;
+        text-shadow: 0 0 6px #ffffff, 0 0 12px #ffffff !important;
+      }
+
+      [data-theme="light"] .div-label-group circle:not(.pulse-dot) {
+        fill: #000000 !important;
+      }
+
+      [data-theme="light"] .bd-sea-label {
+        fill: #0369a1 !important;
+        font-weight: 800 !important;
+      }
+
+      [data-theme="light"] .river-label {
+        fill: #0284c7 !important;
+        font-weight: 800 !important;
+      }
+    </style>
   </defs>
 
   <!-- 1. SOUTHERN SEA: BAY OF BENGAL (Light Blue in Both Modes) -->
