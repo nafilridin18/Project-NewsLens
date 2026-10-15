@@ -187,18 +187,18 @@ $activeTab = 'writer_dashboard';
     <!-- Welcome Card -->
     <div class="welcome-card">
       <div class="welcome-left">
-        <h1>স্বাগতম, <?= htmlspecialchars($user['name'] ?? 'সম্মানিত লেখক') ?>!</h1>
-        <p>আপনার সংবাদ ও বিশ্লেষণ প্রকাশের জন্য লেখক প্যানেলে আপনাকে স্বাগতম।</p>
+        <h1><span data-bn="স্বাগতম," data-en="Welcome,">স্বাগতম,</span> <?= htmlspecialchars($user['name'] ?? 'সম্মানিত লেখক') ?>!</h1>
+        <p data-bn="আপনার সংবাদ ও বিশ্লেষণ প্রকাশের জন্য লেখক প্যানেলে আপনাকে স্বাগতম।" data-en="Welcome to your Writer Command Dashboard to draft and publish articles.">আপনার সংবাদ ও বিশ্লেষণ প্রকাশের জন্য লেখক প্যানেলে আপনাকে স্বাগতম।</p>
         <?php if (($user['permission_level'] ?? '') === 'direct_publish'): ?>
-          <span class="perm-badge perm-direct">⚡ সরাসরি প্রকাশ অনুমোদিত (Direct Publish)</span>
+          <span class="perm-badge perm-direct" data-bn="⚡ সরাসরি প্রকাশ অনুমোদিত (Direct Publish)" data-en="⚡ Direct Publish Enabled (No Review Needed)">⚡ সরাসরি প্রকাশ অনুমোদিত (Direct Publish)</span>
         <?php else: ?>
-          <span class="perm-badge perm-review">📝 সম্পাদকীয় পর্যালোচনা সাপেক্ষে (Editor Review)</span>
+          <span class="perm-badge perm-review" data-bn="📝 সম্পাদকীয় পর্যালোচনা সাপেক্ষে (Editor Review)" data-en="📝 Editorial Review Required before going live">📝 সম্পাদকীয় পর্যালোচনা সাপেক্ষে (Editor Review)</span>
         <?php endif; ?>
       </div>
       <div class="welcome-actions">
-        <a href="<?= $appUrl ?>/writer/posts/create" class="btn-create">✍️ নতুন সংবাদ লিখুন</a>
-        <a href="<?= $appUrl ?>/writer/posts" class="btn-outline">📋 আমার সংবাদসমূহ</a>
-        <a href="<?= $appUrl ?>/profile" class="btn-outline">👤 প্রোফাইল ও পরিসংখ্যান</a>
+        <a href="<?= $appUrl ?>/writer/posts/create" class="btn-create" data-bn="✍️ নতুন সংবাদ লিখুন" data-en="✍️ Write New Post">✍️ নতুন সংবাদ লিখুন</a>
+        <a href="<?= $appUrl ?>/writer/posts" class="btn-outline" data-bn="📋 আমার সংবাদসমূহ" data-en="📋 My Articles">📋 আমার সংবাদসমূহ</a>
+        <a href="<?= $appUrl ?>/profile" class="btn-outline" data-bn="👤 প্রোফাইল ও পরিসংখ্যান" data-en="👤 Profile & Stats">👤 প্রোফাইল ও পরিসংখ্যান</a>
       </div>
     </div>
 
@@ -208,35 +208,35 @@ $activeTab = 'writer_dashboard';
         <div class="stat-icon icon-total">📝</div>
         <div>
           <div class="stat-val"><?= (int)($stats['total_posts'] ?? 0) ?></div>
-          <div class="stat-lbl">মোট সংবাদ</div>
+          <div class="stat-lbl" data-bn="মোট সংবাদ" data-en="Total Posts">মোট সংবাদ</div>
         </div>
       </div>
       <div class="stat-card">
         <div class="stat-icon icon-pub">✅</div>
         <div>
           <div class="stat-val"><?= (int)($stats['published_count'] ?? 0) ?></div>
-          <div class="stat-lbl">প্রকাশিত</div>
+          <div class="stat-lbl" data-bn="প্রকাশিত" data-en="Published">প্রকাশিত</div>
         </div>
       </div>
       <div class="stat-card">
         <div class="stat-icon icon-rev">⏳</div>
         <div>
           <div class="stat-val"><?= (int)($stats['pending_count'] ?? 0) ?></div>
-          <div class="stat-lbl">পর্যালোচনাধীন</div>
+          <div class="stat-lbl" data-bn="পর্যালোচনাধীন" data-en="Under Review">পর্যালোচনাধীন</div>
         </div>
       </div>
       <div class="stat-card">
         <div class="stat-icon icon-rej">❌</div>
         <div>
           <div class="stat-val"><?= (int)($stats['rejected_count'] ?? 0) ?></div>
-          <div class="stat-lbl">প্রত্যাখ্যাত</div>
+          <div class="stat-lbl" data-bn="প্রত্যাখ্যাত" data-en="Rejected">প্রত্যাখ্যাত</div>
         </div>
       </div>
       <div class="stat-card">
         <div class="stat-icon icon-view">👁️</div>
         <div>
           <div class="stat-val"><?= number_format((int)($stats['total_views'] ?? 0)) ?></div>
-          <div class="stat-lbl">সর্বমোট ভিউ</div>
+          <div class="stat-lbl" data-bn="সর্বমোট ভিউ" data-en="Total Views">সর্বমোট ভিউ</div>
         </div>
       </div>
     </div>
@@ -244,26 +244,26 @@ $activeTab = 'writer_dashboard';
     <!-- Recent Posts Section -->
     <div class="section-card">
       <div class="section-head">
-        <h2>সাম্প্রতিক সংবাদসমূহ</h2>
-        <a href="<?= $appUrl ?>/writer/posts" class="btn-action">সবগুলো দেখুন →</a>
+        <h2 data-bn="সাম্প্রতিক সংবাদসমূহ" data-en="Recent Articles">সাম্প্রতিক সংবাদসমূহ</h2>
+        <a href="<?= $appUrl ?>/writer/posts" class="btn-action" data-bn="সবগুলো দেখুন →" data-en="View All →">সবগুলো দেখুন →</a>
       </div>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <th>শিরোনাম</th>
-              <th>ক্যাটাগরি</th>
-              <th>স্ট্যাটাস</th>
-              <th>ভিউ</th>
-              <th>তারিখ</th>
-              <th style="text-align: right;">অ্যাকশন</th>
+              <th data-bn="শিরোনাম" data-en="Title">শিরোনাম</th>
+              <th data-bn="ক্যাটাগরি" data-en="Category">ক্যাটাগরি</th>
+              <th data-bn="স্ট্যাটাস" data-en="Status">স্ট্যাটাস</th>
+              <th data-bn="ভিউ" data-en="Views">ভিউ</th>
+              <th data-bn="তারিখ" data-en="Date">তারিখ</th>
+              <th style="text-align: right;" data-bn="অ্যাকশন" data-en="Action">অ্যাকশন</th>
             </tr>
           </thead>
           <tbody>
             <?php if (empty($recentPosts)): ?>
               <tr>
-                <td colspan="6" style="text-align: center; padding: 40px; color: var(--adm-text-muted);">
-                  এখনো কোনো সংবাদ লেখেননি। <a href="<?= $appUrl ?>/writer/posts/create" style="color: #10b981; font-weight: 700;">প্রথম সংবাদ লিখুন ↗</a>
+                <td colspan="6" style="text-align: center; padding: 40px; color: var(--adm-text-muted);" data-bn="এখনো কোনো সংবাদ লেখেননি।" data-en="You haven't written any articles yet.">
+                  এখনো কোনো সংবাদ লেখেননি। <a href="<?= $appUrl ?>/writer/posts/create" style="color: #10b981; font-weight: 700;" data-bn="প্রথম সংবাদ লিখুন ↗" data-en="Write your first post ↗">প্রথম সংবাদ লিখুন ↗</a>
                 </td>
               </tr>
             <?php else: ?>
@@ -286,13 +286,13 @@ $activeTab = 'writer_dashboard';
                   </td>
                   <td>
                     <?php if ($p['status'] === 'published'): ?>
-                      <span class="badge badge-pub">প্রকাশিত</span>
+                      <span class="badge badge-pub" data-bn="প্রকাশিত" data-en="Published">প্রকাশিত</span>
                     <?php elseif ($p['status'] === 'pending_review'): ?>
-                      <span class="badge badge-rev">পর্যালোচনাধীন</span>
+                      <span class="badge badge-rev" data-bn="পর্যালোচনাধীন" data-en="Under Review">পর্যালোচনাধীন</span>
                     <?php elseif ($p['status'] === 'rejected'): ?>
-                      <span class="badge badge-rej">প্রত্যাখ্যাত</span>
+                      <span class="badge badge-rej" data-bn="প্রত্যাখ্যাত" data-en="Rejected">প্রত্যাখ্যাত</span>
                     <?php else: ?>
-                      <span class="badge badge-dft">খসড়া</span>
+                      <span class="badge badge-dft" data-bn="খসড়া" data-en="Draft">খসড়া</span>
                     <?php endif; ?>
                   </td>
                   <td style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700;">
@@ -302,9 +302,9 @@ $activeTab = 'writer_dashboard';
                     <?= date('d M, Y', strtotime($p['created_at'])) ?>
                   </td>
                   <td style="text-align: right; white-space: nowrap;">
-                    <a href="<?= $appUrl ?>/writer/posts/edit?id=<?= (int)$p['id'] ?>" class="btn-action">✏️ সম্পাদনা</a>
+                    <a href="<?= $appUrl ?>/writer/posts/edit?id=<?= (int)$p['id'] ?>" class="btn-action" data-bn="✏️ সম্পাদনা" data-en="✏️ Edit">✏️ সম্পাদনা</a>
                     <?php if ($p['status'] === 'published'): ?>
-                      <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($p['category_slug'] ?? 'national') ?>/<?= (int)$p['id'] ?>/<?= urlencode($p['slug']) ?>" target="_blank" class="btn-action" style="color: #38bdf8;">👁️ দেখুন ↗</a>
+                      <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($p['category_slug'] ?? 'national') ?>/<?= (int)$p['id'] ?>/<?= urlencode($p['slug']) ?>" target="_blank" class="btn-action" style="color: #38bdf8;" data-bn="👁️ দেখুন ↗" data-en="👁️ View ↗">👁️ দেখুন ↗</a>
                     <?php endif; ?>
                   </td>
                 </tr>

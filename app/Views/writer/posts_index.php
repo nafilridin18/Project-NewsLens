@@ -177,9 +177,9 @@ $activeTab = 'writer_posts';
     <div class="header-row">
       <div class="header-title">
         <span>📝</span>
-        <span>আমার সংবাদসমূহ (My Posts)</span>
+        <span data-bn="আমার সংবাদসমূহ (My Posts)" data-en="My Articles & Posts">আমার সংবাদসমূহ (My Posts)</span>
       </div>
-      <a href="<?= $appUrl ?>/writer/posts/create" class="btn-create">✍️ নতুন সংবাদ লিখুন</a>
+      <a href="<?= $appUrl ?>/writer/posts/create" class="btn-create" data-bn="✍️ নতুন সংবাদ লিখুন" data-en="✍️ Write New Post">✍️ নতুন সংবাদ লিখুন</a>
     </div>
 
     <?php if (!empty($success)): ?>
@@ -192,19 +192,19 @@ $activeTab = 'writer_posts';
     <!-- Filter & Search Bar -->
     <div class="filter-card">
       <div class="pill-group">
-        <a href="<?= $appUrl ?>/writer/posts" class="filter-pill <?= empty($statusFilter) ? 'active' : '' ?>">সবগুলো</a>
-        <a href="<?= $appUrl ?>/writer/posts?status=published" class="filter-pill <?= $statusFilter === 'published' ? 'active' : '' ?>">প্রকাশিত</a>
-        <a href="<?= $appUrl ?>/writer/posts?status=pending_review" class="filter-pill <?= $statusFilter === 'pending_review' ? 'active' : '' ?>">পর্যালোচনাধীন</a>
-        <a href="<?= $appUrl ?>/writer/posts?status=rejected" class="filter-pill <?= $statusFilter === 'rejected' ? 'active' : '' ?>">প্রত্যাখ্যাত</a>
-        <a href="<?= $appUrl ?>/writer/posts?status=draft" class="filter-pill <?= $statusFilter === 'draft' ? 'active' : '' ?>">খসড়া</a>
+        <a href="<?= $appUrl ?>/writer/posts" class="filter-pill <?= empty($statusFilter) ? 'active' : '' ?>" data-bn="সবগুলো" data-en="All">সবগুলো</a>
+        <a href="<?= $appUrl ?>/writer/posts?status=published" class="filter-pill <?= $statusFilter === 'published' ? 'active' : '' ?>" data-bn="প্রকাশিত" data-en="Published">প্রকাশিত</a>
+        <a href="<?= $appUrl ?>/writer/posts?status=pending_review" class="filter-pill <?= $statusFilter === 'pending_review' ? 'active' : '' ?>" data-bn="পর্যালোচনাধীন" data-en="Under Review">পর্যালোচনাধীন</a>
+        <a href="<?= $appUrl ?>/writer/posts?status=rejected" class="filter-pill <?= $statusFilter === 'rejected' ? 'active' : '' ?>" data-bn="প্রত্যাখ্যাত" data-en="Rejected">প্রত্যাখ্যাত</a>
+        <a href="<?= $appUrl ?>/writer/posts?status=draft" class="filter-pill <?= $statusFilter === 'draft' ? 'active' : '' ?>" data-bn="খসড়া" data-en="Drafts">খসড়া</a>
       </div>
 
       <form method="GET" action="<?= $appUrl ?>/writer/posts" class="search-form">
         <?php if (!empty($statusFilter)): ?>
           <input type="hidden" name="status" value="<?= htmlspecialchars($statusFilter) ?>">
         <?php endif; ?>
-        <input type="text" name="q" value="<?= htmlspecialchars($search) ?>" placeholder="শিরোনাম দিয়ে খুঁজুন..." class="search-input">
-        <button type="submit" class="search-btn">🔍 খুঁজুন</button>
+        <input type="text" name="q" value="<?= htmlspecialchars($search) ?>" placeholder="শিরোনাম দিয়ে খুঁজুন..." class="search-input" data-placeholder-bn="শিরোনাম দিয়ে খুঁজুন..." data-placeholder-en="Search by title...">
+        <button type="submit" class="search-btn" data-bn="🔍 খুঁজুন" data-en="🔍 Search">🔍 খুঁজুন</button>
       </form>
     </div>
 
@@ -214,13 +214,13 @@ $activeTab = 'writer_posts';
         <table>
           <thead>
             <tr>
-              <th style="width: 70px;">ছবি</th>
-              <th>শিরোনাম ও বিবরণ</th>
-              <th>ক্যাটাগরি</th>
-              <th>স্ট্যাটাস</th>
-              <th>ভিউ</th>
-              <th>তারিখ</th>
-              <th style="text-align: right;">অ্যাকশন</th>
+              <th style="width: 70px;" data-bn="ছবি" data-en="Image">ছবি</th>
+              <th data-bn="শিরোনাম ও বিবরণ" data-en="Title & Summary">শিরোনাম ও বিবরণ</th>
+              <th data-bn="ক্যাটাগরি" data-en="Category">ক্যাটাগরি</th>
+              <th data-bn="স্ট্যাটাস" data-en="Status">স্ট্যাটাস</th>
+              <th data-bn="ভিউ" data-en="Views">ভিউ</th>
+              <th data-bn="তারিখ" data-en="Date">তারিখ</th>
+              <th style="text-align: right;" data-bn="অ্যাকশন" data-en="Action">অ্যাকশন</th>
             </tr>
           </thead>
           <tbody>
@@ -258,13 +258,13 @@ $activeTab = 'writer_posts';
                   </td>
                   <td>
                     <?php if ($p['status'] === 'published'): ?>
-                      <span class="badge badge-pub">প্রকাশিত</span>
+                      <span class="badge badge-pub" data-bn="প্রকাশিত" data-en="Published">প্রকাশিত</span>
                     <?php elseif ($p['status'] === 'pending_review'): ?>
-                      <span class="badge badge-rev">পর্যালোচনাধীন</span>
+                      <span class="badge badge-rev" data-bn="পর্যালোচনাধীন" data-en="Under Review">পর্যালোচনাধীন</span>
                     <?php elseif ($p['status'] === 'rejected'): ?>
-                      <span class="badge badge-rej">প্রত্যাখ্যাত</span>
+                      <span class="badge badge-rej" data-bn="প্রত্যাখ্যাত" data-en="Rejected">প্রত্যাখ্যাত</span>
                     <?php else: ?>
-                      <span class="badge badge-dft">খসড়া</span>
+                      <span class="badge badge-dft" data-bn="খসড়া" data-en="Draft">খসড়া</span>
                     <?php endif; ?>
                   </td>
                   <td style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700;">
@@ -275,10 +275,10 @@ $activeTab = 'writer_posts';
                   </td>
                   <td style="text-align: right; white-space: nowrap;">
                     <div style="display: inline-flex; gap: 6px; align-items: center;">
-                      <a href="<?= $appUrl ?>/writer/posts/edit?id=<?= (int)$p['id'] ?>" class="btn-action">✏️ সম্পাদনা</a>
+                      <a href="<?= $appUrl ?>/writer/posts/edit?id=<?= (int)$p['id'] ?>" class="btn-action" data-bn="✏️ সম্পাদনা" data-en="✏️ Edit">✏️ সম্পাদনা</a>
                       
                       <?php if ($p['status'] === 'published'): ?>
-                        <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($p['category_slug'] ?? 'national') ?>/<?= (int)$p['id'] ?>/<?= urlencode($p['slug']) ?>" target="_blank" class="btn-action" style="color: #38bdf8;">👁️ দেখুন</a>
+                        <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($p['category_slug'] ?? 'national') ?>/<?= (int)$p['id'] ?>/<?= urlencode($p['slug']) ?>" target="_blank" class="btn-action" style="color: #38bdf8;" data-bn="👁️ দেখুন" data-en="👁️ View">👁️ দেখুন</a>
                       <?php endif; ?>
 
                       <form method="POST" action="<?= $appUrl ?>/writer/posts/delete" onsubmit="return confirm('আপনি কি নিশ্চিত যে এই সংবাদটি মুছে ফেলতে চান? এটি পুনরুদ্ধার করা যাবে না।');" style="display: inline;">

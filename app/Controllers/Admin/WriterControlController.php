@@ -56,13 +56,19 @@ class WriterControlController {
         $pendingCountStmt = $db->query("SELECT COUNT(*) FROM `users` WHERE `role` = 'writer' AND `status` = 'pending' AND `deleted_at` IS NULL");
         $pendingCount = (int) $pendingCountStmt->fetchColumn();
 
+        // Get list of standard users for quick promotion feature
+        $readersStmt = $db->query("SELECT id, name, email, phone FROM `users` WHERE `role` = 'user' AND `deleted_at` IS NULL ORDER BY `name` ASC LIMIT 100");
+        $readers = $readersStmt->fetchAll(PDO::FETCH_ASSOC);
+
         View::render('admin.writers_index', [
-            'pageTitle'    => 'লেখক নিয়ন্ত্রণ ও অনুমোদন | Newslensbd Admin',
+            'pageTitle'    => 'লেখক নিয়ন্ত্রণ ও ব্যবস্থাপনা | Newslensbd Admin',
             'writers'      => $writers,
+            'readers'      => $readers,
             'pendingCount' => $pendingCount,
             'statusFilter' => $statusFilter,
             'permFilter'   => $permFilter,
             'search'       => $search,
+            'adminPath'    => $this->adminSlug(),
             'success'      => $_SESSION['writer_action_msg'] ?? null,
             'error'        => $_SESSION['writer_action_err'] ?? null,
             'csrfToken'    => Auth::generateCsrf()
@@ -115,12 +121,279 @@ class WriterControlController {
             'totalViews'     => $totalViews,
             'publishedCount' => $publishedCount,
             'pendingCount'   => $pendingCount,
+            'adminPath'      => $this->adminSlug(),
             'csrfToken'      => Auth::generateCsrf()
         ]);
     }
 
     /**
-     * Approve writer request with direct_publish or editor_review
+     * Create New Writer Account (Admin only)
+     */
+    public function create(): void {
+        $admin = Middleware::requireAdmin();
+        if (!Auth::verifyCsrf($_POST['csrf_token'] ?? null)) {
+            $_SESSION['writer_action_err'] = 'নিরাপত্তা টোকেন সঠিক নয়।';
+            header("Location: /" . $this->adminPath() . "/writers");
+            exit;
+        }
+
+        $name = trim($_POST['name'] ?? '');
+        $email = strtolower(trim($_POST['email'] ?? ''));
+        $password = $_POST['password'] ?? '';
+        $phone = trim($_POST['phone'] ?? '');
+        $bio = trim($_POST['bio'] ?? '');
+        $level = trim($_POST['permission_level'] ?? 'editor_review');
+
+        if (!in_array($level, ['direct_publish', 'editor_review'], true)) {
+            $level = 'editor_review';
+        }
+
+        if (empty($name) || empty($email) || empty($password)) {
+            $_SESSION['writer_action_err'] = 'নাম, ইমেইল এবং পাসওয়ার্ড অবশ্যই প্রদান করতে হবে।';
+            header("Location: /" . $this->adminPath() . "/writers");
+            exit;
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $_SESSION['writer_action_err'] = 'সঠিক ইমেইল ঠিকানা দিন।';
+            header("Location: /" . $this->adminPath() . "/writers");
+            exit;
+        }
+
+        if (strlen($password) < 6) {
+            $_SESSION['writer_action_err'] = 'পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।';
+            header("Location: /" . $this->adminPath() . "/writers");
+            exit;
+        }
+
+        $db = Database::getConnection();
+
+        // Check for existing user
+        $stmt = $db->prepare("SELECT id, role, status FROM `users` WHERE `email` = :email LIMIT 1");
+        $stmt->execute([':email' => $email]);
+        $existing = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($existing) {
+            if ($existing['role'] === 'writer') {
+                $_SESSION['writer_action_err'] = 'এই ইমেইল দিয়ে ইতোমধ্যে একজন লেখক অ্যাকাউন্ট রয়েছে।';
+            } else {
+                $_SESSION['writer_action_err'] = "এই ইমেইলটি সাধারণ পাঠক হিসেবে নিবন্ধিত। 'পাঠককে লেখকে উন্নীত করুন' অপশন ব্যবহার করুন।";
+            }
+            header("Location: /" . $this->adminPath() . "/writers");
+            exit;
+        }
+
+        $passwordHash = password_hash($password, PASSWORD_BCRYPT);
+        $insert = $db->prepare("
+            INSERT INTO `users` (
+                `name`, `email`, `phone`, `password_hash`, `role`, 
+                `bio`, `permission_level`, `status`, `email_verified_at`, 
+                `approved_by`, `approved_at`, `created_at`
+            ) VALUES (
+                :name, :email, :phone, :hash, 'writer',
+                :bio, :perm, 'active', NOW(),
+                :admin_id, NOW(), NOW()
+            )
+        ");
+
+        $insert->execute([
+            ':name'     => $name,
+            ':email'    => $email,
+            ':phone'    => !empty($phone) ? $phone : null,
+            ':hash'     => $passwordHash,
+            ':bio'      => !empty($bio) ? $bio : null,
+            ':perm'     => $level,
+            ':admin_id' => $admin['id']
+        ]);
+
+        $newWriterId = (int) $db->lastInsertId();
+
+        AuditLog::log('create_writer_account', 'user', $newWriterId, [
+            'name'             => $name,
+            'email'            => $email,
+            'permission_level' => $level,
+            'created_by_admin' => $admin['id']
+        ]);
+
+        // Attempt sending credentials email
+        try {
+            Mailer::sendWriterStatus($email, $name, 'approved', $level);
+        } catch (\Throwable $e) {}
+
+        $_SESSION['writer_action_msg'] = "{$name}-কে সফলভাবে নতুন লেখক হিসেবে যুক্ত করা হয়েছে। (লগইন URL: /writer/login)";
+        header("Location: /" . $this->adminPath() . "/writers");
+        exit;
+    }
+
+    /**
+     * Reset Writer Password (Admin-controlled)
+     */
+    public function resetPassword(): void {
+        $admin = Middleware::requireAdmin();
+        if (!Auth::verifyCsrf($_POST['csrf_token'] ?? null)) {
+            $_SESSION['writer_action_err'] = 'নিরাপত্তা টোকেন সঠিক নয়।';
+            header("Location: /" . $this->adminPath() . "/writers");
+            exit;
+        }
+
+        $id = (int) ($_POST['id'] ?? 0);
+        $newPassword = $_POST['new_password'] ?? '';
+
+        if ($id <= 0 || strlen($newPassword) < 6) {
+            $_SESSION['writer_action_err'] = 'নতুন পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।';
+            header("Location: /" . $this->adminPath() . "/writers");
+            exit;
+        }
+
+        $db = Database::getConnection();
+        $stmt = $db->prepare("SELECT id, name, email FROM `users` WHERE `id` = :id AND `role` = 'writer' LIMIT 1");
+        $stmt->execute([':id' => $id]);
+        $writer = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$writer) {
+            $_SESSION['writer_action_err'] = 'লেখক পাওয়া যায়নি।';
+            header("Location: /" . $this->adminPath() . "/writers");
+            exit;
+        }
+
+        $hash = password_hash($newPassword, PASSWORD_BCRYPT);
+        $up = $db->prepare("UPDATE `users` SET `password_hash` = :hash, `updated_at` = NOW() WHERE `id` = :id");
+        $up->execute([':hash' => $hash, ':id' => $id]);
+
+        AuditLog::log('reset_writer_password', 'user', $id, [
+            'writer_email' => $writer['email'],
+            'admin_id'     => $admin['id']
+        ]);
+
+        $_SESSION['writer_action_msg'] = "{$writer['name']}-এর পাসওয়ার্ড সফলভাবে রিসেট করা হয়েছে।";
+        header("Location: /" . $this->adminPath() . "/writers");
+        exit;
+    }
+
+    /**
+     * Promote an existing normal reader (role='user') to Writer (role='writer')
+     */
+    public function promoteUser(): void {
+        $admin = Middleware::requireAdmin();
+        if (!Auth::verifyCsrf($_POST['csrf_token'] ?? null)) {
+            $_SESSION['writer_action_err'] = 'নিরাপত্তা টোকেন সঠিক নয়।';
+            header("Location: /" . $this->adminPath() . "/writers");
+            exit;
+        }
+
+        $userId = (int) ($_POST['user_id'] ?? 0);
+        $userEmail = strtolower(trim($_POST['user_email'] ?? ''));
+        $level = trim($_POST['permission_level'] ?? 'editor_review');
+        if (!in_array($level, ['direct_publish', 'editor_review'], true)) {
+            $level = 'editor_review';
+        }
+
+        $db = Database::getConnection();
+
+        if ($userId > 0) {
+            $stmt = $db->prepare("SELECT * FROM `users` WHERE `id` = :id LIMIT 1");
+            $stmt->execute([':id' => $userId]);
+        } elseif (!empty($userEmail)) {
+            $stmt = $db->prepare("SELECT * FROM `users` WHERE `email` = :email LIMIT 1");
+            $stmt->execute([':email' => $userEmail]);
+        } else {
+            $_SESSION['writer_action_err'] = 'ব্যবহারকারী আইডি বা ইমেইল প্রদান করুন।';
+            header("Location: /" . $this->adminPath() . "/writers");
+            exit;
+        }
+
+        $targetUser = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$targetUser) {
+            $_SESSION['writer_action_err'] = 'ব্যবহারকারী খুঁজে পাওয়া যায়নি।';
+            header("Location: /" . $this->adminPath() . "/writers");
+            exit;
+        }
+
+        if ($targetUser['role'] === 'writer') {
+            $_SESSION['writer_action_err'] = "{$targetUser['name']} ইতোমধ্যে লেখক পদে রয়েছেন।";
+            header("Location: /" . $this->adminPath() . "/writers");
+            exit;
+        }
+
+        $up = $db->prepare("
+            UPDATE `users` 
+            SET `role` = 'writer',
+                `status` = 'active',
+                `permission_level` = :perm,
+                `approved_by` = :admin_id,
+                `approved_at` = NOW(),
+                `updated_at` = NOW()
+            WHERE `id` = :id
+        ");
+
+        $up->execute([
+            ':perm'     => $level,
+            ':admin_id' => $admin['id'],
+            ':id'       => $targetUser['id']
+        ]);
+
+        AuditLog::log('promote_to_writer', 'user', $targetUser['id'], [
+            'user_email'       => $targetUser['email'],
+            'permission_level' => $level,
+            'admin_id'         => $admin['id']
+        ]);
+
+        try {
+            Mailer::sendWriterStatus($targetUser['email'], $targetUser['name'], 'approved', $level);
+        } catch (\Throwable $e) {}
+
+        $_SESSION['writer_action_msg'] = "{$targetUser['name']}-কে সফলভাবে লেখক হিসেবে অনুমোদন দেওয়া হয়েছে।";
+        header("Location: /" . $this->adminPath() . "/writers");
+        exit;
+    }
+
+    /**
+     * Demote Writer back to User (role='user')
+     */
+    public function demoteWriter(): void {
+        $admin = Middleware::requireAdmin();
+        if (!Auth::verifyCsrf($_POST['csrf_token'] ?? null)) {
+            $_SESSION['writer_action_err'] = 'নিরাপত্তা টোকেন সঠিক নয়।';
+            header("Location: /" . $this->adminPath() . "/writers");
+            exit;
+        }
+
+        $id = (int) ($_POST['id'] ?? 0);
+        $db = Database::getConnection();
+
+        $stmt = $db->prepare("SELECT * FROM `users` WHERE `id` = :id AND `role` = 'writer' LIMIT 1");
+        $stmt->execute([':id' => $id]);
+        $writer = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$writer) {
+            $_SESSION['writer_action_err'] = 'লেখক পাওয়া যায়নি।';
+            header("Location: /" . $this->adminPath() . "/writers");
+            exit;
+        }
+
+        // Demote role to 'user', remove writer permission level
+        $up = $db->prepare("
+            UPDATE `users` 
+            SET `role` = 'user',
+                `permission_level` = NULL,
+                `updated_at` = NOW()
+            WHERE `id` = :id
+        ");
+        $up->execute([':id' => $id]);
+
+        AuditLog::log('demote_writer_to_user', 'user', $id, [
+            'writer_email' => $writer['email'],
+            'admin_id'     => $admin['id']
+        ]);
+
+        $_SESSION['writer_action_msg'] = "{$writer['name']}-কে সফলভাবে সাধারণ পাঠক পদে স্থানান্তর করা হয়েছে। (পূর্বের সংবাদসমূহ সংরক্ষিত থাকবে)";
+        header("Location: /" . $this->adminPath() . "/writers");
+        exit;
+    }
+
+    /**
+     * Approve legacy or pending writer request
      */
     public function approve(): void {
         $admin = Middleware::requireAdmin();
@@ -169,19 +442,13 @@ class WriterControlController {
         ]);
 
         // Notify writer via email
-        Mailer::sendWriterStatus($writer['email'], $writer['name'], 'approved', $level);
+        try {
+            Mailer::sendWriterStatus($writer['email'], $writer['name'], 'approved', $level);
+        } catch (\Throwable $e) {}
 
         $_SESSION['writer_action_msg'] = "{$writer['name']}-কে সফলভাবে অনুমোদন দেওয়া হয়েছে।";
         header("Location: /" . $this->adminPath() . "/writers");
         exit;
-    }
-
-    private function adminPath(): string {
-        $c = require dirname(__DIR__, 3) . '/config/config.php';
-        $admin = trim($c['app']['admin_path'] ?? 'lens-desk', '/');
-        $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
-        $appUrl = rtrim($scriptDir, '/');
-        return ltrim($appUrl . '/' . $admin, '/');
     }
 
     /**
@@ -229,7 +496,9 @@ class WriterControlController {
             'admin_id'     => $admin['id']
         ]);
 
-        Mailer::sendWriterStatus($writer['email'], $writer['name'], 'rejected', null, $reason);
+        try {
+            Mailer::sendWriterStatus($writer['email'], $writer['name'], 'rejected', null, $reason);
+        } catch (\Throwable $e) {}
 
         $_SESSION['writer_action_msg'] = "{$writer['name']}-এর আবেদন প্রত্যাখ্যান করা হয়েছে।";
         header("Location: /" . $this->adminPath() . "/writers");
@@ -274,7 +543,9 @@ class WriterControlController {
             'writer_email'   => $writer['email']
         ]);
 
-        Mailer::sendWriterStatus($writer['email'], $writer['name'], 'approved', $level);
+        try {
+            Mailer::sendWriterStatus($writer['email'], $writer['name'], 'approved', $level);
+        } catch (\Throwable $e) {}
 
         $_SESSION['writer_action_msg'] = "{$writer['name']}-এর পারমিশন লেভেল আপডেট করা হয়েছে।";
         header("Location: /" . $this->adminPath() . "/writers");
@@ -313,7 +584,9 @@ class WriterControlController {
                 ':id'     => $id
             ]);
             AuditLog::log('suspend_writer', 'user', $id, ['reason' => $reason]);
-            Mailer::sendWriterStatus($writer['email'], $writer['name'], 'suspended', null, $reason);
+            try {
+                Mailer::sendWriterStatus($writer['email'], $writer['name'], 'suspended', null, $reason);
+            } catch (\Throwable $e) {}
             $_SESSION['writer_action_msg'] = "{$writer['name']}-কে সাময়িকভাবে স্থগিত করা হয়েছে।";
         } elseif ($action === 'activate') {
             $db->prepare("UPDATE `users` SET `status` = 'active' WHERE `id` = :id")->execute([':id' => $id]);
@@ -326,7 +599,7 @@ class WriterControlController {
     }
 
     /**
-     * Remove writer (Soft delete with option for articles: unpublish or keep former author label)
+     * Remove / Soft-delete writer
      */
     public function removeWriter(): void {
         $admin = Middleware::requireAdmin();
@@ -354,10 +627,8 @@ class WriterControlController {
         $db->prepare("UPDATE `users` SET `deleted_at` = NOW(), `status` = 'removed' WHERE `id` = :id")->execute([':id' => $id]);
 
         if ($postsAction === 'unpublish') {
-            // Unpublish all their articles to draft
             $db->prepare("UPDATE `posts` SET `status` = 'draft' WHERE `author_id` = :id")->execute([':id' => $id]);
         } else {
-            // Keep them published with custom_author label 'সাবেক লেখক (Former Writer)'
             $db->prepare("
                 UPDATE `posts` 
                 SET `custom_author` = CONCAT(:name, ' (সাবেক লেখক)') 
@@ -373,5 +644,66 @@ class WriterControlController {
         $_SESSION['writer_action_msg'] = "{$writer['name']}-কে সফলভাবে অপসারন করা হয়েছে।";
         header("Location: /" . $this->adminPath() . "/writers");
         exit;
+    }
+
+    /**
+     * Delete writer permanently (Hard delete option if requested)
+     */
+    public function deleteWriter(): void {
+        $admin = Middleware::requireAdmin();
+        if (!Auth::verifyCsrf($_POST['csrf_token'] ?? null)) {
+            $_SESSION['writer_action_err'] = 'নিরাপত্তা টোকেন সঠিক নয়।';
+            header("Location: /" . $this->adminPath() . "/writers");
+            exit;
+        }
+
+        $id = (int) ($_POST['id'] ?? 0);
+        $postsAction = trim($_POST['posts_action'] ?? 'keep');
+
+        $db = Database::getConnection();
+        $stmt = $db->prepare("SELECT * FROM `users` WHERE `id` = :id AND `role` = 'writer' LIMIT 1");
+        $stmt->execute([':id' => $id]);
+        $writer = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$writer) {
+            $_SESSION['writer_action_err'] = 'লেখক পাওয়া যায়নি।';
+            header("Location: /" . $this->adminPath() . "/writers");
+            exit;
+        }
+
+        if ($postsAction === 'unpublish') {
+            $db->prepare("UPDATE `posts` SET `status` = 'draft' WHERE `author_id` = :id")->execute([':id' => $id]);
+        } else {
+            $db->prepare("
+                UPDATE `posts` 
+                SET `custom_author` = CONCAT(:name, ' (সাবেক লেখক)') 
+                WHERE `author_id` = :id AND `custom_author` IS NULL
+            ")->execute([':name' => $writer['name'], ':id' => $id]);
+        }
+
+        // Soft delete writer
+        $db->prepare("UPDATE `users` SET `deleted_at` = NOW(), `status` = 'removed' WHERE `id` = :id")->execute([':id' => $id]);
+
+        AuditLog::log('delete_writer', 'user', $id, [
+            'posts_action' => $postsAction,
+            'writer_name'  => $writer['name']
+        ]);
+
+        $_SESSION['writer_action_msg'] = "{$writer['name']}-এর অ্যাকাউন্ট সফলভাবে মুছে ফেলা হয়েছে।";
+        header("Location: /" . $this->adminPath() . "/writers");
+        exit;
+    }
+
+    private function adminPath(): string {
+        $c = require dirname(__DIR__, 3) . '/config/config.php';
+        $admin = trim($c['app']['admin_path'] ?? 'lens-desk', '/');
+        $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+        $appUrl = rtrim($scriptDir, '/');
+        return ltrim($appUrl . '/' . $admin, '/');
+    }
+
+    private function adminSlug(): string {
+        $c = require dirname(__DIR__, 3) . '/config/config.php';
+        return trim($c['app']['admin_path'] ?? 'lens-desk', '/');
     }
 }

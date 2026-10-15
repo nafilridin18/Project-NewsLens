@@ -22,6 +22,8 @@ class Middleware {
             $currentUri = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
             if (str_contains($currentUri, '/' . $adminPath)) {
                 header("Location: {$appUrl}/{$adminPath}/login");
+            } elseif (str_contains($currentUri, '/writer')) {
+                header("Location: {$appUrl}/writer/login");
             } else {
                 header("Location: {$appUrl}/login");
             }

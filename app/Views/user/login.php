@@ -18,14 +18,9 @@ $success = $success ?? null;
       <p style="color: var(--text-muted); font-size: 0.94rem;">আপনার নিবন্ধিত ইমেইল ও পাসওয়ার্ড দিয়ে প্রবেশ করুন</p>
     </div>
 
-    <!-- Role Switch Segmented Pills -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: var(--bg-alt); padding: 5px; border-radius: 12px; margin-bottom: 24px; border: 1px solid var(--border-color);">
-      <button type="button" class="auth-role-tab active" style="border: none; background: var(--bg-card); color: var(--color-secondary); padding: 9px; border-radius: 9px; font-weight: 700; font-size: 0.88rem; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.06); display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
-        <span>👤</span> <span>সাধারণ পাঠক</span>
-      </button>
-      <a href="<?= $appUrl ?>/writer/register" class="auth-role-tab" style="text-decoration: none; border: none; background: transparent; color: var(--text-muted); padding: 9px; border-radius: 9px; font-weight: 700; font-size: 0.88rem; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: color 0.2s;">
-        <span>✍️</span> <span>লেখক আবেদন</span>
-      </a>
+    <!-- Reader Login Notice -->
+    <div style="background: var(--bg-alt); padding: 8px 14px; border-radius: 10px; margin-bottom: 24px; border: 1px solid var(--border-color); text-align: center; font-size: 0.88rem; color: var(--text-muted); font-weight: 600;">
+      <span>👤 সাধারণ পাঠক একাউন্ট লগইন</span>
     </div>
 
     <!-- Alerts -->
@@ -125,12 +120,9 @@ $success = $success ?? null;
 
     <!-- Footer Links -->
     <div style="text-align: center; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border-color); font-size: 0.92rem; color: var(--text-muted);">
-      <p style="margin-bottom: 10px;">
+      <p style="margin-bottom: 0;">
         নতুন পাঠক? <a href="<?= $appUrl ?>/register" style="color: var(--color-secondary); font-weight: 800; text-decoration: none;" onmouseover="this.style.textDecoration='underline';" onmouseout="this.style.textDecoration='none';">বিনামূল্যে অ্যাকাউন্ট খুলুন ➔</a>
       </p>
-      <div style="background: var(--bg-alt); padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-color); font-size: 0.86rem;">
-        ✍️ আপনি কি লিখতে ভালোবাসেন? <a href="<?= $appUrl ?>/writer/register" style="color: #0284c7; font-weight: 800; text-decoration: none;">লেখক হিসেবে আবেদন করুন ↗</a>
-      </div>
     </div>
 
   </div>

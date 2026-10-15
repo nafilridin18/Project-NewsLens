@@ -94,7 +94,10 @@ $router->get('/profile/edit', 'ProfileController@edit');
 $router->post('/profile/update', 'ProfileController@update');
 $router->post('/profile/change-password', 'ProfileController@changePassword');
 
-// Writer Onboarding & Registration
+// Dedicated Writer Authentication & Portal
+$router->get('/writer/login', 'WriterAuthController@showLogin');
+$router->post('/writer/login', 'WriterAuthController@login');
+$router->get('/writer/logout', 'WriterAuthController@logout');
 $router->get('/writer/register', 'WriterAuthController@showRegister');
 $router->post('/writer/register', 'WriterAuthController@register');
 $router->get('/writer/pending', 'WriterAuthController@showPending');
@@ -162,9 +165,14 @@ $router->post('/' . $adminPath . '/register', 'Admin\AuthController@register');
 $router->post('/' . $adminPath . '/profile/update', 'Admin\AuthController@updateProfile');
 $router->get('/' . $adminPath . '/logout', 'Admin\AuthController@logout');
 
-// Admin Writer Control & Approvals
+// Admin Writer Control & Management
 $router->get('/' . $adminPath . '/writers', 'Admin\WriterControlController@index');
 $router->get('/' . $adminPath . '/writers/show', 'Admin\WriterControlController@show');
+$router->post('/' . $adminPath . '/writers/create', 'Admin\WriterControlController@create');
+$router->post('/' . $adminPath . '/writers/reset-password', 'Admin\WriterControlController@resetPassword');
+$router->post('/' . $adminPath . '/writers/promote', 'Admin\WriterControlController@promoteUser');
+$router->post('/' . $adminPath . '/writers/demote', 'Admin\WriterControlController@demoteWriter');
+$router->post('/' . $adminPath . '/writers/delete', 'Admin\WriterControlController@deleteWriter');
 $router->post('/' . $adminPath . '/writers/approve', 'Admin\WriterControlController@approve');
 $router->post('/' . $adminPath . '/writers/reject', 'Admin\WriterControlController@reject');
 $router->post('/' . $adminPath . '/writers/permission', 'Admin\WriterControlController@updatePermission');

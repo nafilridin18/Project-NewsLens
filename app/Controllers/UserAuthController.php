@@ -177,23 +177,24 @@ class UserAuthController {
             exit;
         }
 
+        // Public login ONLY allows reader users (role === 'user')
         if ($user['role'] === 'writer') {
-            if ($user['status'] === 'pending') {
-                header("Location: /writer/pending");
-                exit;
-            }
-            header("Location: /writer/dashboard");
+            Auth::logout();
+            $_SESSION['writer_login_info'] = 'লেখক অ্যাকাউন্টের জন্য অনুগ্রহ করে লেখক লগইন পোর্টাল ব্যবহার করুন।';
+            header("Location: /writer/login?email=" . urlencode($email));
             exit;
         }
 
         if (in_array($user['role'], ['super_admin', 'admin', 'editor'], true)) {
+            Auth::logout();
             $config = require CONFIG_PATH . '/config.php';
             $adminPath = $config['app']['admin_path'] ?? 'lens-desk';
-            header("Location: /{$adminPath}");
+            $_SESSION['admin_login_info'] = 'প্রশাসনিক অ্যাকাউন্টের জন্য অনুগ্রহ করে অ্যাডমিন লগইন ব্যবহার করুন।';
+            header("Location: /{$adminPath}/login?email=" . urlencode($email));
             exit;
         }
 
-        // Reader user
+        // Reader user only
         header("Location: /");
         exit;
     }
