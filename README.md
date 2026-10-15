@@ -3,25 +3,30 @@
 > **ট্যাগলাইন (বাংলা):** সাধারণের বাইরে, সত্যের খোঁজে  
 > **Tagline (English):** News Beyond the Ordinary  
 > **টেকনোলজি পার্টনার:** [Stratifyx Global](https://stratifyxglobal.com)  
-> **লাইভ ওয়েবসাইট:** [https://newslensbd.com](https://newslensbd.com)
+> **লাইভ ওয়েবসাইট:** [https://newslensbd.com](https://newslensbd.com)  
+> **লোকাল ওয়েবসাইট:** [http://localhost/NewsLens/public](http://localhost/NewsLens/public)
 
 ---
 
-## 🔑 দ্রুত অ্যাক্সেস ও লগইন ক্রেডেনশিয়াল (Quick Credentials & Access)
+## 🔑 দ্রুত অ্যাক্সেস ও লগইন ক্রেডেনশিয়াল (Quick Credentials & Access Links)
 
-সিস্টেমের সকল অ্যাডমিন, লেখক, পাঠক ও ডাটাবেজের ক্রেডেনশিয়াল নিচে সুস্পষ্টভাবে প্রদান করা হলো:
+সিস্টেমের সকল অ্যাডমিন, লেখক, সাধারণ পাঠক ও ডাটাবেজের সরাসরি অ্যাক্সেস লিঙ্ক ও ক্রেডেনশিয়াল নিচে সুস্পষ্টভাবে প্রদান করা হলো:
 
-### ১. অ্যাডমিন ও ইউজার লগইন তথ্য (Authentication Credentials)
+### ১. অ্যাডমিন, লেখক ও ইউজার লগইন তথ্য (Authentication Credentials)
 
-| ভূমিকা (Role) | ইমেইল / ইউজার আইডি (Email / ID) | ডিফল্ট পাসওয়ার্ড (Password) | প্যানেল / লগইন লিঙ্ক (Access URL) |
-| :--- | :--- | :--- | :--- |
-| **সুপার অ্যাডমিন (Super Admin)** | `admin@newslensbd.com` | `password123` | **লাইভ:** [`https://newslensbd.com/lens-desk/login`](https://newslensbd.com/lens-desk/login)<br>**লোকাল:** [`http://localhost/NewsLens/public/lens-desk/login`](http://localhost/NewsLens/public/lens-desk/login) |
-| **লেখক (Writer Panel)** | নিবন্ধিত লেখকের ইমেইল | লেখকের পাসওয়ার্ড | **লাইভ:** [`https://newslensbd.com/login`](https://newslensbd.com/login)<br>**ড্যাশবোর্ড:** [`https://newslensbd.com/writer/dashboard`](https://newslensbd.com/writer/dashboard) |
-| **সাধারণ পাঠক (Reader)** | নিবন্ধিত পাঠকের ইমেইল | পাঠকের পাসওয়ার্ড | **লাইভ:** [`https://newslensbd.com/login`](https://newslensbd.com/login)<br>**বুকমার্ক:** [`https://newslensbd.com/user/bookmarks`](https://newslensbd.com/user/bookmarks) |
+| ভূমিকা (Role) | ইমেইল / ইউজার আইডি (Email / ID) | ডিফল্ট পাসওয়ার্ড (Password) | লাইভ পোর্টাল লিঙ্ক (Live URL) | লোকাল পোর্টাল লিঙ্ক (Local URL) |
+| :--- | :--- | :--- | :--- | :--- |
+| **সুপার অ্যাডমিন (Super Admin)** | `admin@newslensbd.com` | `password123` | [Live Admin Login](https://newslensbd.com/lens-desk/login) | [Local Admin Login](http://localhost/NewsLens/public/lens-desk/login) |
+| **লেখক প্যানেল (Dedicated Writer)** | অ্যাডমিন কর্তৃক তৈরিকৃত লেখকের ইমেইল | লেখকের পাসওয়ার্ড | [Live Writer Login](https://newslensbd.com/writer/login) | [Local Writer Login](http://localhost/NewsLens/public/writer/login) |
+| **সাধারণ পাঠক (Public Reader)** | নিবন্ধিত পাঠকের ইমেইল | পাঠকের নিজস্ব পাসওয়ার্ড | [Live Reader Login](https://newslensbd.com/login) | [Local Reader Login](http://localhost/NewsLens/public/login) |
+
+> [!IMPORTANT]
+> **⚠️ লেখক সিস্টেম সম্পূর্ণ পৃথকীকৃত (Independent Writer System):**  
+> সাধারণ পাবলিক লগইন/রেজিস্ট্রেশন পেজ (`/login`, `/register`) থেকে লেখকদের সকল অপশন বিলুপ্ত করা হয়েছে। সাধারণ পাঠকরা কখনো পাবলিক পেজ থেকে লেখক হতে পারবেন না। লেখকদের জন্য রয়েছে নিজস্ব ডেডিকেটেড লগইন পোর্টাল: [`/writer/login`](https://newslensbd.com/writer/login)। নতুন লেখক অ্যাকাউন্ট শুধুমাত্র অ্যাডমিন প্যানেল ([`Admin Writers Desk`](https://newslensbd.com/lens-desk/writers)) থেকে তৈরি বা পাঠককে পদোন্নতি (Promote) দেওয়ার মাধ্যমে সক্রিয় করা যায়।
 
 > [!TIP]
 > **🧪 ইনস্ট্যান্ট টেস্টিং মাস্টার ওটিপি (Master Test OTP):**  
-> নতুন পাঠক/লেখক নিবন্ধন, ইমেইল যাচাই বা পাসওয়ার্ড রিসেটের সময় যেকোনো ইমেইলের জন্য ওটিপি কোড হিসেবে **`123456`** ব্যবহার করুন। কোনো প্রকার ইমেইল ডেলিভারির জন্য অপেক্ষা না করেই তৎক্ষণাৎ অ্যাকাউন্ট ভেরিফাই হয়ে যাবে। এছাড়াও স্ক্রিনে এক ক্লিকেই ওটিপি অটো-ফিল করার সুবিধা রয়েছে।
+> নতুন পাঠক নিবন্ধন, ইমেইল যাচাই বা পাসওয়ার্ড রিসেটের সময় যেকোনো ইমেইলের জন্য ওটিপি কোড হিসেবে **`123456`** ব্যবহার করুন। কোনো প্রকার ইমেইল ডেলিভারির জন্য অপেক্ষা না করেই তৎক্ষণাৎ অ্যাকাউন্ট ভেরিফাই হয়ে যাবে। এছাড়াও স্ক্রিনে এক ক্লিকেই ওটিপি অটো-ফিল করার সুবিধা সংযুক্ত রয়েছে।
 
 ### ২. ডাটাবেজ সংযোগ তথ্য (Database Configurations)
 
@@ -42,46 +47,67 @@
 * **Category Label (ক্যাটাগরি ব্যাজ):** জাতীয় সবুজ (`#0E7A3A`)
 * **Breaking / Live (ব্রেকিং ও লাইভ ব্যাজ):** রক্তিম লাল (`#E31E24`)
 * **ফন্ট ও টাইপোগ্রাফি:** Hind Siliguri / Noto Serif Bengali (Self-hosted)
+* **দ্বিভাষিক সমর্থন:** সমগ্র পোর্টালে বাংলা এবং ইংরেজি (BN ⇄ EN) ইনস্ট্যান্ট টগল সুবিধা।
+* **লাইট ও ডার্ক মোড:** চোখ-বান্ধব থিম টগল যা লোকালস্টোরেজে ব্যবহারকারীর পছন্দ মনে রাখে।
 
 ---
 
 ## 🚀 প্রধান ফিচার ও মডিউলসমূহ (Core Modules)
 
-### ১. মূল পোর্টাল ও পাবলিক ইন্টারফেস (Public Portal)
+### ১. মূল পোর্টাল ও পাবলিক ইন্টারফেস (Public Reader Portal)
 * **স্মার্ট শীর্ষবার (Top Bar):** স্বয়ংক্রিয় বাংলা ও হিজরি তারিখ রূপান্তরকারী (`BanglaDate`), লাইভ আবহাওয়া, ফন্ট সাইজার (অ-, অ, অ+), দ্বিভাষিক সুইচ (`[বাংলা | English]`) এবং ডার্ক/লাইট মোড টগল।
 * **ব্রেকিং নিউজ টিকার:** লাল পালসিং ডট সহ মসৃণ অটো-স্লাইডার, হোভার পজ ও ম্যানুয়াল নেভিগেশন।
 * **সারাদেশ ও ৬৪ জেলার সংবাদ (`/saradesh`):** ৮টি বিভাগ ও ৬৪টি জেলার ক্যাসকেডিং ড্রপডাউন ফিল্টার সহ দ্রুতগতিতে জেলাভিত্তিক সংবাদ পড়ার ব্যবস্থা।
 * **সিঙ্গেল আর্টিকেল ও মিডিয়া প্লেয়ার:** ক্যাটাগরি, লেখক, প্রকাশের তারিখ, সোশ্যাল শেয়ারিং (Facebook, WhatsApp, X, Copy Link), সম্পর্কিত সংবাদ এবং পপআপ লাইটবক্সে ভিডিও প্লেব্যাক।
 * **মাল্টি-ক্রাইটেরিয়া সার্চ (`/search`):** কীওয়ার্ড, ক্যাটাগরি, সময়সীমা (আজ, ৭ দিন, ৩০ দিন) এবং বিভাগ/জেলা ফিল্টার।
+* **প্রতিষ্ঠান ও সম্পাদকীয় পেজসমূহ (`/page/{slug}`):** আমাদের সম্পর্কে, যোগাযোগ, বিজ্ঞাপন, গোপনীয়তা নীতি, ব্যবহারের শর্তাবলী এবং সংশোধনী নীতি সরাসরি ডেটাবেজ ম্যানেজমেন্ট সহ প্রস্তুত।
 * **ইন্টারেক্টিভ সাইডবার উইজেট:** ডাটাবেজ-সংযুক্ত অনলাইন পাঠক জরিপ (Poll) লাইভ ভোট ও রিয়েলটাইম ফলাফল, নামাজের সময়সূচি, নিউজলেটার সাবস্ক্রিপশন এবং বিজ্ঞাপন স্লট।
 * **PWA ও ওয়েব পুশ নোটিফিকেশন:** সার্ভিস ওয়ার্কার (`/sw.js`) ও ব্যাকগ্রাউন্ড পুশ সাপোর্ট (`/manifest.json`); নতুন ব্রেকিং নিউজ প্রকাশিত হওয়ামাত্রই সক্রিয় পাঠকদের নোটিফিকেশন অ্যালার্ট।
+* **নিরাপদ পাঠক নিবন্ধন (`/register`):** শুধুমাত্র পাঠক হিসেবে রেজিস্ট্রেশন কার্যকর (`role = 'user'`); কোনো ধরনের রোল ট্যাম্পারিং বা লেখক হওয়ার সুযোগ নেই।
 
 ### ২. অ্যাডমিন কমান্ড ডেস্ক (`/lens-desk`)
 * **সুরক্ষিত নন-ডিফল্ট রুট:** সাধারণ `/admin`-এর বদলে সুরক্ষায় `/lens-desk` পাথ ব্যবহৃত।
-* **১০০% সার্বজনীন দ্বিভাষিক ইন্টারফেস (BN ⇄ EN):** অ্যাডমিন প্যানেলের প্রতিটি মেনু, বাটন, ফর্ম লেবেল, প্লেসহোল্ডার, মেট্রিক্স ও টেবিল এক ক্লিকে বাংলা বা ইংরেজিতে রূপান্তরযোগ্য (লগইনকারীর প্রেফারেন্স লোকালস্টোরেজে সিঙ্ক থাকে)।
+* **১০০% সার্বজনীন দ্বিভাষিক ইন্টারফেস (BN ⇄ EN):** অ্যাডমিন প্যানেলের প্রতিটি মেনু, বাটন, ফর্ম লেবেল, প্লেসহোল্ডার, মেট্রিক্স ও টেবিল এক ক্লিকে বাংলা বা ইংরেজিতে রূপান্তরযোগ্য।
 * **লগইন স্ক্রিনে ইন্টারঅ্যাক্টিভ বাংলাদেশ ভেক্টর ম্যাপ:** ডার্ক মোডে লাল (`#E31E24`) ও লাইট মোডে সবুজ (`#0E7A3A`) রঙে রেন্ডার হওয়া স্কেলযোগ্য SVG ম্যাপ, নদী, সাগর এবং ঢাকার পালসিং বীকন।
 * **মাল্টি-বাইলাইন নির্বাচন (Multi-Author Byline):** সংবাদ তৈরির সময় ৩ ধরনের লেখক অপশন:
   1. *অ্যাকাউন্ট নাম:* লগইনকৃত অ্যাডমিনের নাম।
   2. *বেনামী (Anonymous):* পরিচয় গোপন রেখে প্রকাশ।
   3. *কাস্টম বাইলাইন:* বিশেষ প্রতিনিধি, নিজস্ব প্রতিবেদক বা নির্দিষ্ট কোনো নাম।
 * **সংবাদ ও মিডিয়া ব্যবস্থাপনা (`/lens-desk/posts`):** ড্রাফট, এডিটর রিভিউ, সরাসরি প্রকাশ, লোকাল ফাইল আপলোড বা সরাসরি ইমেজ URL ও ইউটিউব ভিডিও লিঙ্ক সাপোর্ট।
-* **লেখক নিয়ন্ত্রণ ও অনুমোদন (`/lens-desk/writers`):** নতুন লেখকদের আবেদন পর্যালোচনা, অনুমতি স্তর নির্ধারণ (সরাসরি প্রকাশ বনাম সম্পাদকীয় পর্যালোচনা), সাময়িক স্থগিতকরণ এবং অডিট লগ ট্র্যাকিং।
+* **লেখক নিয়ন্ত্রণ ও কেন্দ্রীয় ব্যবস্থাপনা (`/lens-desk/writers`):** 
+  - **নতুন লেখক তৈরি (Create Writer Modal):** নাম, ইমেইল, মোবাইল ও সুরক্ষিত পাসওয়ার্ড দিয়ে সরাসরি নতুন লেখক তৈরি।
+  - **পাঠক থেকে লেখক পদোন্নতি (Promote Reader Modal):** সাধারণ পাঠকদের তালিকা থেকে যেকোনো পাঠককে লেখক হিসেবে পদোন্নতি।
+  - **পাসওয়ার্ড রিসেট (Reset Password Modal):** অ্যাডমিন কর্তৃক যেকোনো লেখকের পাসওয়ার্ড সরাসরি পরিবর্তন।
+  - **লেখক থেকে পাঠক পদাবনতি (Demote to Reader):** লেখককে সাধারণ পাঠকে রূপান্তর।
+  - **স্থগিত ও স্থায়ী অপসারণ (Suspend / Delete):** এক ক্লিকে অ্যাক্টিভ/সাসপেন্ড টগল এবং ডাটাবেজ থেকে অপসারণ।
 * **বিজ্ঞাপন ও মনিটাইজেশন কন্ট্রোল (`/lens-desk/ads`):** ৫টি লাইভ কেপিআই (মোট বিজ্ঞাপন, চলমান, মোট ভিউ, ক্লিক, CTR) এবং স্ট্যান্ডার্ড সাইজ গাইডলাইন ট্র্যাকিং।
 * **অনলাইন জরিপ ও পাঠক এনগেজমেন্ট (`/lens-desk/polls`):** নতুন পোল তৈরি, হোমপেজে সক্রিয়করণ, ভোট রিসেট এবং ডিলিট সুবিধা।
 * **সাইট ব্র্যান্ডিং ও মেটা সেটিংস (`/lens-desk/settings`):** লোগো, পার্টনার লোগো, সম্পাদক/প্রকাশকের তথ্য, সরকারি নিবন্ধন নম্বর, সোশ্যাল লিঙ্ক ও ফুটার কনফিগারেশন।
-* **আধুনিক অফক্যানভাস ড্রয়ার ও প্রোফাইল মোডাল:** রেসপনসিভ ৩-লাইন হ্যামবার্গার (`☰`) মেনু এবং হেডার থেকে দ্রুত নাম, মোবাইল ও পাসওয়ার্ড পরিবর্তনের মোডাল।
+* **প্রাতিষ্ঠানিক পেজ সিএমএস (`/lens-desk/pages`):** ৬টি মূল পেজের কন্টেন্ট সরাসরি অ্যাডমিন থেকে এডিট ও পাবলিশ করার সুবিধা।
 
-### ৩. লেখক ব্যবস্থাপনা ও ওয়ার্কফ্লো (`/writer`)
-* **স্বতন্ত্র লেখক নিবন্ধন (`/writer/register`):** নাম, ইমেইল, মোবাইল ও লেখার আগ্রহ জানিয়ে বাংলা আবেদন ফরম।
-* **অনুমোদন ব্যবস্থা:** অ্যাডমিন অনুমোদন না দেওয়া পর্যন্ত অ্যাকাউন্টটি `pending` থাকে এবং কোনো পোস্ট তৈরি করতে পারে না।
-* **লেখক ড্যাশবোর্ড (`/writer/dashboard`):** মোট সংবাদ, প্রকাশিত, পর্যালোচনাধীন, প্রত্যাখ্যাত এবং মোট ভিউয়ের লাইভ কেপিআই মেট্রিক্স।
-* **কঠোর মালিকানা নিরাপত্তা (Strict Ownership):** লেখকরা কেবল নিজের সংবাদ তৈরি ও সম্পাদনা করতে পারেন; অন্যের পোস্টে তাদের কোনো প্রবেশাধিকার নেই।
-* **পাবলিক লেখক পেজ (`/author/{id}`):** লেখকের বায়ো, ছবি, সোশ্যাল মিডিয়া ও তার সকল প্রকাশিত প্রতিবেদনের সুবিন্যস্ত গ্রিড।
+### ৩. স্বতন্ত্র লেখক ব্যবস্থাপনা ও ওয়ার্কফ্লো (`/writer`)
+* **স্বতন্ত্র ডেডিকেটেড লগইন পোর্টাল (`/writer/login`):**
+  - সাধারণ ইউজার লগইন থেকে সম্পূর্ণ আলাদা।
+  - ব্রুট-ফোর্স প্রটেকশন ও আইপি রেট-লিমিটিং (`RateLimiter.php`): ৫টি ব্যর্থ চেষ্টার পর ১৫ মিনিটের জন্য আইপি সাময়িক ব্লক।
+  - জেনেরিক ত্রুটি বার্তা: সাধারণ পাঠকদের তথ্য দিলে বা তথ্য ভুল হলে অ্যাকাউন্ট অস্তিত্ব ফাঁস না করে সুরক্ষিত জেনেরিক মেসেজ প্রদর্শন।
+  - লাইট/ডার্ক মোড ও বাংলা/ইংরেজি সুইচ সম্বলিত আধুনিক ইন্টারফেস।
+* **পাবলিক রেজিস্ট্রেশন নিষিদ্ধ (`/writer/register`):**
+  - সাধারণের জন্য উন্মুক্ত লেখক নিবন্ধন সম্পূর্ণ বন্ধ। এই রুটে প্রবেশ করলে ইউজারকে নোটিশ পেজে রিডাইরেক্ট করে সরাসরি লেখক লগইনে পাঠিয়ে দেওয়া হয়।
+* **লেখক ড্যাশবোর্ড (`/writer/dashboard`):** 
+  - মোট সংবাদ, প্রকাশিত, পর্যালোচনাধীন, প্রত্যাখ্যাত এবং মোট ভিউয়ের লাইভ কেপিআই মেট্রিক্স।
+  - বাংলা ও ইংরেজি দ্বিভাষিক লেবেল এবং ডার্ক মোড সাপোর্ট।
+* **কঠোর মালিকানা নিরাপত্তা (Strict Author Isolation):**
+  - লেখকরা কেবল নিজের সংবাদ তৈরি, সম্পাদনা ও দেখতে পারেন (`author_id = $_SESSION['user_id']`)। অন্যের পোস্টে কোনো প্রকার প্রবেশাধিকার নেই।
+* **সার্ভার-সাইড সুরক্ষা (HTTP 403 Forbidden):**
+  - কোনো সাধারণ পাঠক ইউজার সেশন থাকা অবস্থায় জোরপূর্বক লেখক প্যানেল বা এপিআই অ্যাক্সেস করতে চাইলে মিডলওয়্যার তাৎক্ষণিক HTTP 403 এক্সেস ডিনাইড প্রদান করে।
+* **পাবলিক লেখক পেজ (`/author/{id}`):**
+  - লেখকের বায়ো, ছবি, সোশ্যাল মিডিয়া ও তার সকল প্রকাশিত প্রতিবেদনের সুবিন্যস্ত গ্রিড।
 
 ### ৪. পাঠক অ্যাকাউন্ট ও এনগেজমেন্ট (`/login`, `/register`)
 * **বুকমার্ক ব্যবস্থা (`/user/bookmarks`):** পছন্দের যেকোনো খবর এক ক্লিকে বুকমার্ক (🔖) করে পরবর্তী সময়ে পড়ার সুবিধা।
 * **সেলফ-সার্ভিস প্রোফাইল (`/profile`):** ছবি, বায়ো, যোগাযোগ ও পাসওয়ার্ড পরিবর্তনের পূর্ণ সুবিধা।
 * **৩০-মিনিট ডুপ্লিকেট প্রতিরোধক ভিউ কাউন্টার:** প্রতিটি ইউনিক ভিউ হ্যাসড আইপি (`post_views`) দিয়ে সংরক্ষিত; একই ডিভাইস থেকে বারবার পেজ রিফ্রেশ করলেও ফেক ভিউ কাউন্ট হবে না।
+* **স্মার্ট লগইন রিডাইরেক্ট:** কোনো লেখক ভুলবশত পাবলিক `/login` পেজে লগইন করার চেষ্টা করলে সিস্টেম তাকে নিরাপদ মেসেজ দিয়ে আলাদা লেখক লগইন পেজে রিডাইরেক্ট করে।
 
 ---
 
@@ -89,16 +115,18 @@
 
 | বৈশিষ্ট্য / অ্যাকশন | সাধারণ পাঠক (Reader) | অনুমোদিত লেখক (Writer) | সুপার অ্যাডমিন / এডিটর (Admin) |
 | :--- | :---: | :---: | :---: |
+| **লগইন পোর্টাল (Login URL)** | `/login` | **`/writer/login`** (স্বতন্ত্র) | **`/lens-desk/login`** (স্বতন্ত্র) |
+| **অ্যাকাউন্ট তৈরি (Account Creation)** | পাবলিক সেলফ-রেজিস্টার (`/register`) | **অ্যাডমিন কর্তৃক তৈরি বা প্রমোট** | সুপার অ্যাডমিন কর্তৃক নিয়ন্ত্রিত |
 | **সংবাদ পড়া, সার্চ ও শেয়ার** | ✅ | ✅ | ✅ |
 | **সংবাদ বুকমার্ক (Bookmark)** | ✅ | ✅ | ✅ |
-| **ড্যাশবোর্ড প্রবেশাধিকার** | ❌ | ✅ (`/writer/dashboard`) | ✅ (`/lens-desk`) |
-| **নতুন সংবাদ রচনা (`/posts/create`)** | ❌ | ✅ (নিজের নামে লকড) | ✅ (যেকোনো বাইলাইন/বেনামী) |
+| **লেখক ড্যাশবোর্ড (`/writer/dashboard`)** | ❌ (HTTP 403) | ✅ | ✅ |
+| **নতুন সংবাদ রচনা (`/writer/posts/create`)** | ❌ (HTTP 403) | ✅ (নিজের নামে লকড) | ✅ (যেকোনো বাইলাইন/বেনামী) |
 | **অন্যের সংবাদ সম্পাদনা/ডিলিট** | ❌ | ❌ | ✅ |
 | **সরাসরি প্রকাশ (Direct Publish)** | ❌ | ⚡ (অ্যাডমিনের অনুমতি সাপেক্ষে) | ✅ (তাৎক্ষণিক লাইভ) |
 | **সম্পাদকীয় পর্যালোচনা (Editor Review)**| ❌ | 📝 (অ্যাডমিন অনুমোদনের অপেক্ষায়) | ✅ (অনুমোদন/বাতিলকারী) |
 | **ব্রেকিং ও লিড নিউজ নির্ধারণ** | ❌ | ❌ | ✅ |
 | **বিজ্ঞাপন, জরিপ ও সাইট সেটিংস** | ❌ | ❌ | ✅ |
-| **লেখক অনুমোদন ও নিয়ন্ত্রণ** | ❌ | ❌ | ✅ |
+| **লেখক অনুমোদন, তৈরি, রিসেট ও পদোন্নতি** | ❌ | ❌ | ✅ (`/lens-desk/writers`) |
 
 ---
 
@@ -109,221 +137,110 @@
 | **Frontend** | Semantic HTML5, Vanilla CSS3 (Custom Design System, Zero External CSS Frameworks), Vanilla ES6+ JS |
 | **Backend** | PHP 8.2+ (Lightweight MVC Architecture, PSR-4 Autoloading, PDO Prepared Statements) |
 | **Database** | MySQL 8.0+ / MariaDB (`utf8mb4_unicode_ci` বাংলা ফন্টের নিখুঁত রেন্ডারিংয়ের জন্য) |
-| **Security** | CSRF Token Protection, XSS Sanitization, Password Hashing (`bcrypt`), RBAC Server-side Middleware |
-| **Web Server** | Apache / Nginx (mod_rewrite সক্রিয়, HTTPS বাধ্যতামূলক) |
+| **Security** | CSRF Token Protection, XSS Sanitization, Password Hashing (`bcrypt`), RBAC Server-side Middleware, IP Rate Limiting (`RateLimiter.php`) |
+| **Web Server** | LiteSpeed / Apache / Nginx (mod_rewrite সক্রিয়, HTTPS বাধ্যতামূলক) |
 | **Background Cron** | PHP CLI (`cron/send_notifications.php`) |
 
 ---
 
-## 🗂 ডিরেক্টরি কাঠামো (Directory Structure)
+## 🔗 সমস্ত পেজের লাইভ ও লোকাল সরাসরি লিঙ্ক তালিকা (Comprehensive URL Directory)
 
-```text
-NewsLens/
-├── public/                 # ওয়েব রুট (একমাত্র পাবলিক ডিরেক্টরি)
-│   ├── index.php           # ফ্রন্ট কন্ট্রোলার ও সেন্ট্রাল রাউটার এন্ট্রি পয়েন্ট
-│   ├── assets/             # স্ট্যাটিক এসেট (CSS, JS, Fonts, Images)
-│   │   ├── css/style.css   # মাস্টার স্টাইলশিট (Dark Mode, Responsive, Brand Tokens)
-│   │   ├── js/main.js      # ক্লায়েন্ট স্ক্রিপ্ট (Theme toggle, Modals, Ajax filters)
-│   │   └── img/            # সাইট লোগো ও ভেক্টর উপাদান
-│   ├── uploads/            # সংবাদ ও প্রোফাইলের আপলোডকৃত ছবি
-│   │   ├── news/           # সংবাদ প্রতিবেদন ও ফিচার ইমেজ
-│   │   └── avatars/        # ব্যবহারকারী ও লেখকদের প্রোফাইল ছবি
-│   ├── sw.js               # সার্ভিস ওয়ার্কার (Web Push & Offline Caching)
-│   └── manifest.json       # PWA ওয়েব অ্যাপ মেনিফেস্ট
-├── app/
-│   ├── Controllers/        # ওয়েব ও এপিআই কন্ট্রোলারসমূহ
-│   │   ├── HomeController.php          # হোমপেজ কন্ট্রোলার
-│   │   ├── NewsController.php          # সংবাদ বিস্তারিত, ক্যাটাগরি ও সার্চ
-│   │   ├── SaradeshController.php      # সারাদেশ ও ৬৪ জেলার সংবাদ
-│   │   ├── AuthorController.php        # পাবলিক লেখক প্রোফাইল
-│   │   ├── PageController.php          # স্ট্যাটিক পেজ (About, Contact, Advertise, Privacy, Terms)
-│   │   ├── UserAuthController.php      # সাধারণ পাঠক লগইন/রেজিস্ট্রেশন/বুকমার্ক
-│   │   ├── WriterAuthController.php    # লেখক আবেদন ও যাচাই
-│   │   ├── OtpController.php           # ওটিপি ভেরিফিকেশন ও রিসেন্ড
-│   │   ├── PasswordResetController.php # পাসওয়ার্ড রিসেট ফ্লো
-│   │   ├── ProfileController.php       # ইউজার প্রোফাইল ও বায়ো ম্যানেজমেন্ট
-│   │   ├── NotificationController.php  # ওয়েব পুশ ও ইন-অ্যাপ নোটিফিকেশন
-│   │   ├── Admin/                      # অ্যাডমিন CMS কন্ট্রোলারসমূহ
-│   │   │   ├── DashboardController.php
-│   │   │   ├── PostController.php
-│   │   │   ├── WriterControlController.php
-│   │   │   ├── AdController.php
-│   │   │   ├── PollController.php
-│   │   │   ├── SettingsController.php
-│   │   │   ├── SubscriberController.php
-│   │   │   └── AuthController.php
-│   │   └── Writer/                     # লেখক প্যানেল কন্ট্রোলার
-│   │       └── WriterPanelController.php
-│   ├── Models/             # ডাটাবেজ মডেল (Post, Category, District, Setting, User, Ad, Poll, OtpCode, Notification, Bookmark, PushSubscription, Newsletter, AuditLog)
-│   ├── Views/              # MVC টেমপ্লেট ভিউ ফাইল
-│   │   ├── layouts/        # main.php
-│   │   ├── partials/       # header.php, breaking_ticker.php, footer.php
-│   │   ├── pages/          # home.php, saradesh.php, single.php, category.php, author.php, search.php, static_page.php
-│   │   ├── admin/          # dashboard.php, posts_index.php, writers_index.php, settings.php, ads_index.php, polls_index.php, subscribers_index.php
-│   │   ├── writer/         # dashboard.php, posts_index.php, post_form.php
-│   │   ├── auth/           # login.php, register.php, otp_verify.php, forgot_password.php, reset_password.php
-│   │   ├── profile/        # show.php, edit.php
-│   │   ├── user/           # bookmarks.php
-│   │   └── errors/         # 404.php, 500.php
-│   ├── Core/               # Router, Database, Auth, View, Middleware
-│   └── Helpers/            # BanglaDate, AdBanner, Mailer, PushNotifier
-├── config/
-│   ├── config.php          # গ্লোবাল এপ্লিকেশন কনফিগারেশন ও imageUrl() হেল্পার
-│   ├── .env.example        # এনভায়রনমেন্ট ভেরিয়েবল টেমপ্লেট
-│   └── .env                # অ্যাক্টিভ এনভায়রনমেন্ট কনফিগারেশন
-├── cron/
-│   └── send_notifications.php # ব্যাকগ্রাউন্ড পুশ ও ইমেইল নোটিফিকেশন ক্রন জব
-├── database/
-│   ├── schema.sql          # সম্পূর্ণ প্রোডাকশন স্কিমা (টেবিল স্ট্রাকচার)
-│   ├── seed_initial.sql    # ৮ বিভাগ, ৬৪ জেলা, ১৪ ক্যাটাগরি, ডিফল্ট অ্যাডমিন ও সেটিংস সিড
-│   └── migrations/         # ডাটাবেজ মাইগ্রেশন স্ক্রিপ্ট
-├── storage/                # সিস্টেম লগ, ফাইল ক্যাশ ও ব্যাকআপ
-└── README.md               # মূল প্রজেক্ট ডকুমেন্টেশন
-```
+নিচের টেবিলে প্রতিটি মডিউলের জন্য লাইভ সার্ভার এবং লোকাল XAMPP সার্ভারের ক্লিকেবল লিঙ্ক দেওয়া হলো:
 
----
+### ১. পাবলিক পাঠক ও সাধারণ পোর্টাল লিঙ্ক (Public Portal URLs)
 
-## 💻 লোকাল সেটআপ গাইড (Local Setup Guide - XAMPP)
+| পেজ বা মডিউলের নাম (Module / Page) | ভূমিকা (Access) | লাইভ ওয়েবসাইট লিঙ্ক (Live URL) | লোকাল সার্ভার লিঙ্ক (Local URL) |
+| :--- | :--- | :--- | :--- |
+| **হোমপেজ (Home Portal)** | সর্বসাধারণ | [`Live Home`](https://newslensbd.com/) | [`Local Home`](http://localhost/NewsLens/public/) |
+| **সারাদেশ সংবাদ (৬৪ জেলা)** | সর্বসাধারণ | [`Live Saradesh`](https://newslensbd.com/saradesh) | [`Local Saradesh`](http://localhost/NewsLens/public/saradesh) |
+| **ক্যাটাগরি: জাতীয় (National)** | সর্বসাধারণ | [`Live National`](https://newslensbd.com/category/national) | [`Local National`](http://localhost/NewsLens/public/category/national) |
+| **ক্যাটাগরি: আন্তর্জাতিক (World)** | সর্বসাধারণ | [`Live World`](https://newslensbd.com/category/international) | [`Local World`](http://localhost/NewsLens/public/category/international) |
+| **ক্যাটাগরি: রাজনীতি (Politics)** | সর্বসাধারণ | [`Live Politics`](https://newslensbd.com/category/politics) | [`Local Politics`](http://localhost/NewsLens/public/category/politics) |
+| **ক্যাটাগরি: অর্থনীতি (Economy)** | সর্বসাধারণ | [`Live Economy`](https://newslensbd.com/category/economy) | [`Local Economy`](http://localhost/NewsLens/public/category/economy) |
+| **ক্যাটাগরি: খেলাধুলা (Sports)** | সর্বসাধারণ | [`Live Sports`](https://newslensbd.com/category/sports) | [`Local Sports`](http://localhost/NewsLens/public/category/sports) |
+| **ক্যাটাগরি: বিনোদন (Entertainment)** | সর্বসাধারণ | [`Live Entertainment`](https://newslensbd.com/category/entertainment) | [`Local Entertainment`](http://localhost/NewsLens/public/category/entertainment) |
+| **ক্যাটাগরি: প্রযুক্তি (Technology)** | সর্বসাধারণ | [`Live Technology`](https://newslensbd.com/category/technology) | [`Local Technology`](http://localhost/NewsLens/public/category/technology) |
+| **উন্নত সার্চ ও ফিল্টার (Search)** | সর্বসাধারণ | [`Live Search`](https://newslensbd.com/search) | [`Local Search`](http://localhost/NewsLens/public/search) |
+| **লেখক পাবলিক প্রোফাইল (Author View)** | সর্বসাধারণ | [`Live Author`](https://newslensbd.com/author/1) | [`Local Author`](http://localhost/NewsLens/public/author/1) |
+| **আমাদের সম্পর্কে (About Us)** | সর্বসাধারণ | [`Live About`](https://newslensbd.com/page/about) | [`Local About`](http://localhost/NewsLens/public/page/about) |
+| **যোগাযোগ (Contact Us)** | সর্বসাধারণ | [`Live Contact`](https://newslensbd.com/page/contact) | [`Local Contact`](http://localhost/NewsLens/public/page/contact) |
+| **বিজ্ঞাপন দিন (Advertise)** | সর্বসাধারণ | [`Live Advertise`](https://newslensbd.com/page/advertise) | [`Local Advertise`](http://localhost/NewsLens/public/page/advertise) |
+| **গোপনীয়তা নীতি (Privacy Policy)** | সর্বসাধারণ | [`Live Privacy`](https://newslensbd.com/page/privacy) | [`Local Privacy`](http://localhost/NewsLens/public/page/privacy) |
+| **ব্যবহারের শর্তাবলী (Terms)** | সর্বসাধারণ | [`Live Terms`](https://newslensbd.com/page/terms) | [`Local Terms`](http://localhost/NewsLens/public/page/terms) |
+| **সম্পাদকীয় নীতি (Corrections Policy)** | সর্বসাধারণ | [`Live Corrections`](https://newslensbd.com/page/corrections) | [`Local Corrections`](http://localhost/NewsLens/public/page/corrections) |
 
-### ধাপ ১: XAMPP সার্ভার চালু করুন
-1. **XAMPP Control Panel** ওপেন করুন।
-2. **Apache** এবং **MySQL** মডিউলের **Start** বাটনে ক্লিক করুন।
+### ২. পাঠক অ্যাকাউন্ট ও অথেনটিকেশন লিঙ্ক (Reader Auth & Profile URLs)
 
-### ধাপ ২: ডাটাবেজ তৈরি ও ইমপোর্ট
-1. ব্রাউজারে প্রবেশ করুন: [http://localhost/phpmyadmin](http://localhost/phpmyadmin)
-2. **New**-এ ক্লিক করে ডেটাবেজ নাম দিন: `newslensbd` এবং Collation নির্বাচন করুন: `utf8mb4_unicode_ci`।
-3. `newslensbd` ডেটাবেজটি নির্বাচন করে **Import** ট্যাবে যান:
-   - প্রথমে `database/schema.sql` ফাইলটি নির্বাচন করে **Import** করুন (টেবিলসমূহ তৈরি হবে)।
-   - এরপর `database/seed_initial.sql` ফাইলটি নির্বাচন করে **Import** করুন (ডিফল্ট অ্যাডমিন, ক্যাটাগরি ও জেলা ডেটা লোড হবে)।
+| পেজ বা ফিচারের নাম (Feature) | ভূমিকা (Access) | লাইভ ওয়েবসাইট লিঙ্ক (Live URL) | লোকাল সার্ভার লিঙ্ক (Local URL) |
+| :--- | :--- | :--- | :--- |
+| **পাঠক লগইন (Reader Login)** | সাধারণ পাঠক | [`Live Reader Login`](https://newslensbd.com/login) | [`Local Reader Login`](http://localhost/NewsLens/public/login) |
+| **পাঠক সেলফ-রেজিস্টার (Reader Register)** | নতুন পাঠক | [`Live Reader Register`](https://newslensbd.com/register) | [`Local Reader Register`](http://localhost/NewsLens/public/register) |
+| **ওটিপি ভেরিফিকেশন (OTP Verify)** | নতুন পাঠক | [`Live OTP Verify`](https://newslensbd.com/otp/verify) | [`Local OTP Verify`](http://localhost/NewsLens/public/otp/verify) |
+| **পাসওয়ার্ড ভুলে গেছেন (Forgot Password)**| যেকেউ | [`Live Forgot Password`](https://newslensbd.com/password/forgot) | [`Local Forgot Password`](http://localhost/NewsLens/public/password/forgot) |
+| **সংরক্ষিত খবর (Saved Bookmarks)** | লগইন পাঠক | [`Live Bookmarks`](https://newslensbd.com/user/bookmarks) | [`Local Bookmarks`](http://localhost/NewsLens/public/user/bookmarks) |
+| **পাঠক প্রোফাইল ও সেটিংস** | লগইন ইউজার | [`Live User Profile`](https://newslensbd.com/profile) | [`Local User Profile`](http://localhost/NewsLens/public/profile) |
+| **পাঠক লগআউট (Logout)** | লগইন ইউজার | [`Live User Logout`](https://newslensbd.com/logout) | [`Local User Logout`](http://localhost/NewsLens/public/logout) |
 
-### ধাপ ৩: `.env` কনফিগারেশন
-প্রজেক্টের মূল ডিরেক্টরিতে থাকা `.env.example`-কে কপি করে `.env` নামে সেভ করুন:
-```ini
-DB_HOST=127.0.0.1
-DB_PORT=3307        # আপনার MySQL পোর্ট (3306 বা 3307)
-DB_NAME=newslensbd
-DB_USER=root
-DB_PASS=            # কোনো পাসওয়ার্ড না থাকলে ফাঁকা রাখুন
-```
+### ৩. স্বতন্ত্র লেখক প্যানেল লিঙ্ক (Dedicated Writer Portal URLs)
 
-### ধাপ ৪: লোকাল পোর্টাল ভিজিট করুন
-* 🌐 **হোমপেজ:** [`http://localhost/NewsLens/public/`](http://localhost/NewsLens/public/)
-* 📍 **সারাদেশ:** [`http://localhost/NewsLens/public/saradesh`](http://localhost/NewsLens/public/saradesh)
-* 🔐 **অ্যাডমিন ডেস্ক:** [`http://localhost/NewsLens/public/lens-desk`](http://localhost/NewsLens/public/lens-desk) *(লগইন: `admin@newslensbd.com` / `password123`)*
+| পেজ বা ফিচারের নাম (Feature) | ভূমিকা (Access) | লাইভ ওয়েবসাইট লিঙ্ক (Live URL) | লোকাল সার্ভার লিঙ্ক (Local URL) |
+| :--- | :--- | :--- | :--- |
+| **লেখক লগইন পোর্টাল (Writer Login)** | নিবন্ধিত লেখক | [`Live Writer Login`](https://newslensbd.com/writer/login) | [`Local Writer Login`](http://localhost/NewsLens/public/writer/login) |
+| **লেখক ড্যাশবোর্ড (Writer Dashboard)** | অ্যাক্টিভ লেখক | [`Live Writer Dashboard`](https://newslensbd.com/writer/dashboard) | [`Local Writer Dashboard`](http://localhost/NewsLens/public/writer/dashboard) |
+| **লেখক নতুন সংবাদ রচনা (Create Post)** | অ্যাক্টিভ লেখক | [`Live Create News`](https://newslensbd.com/writer/posts/create) | [`Local Create News`](http://localhost/NewsLens/public/writer/posts/create) |
+| **আমার সংবাদসমূহ (Writer's Own Posts)**| অ্যাক্টিভ লেখক | [`Live My Posts`](https://newslensbd.com/writer/posts) | [`Local My Posts`](http://localhost/NewsLens/public/writer/posts) |
+| **পাবলিক রেজিস্ট্রেশন বন্ধ নোটিশ** | আবেদনকারী | [`Live Writer Notice`](https://newslensbd.com/writer/register) | [`Local Writer Notice`](http://localhost/NewsLens/public/writer/register) |
+| **লেখক নিরাপদ লগআউট (Writer Logout)** | অ্যাক্টিভ লেখক | [`Live Writer Logout`](https://newslensbd.com/writer/logout) | [`Local Writer Logout`](http://localhost/NewsLens/public/writer/logout) |
+
+### ৪. অ্যাডমিন কমান্ড ডেস্ক লিঙ্ক (Admin Desk URLs — `/lens-desk`)
+
+| পেজ বা ম্যানেজমেন্ট ফিচার (Admin Module) | ভূমিকা (Access) | লাইভ ওয়েবসাইট লিঙ্ক (Live URL) | লোকাল সার্ভার লিঙ্ক (Local URL) |
+| :--- | :--- | :--- | :--- |
+| **অ্যাডমিন লগইন ডেস্ক (Admin Login)** | সুপার অ্যাডমিন | [`Live Admin Login`](https://newslensbd.com/lens-desk/login) | [`Local Admin Login`](http://localhost/NewsLens/public/lens-desk/login) |
+| **অ্যাডমিন মূল ড্যাশবোর্ড (Dashboard)** | অ্যাডমিন/এডিটর | [`Live Admin Desk`](https://newslensbd.com/lens-desk) | [`Local Admin Desk`](http://localhost/NewsLens/public/lens-desk) |
+| **সংবাদ ও মিডিয়া ব্যবস্থাপনা (Posts CMS)** | অ্যাডমিন/এডিটর | [`Live Admin Posts`](https://newslensbd.com/lens-desk/posts) | [`Local Admin Posts`](http://localhost/NewsLens/public/lens-desk/posts) |
+| **কেন্দ্রীয় লেখক নিয়ন্ত্রণ ডেস্ক (Writers)**| সুপার অ্যাডমিন | [`Live Writers Control`](https://newslensbd.com/lens-desk/writers) | [`Local Writers Control`](http://localhost/NewsLens/public/lens-desk/writers) |
+| **নতুন লেখক তৈরি রুট (Create Action)** | সুপার অ্যাডমিন | [`Live Create Writer`](https://newslensbd.com/lens-desk/writers/create) | [`Local Create Writer`](http://localhost/NewsLens/public/lens-desk/writers/create) |
+| **লেখক পাসওয়ার্ড রিসেট (Reset Pass)** | সুপার অ্যাডমিন | [`Live Reset Password`](https://newslensbd.com/lens-desk/writers/reset-password) | [`Local Reset Password`](http://localhost/NewsLens/public/lens-desk/writers/reset-password) |
+| **পাঠক থেকে লেখক পদোন্নতি (Promote)** | সুপার অ্যাডমিন | [`Live Promote Reader`](https://newslensbd.com/lens-desk/writers/promote) | [`Local Promote Reader`](http://localhost/NewsLens/public/lens-desk/writers/promote) |
+| **লেখক থেকে পাঠক পদাবনতি (Demote)** | সুপার অ্যাডমিন | [`Live Demote Writer`](https://newslensbd.com/lens-desk/writers/demote) | [`Local Demote Writer`](http://localhost/NewsLens/public/lens-desk/writers/demote) |
+| **বিজ্ঞাপন ও স্পন্সর ডেস্ক (Ads Desk)** | সুপার অ্যাডমিন | [`Live Ads Desk`](https://newslensbd.com/lens-desk/ads) | [`Local Ads Desk`](http://localhost/NewsLens/public/lens-desk/ads) |
+| **অনলাইন পাঠক জরিপ ডেস্ক (Polls Desk)** | অ্যাডমিন/এডিটর | [`Live Polls Desk`](https://newslensbd.com/lens-desk/polls) | [`Local Polls Desk`](http://localhost/NewsLens/public/lens-desk/polls) |
+| **নিউজলেটার সাবস্ক্রাইবার তালিকা** | সুপার অ্যাডমিন | [`Live Subscribers`](https://newslensbd.com/lens-desk/subscribers) | [`Local Subscribers`](http://localhost/NewsLens/public/lens-desk/subscribers) |
+| **সাইট মেটা, ব্র্যান্ডিং ও সেটিংস** | সুপার অ্যাডমিন | [`Live Settings`](https://newslensbd.com/lens-desk/settings) | [`Local Settings`](http://localhost/NewsLens/public/lens-desk/settings) |
+| **প্রাতিষ্ঠানিক পেজ ব্যবস্থাপনা (Pages)** | অ্যাডমিন/এডিটর | [`Live Pages CMS`](https://newslensbd.com/lens-desk/pages) | [`Local Pages CMS`](http://localhost/NewsLens/public/lens-desk/pages) |
+| **অ্যাডমিন লগআউট (Admin Logout)** | অ্যাডমিন সেশন | [`Live Admin Logout`](https://newslensbd.com/lens-desk/logout) | [`Local Admin Logout`](http://localhost/NewsLens/public/lens-desk/logout) |
 
 ---
 
-## 🌐 লাইভ সার্ভার ডিপ্লয়মেন্ট ও ইউআরএল ডিরেক্টরি (Live Deployment)
+## 🌐 লাইভ সার্ভার ডিপ্লয়মেন্ট ও হোস্টিং তথ্য (Live Deployment)
 
 Newslensbd পোর্টালটি লাইভ cPanel হোস্টিং সার্ভারে সংযুক্ত ও কনফিগার করা হয়েছে।
 
-### ১. লাইভ অ্যাক্সেস ডিরেক্টরি (All Live URLs)
-
-| পোর্টাল / পেজ (Page) | সরাসরি লাইভ লিঙ্ক (URL) | অ্যাক্সেস ভূমিকা (Access Role) |
-| :--- | :--- | :--- |
-| **লাইভ মূল পোর্টাল** | [`https://newslensbd.com/`](https://newslensbd.com/) | সর্বসাধারণ (Public Readers) |
-| **সারাদেশ বিভাগ ও জেলা সংবাদ** | [`https://newslensbd.com/saradesh`](https://newslensbd.com/saradesh) | সর্বসাধারণ |
-| **ক্যাটাগরি আর্কাইভ (যেমন: জাতীয়)** | [`https://newslensbd.com/category/national`](https://newslensbd.com/category/national) | সর্বসাধারণ |
-| **পাবলিক লেখক প্রোফাইল** | [`https://newslensbd.com/author/1`](https://newslensbd.com/author/1) | সর্বসাধারণ |
-| **অনুসন্ধান ও ফিল্টার (Search)** | [`https://newslensbd.com/search`](https://newslensbd.com/search) | সর্বসাধারণ |
-| **আমাদের সম্পর্কে (About Us)** | [`https://newslensbd.com/page/about`](https://newslensbd.com/page/about) | সর্বসাধারণ |
-| **যোগাযোগ (Contact Us)** | [`https://newslensbd.com/page/contact`](https://newslensbd.com/page/contact) | সর্বসাধারণ |
-| **বিজ্ঞাপন দিন (Advertise)** | [`https://newslensbd.com/page/advertise`](https://newslensbd.com/page/advertise) | সর্বসাধারণ ও বিজ্ঞাপনী সংস্থা |
-| **গোপনীয়তা নীতি (Privacy Policy)** | [`https://newslensbd.com/page/privacy`](https://newslensbd.com/page/privacy) | সর্বসাধারণ |
-| **ব্যবহারের শর্তাবলী (Terms & Conditions)** | [`https://newslensbd.com/page/terms`](https://newslensbd.com/page/terms) | সর্বসাধারণ |
-| **সম্পাদকীয় ও সংশোধনী নীতি (Corrections)** | [`https://newslensbd.com/page/corrections`](https://newslensbd.com/page/corrections) | সর্বসাধারণ |
-| **অ্যাডমিন কমান্ড ডেস্ক লগইন** | [`https://newslensbd.com/lens-desk/login`](https://newslensbd.com/lens-desk/login) | Super Admin (`admin@newslensbd.com` / `password123`) |
-| **অ্যাডমিন মূল ড্যাশবোর্ড** | [`https://newslensbd.com/lens-desk`](https://newslensbd.com/lens-desk) | Super Admin / Editor |
-| **অ্যাডমিন লেখক নিয়ন্ত্রণ প্যানেল** | [`https://newslensbd.com/lens-desk/writers`](https://newslensbd.com/lens-desk/writers) | Super Admin |
-| **বিজ্ঞাপন ও অ্যানালিটিক্স ডেস্ক** | [`https://newslensbd.com/lens-desk/ads`](https://newslensbd.com/lens-desk/ads) | Super Admin |
-| **অনলাইন পাঠক জরিপ ডেস্ক** | [`https://newslensbd.com/lens-desk/polls`](https://newslensbd.com/lens-desk/polls) | Super Admin / Editor |
-| **নিউজলেটার সাবস্ক্রাইবার তালিকা** | [`https://newslensbd.com/lens-desk/subscribers`](https://newslensbd.com/lens-desk/subscribers) | Super Admin |
-| **সাইট মেটা ও ব্র্যান্ডিং সেটিংস** | [`https://newslensbd.com/lens-desk/settings`](https://newslensbd.com/lens-desk/settings) | Super Admin |
-| **প্রাতিষ্ঠানিক পেজ ব্যবস্থাপনা (Pages)** | [`https://newslensbd.com/lens-desk/pages`](https://newslensbd.com/lens-desk/pages) | Super Admin / Editor |
-| **লেখক নিবন্ধন ফরম** | [`https://newslensbd.com/writer/register`](https://newslensbd.com/writer/register) | নতুন আবেদনকারী লেখক |
-| **লেখক ড্যাশবোর্ড** | [`https://newslensbd.com/writer/dashboard`](https://newslensbd.com/writer/dashboard) | অনুমোদিত লেখক (Active Writer) |
-| **লেখক নতুন সংবাদ রচনা** | [`https://newslensbd.com/writer/posts/create`](https://newslensbd.com/writer/posts/create) | অনুমোদিত লেখক |
-| **আমার সংবাদসমূহ (লেখক তালিকা)** | [`https://newslensbd.com/writer/posts`](https://newslensbd.com/writer/posts) | অনুমোদিত লেখক |
-| **সাধারণ পাঠক লগইন** | [`https://newslensbd.com/login`](https://newslensbd.com/login) | পাঠক ও লেখক |
-| **সাধারণ পাঠক নিবন্ধন** | [`https://newslensbd.com/register`](https://newslensbd.com/register) | নতুন সাধারণ পাঠক |
-| **ওটিপি যাচাইকরণ (OTP Verify)** | [`https://newslensbd.com/otp/verify`](https://newslensbd.com/otp/verify) | নতুন নিবন্ধিত ইউজার |
-| **সংরক্ষিত খবর (Bookmarks)** | [`https://newslensbd.com/user/bookmarks`](https://newslensbd.com/user/bookmarks) | লগইনকৃত পাঠক |
-| **ব্যবহারকারী প্রোফাইল ও সেটিংস** | [`https://newslensbd.com/profile`](https://newslensbd.com/profile) | নিবন্ধিত যেকেউ |
-| **পাসওয়ার্ড রিসেট (ইমেইল ওটিপি)** | [`https://newslensbd.com/password/forgot`](https://newslensbd.com/password/forgot) | পাসওয়ার্ড ভুলে যাওয়া ইউজার |
-| **সার্বজনীন লগআউট (Universal Logout)** | [`https://newslensbd.com/logout`](https://newslensbd.com/logout) | যেকোনো সক্রিয় সেশন |
+### cPanel সংযোগ তথ্য:
+* **কন্ট্রোল প্যানেল URL:** [https://s16us-app.whiteservers.net:2083/](https://s16us-app.whiteservers.net:2083/) অথবা [https://newslensbd.com:2083/](https://newslensbd.com:2083/)
+* **সার্ভার আইপি:** `104.243.34.108`
+* **cPanel ইউজারনেম:** `lcxdiarj`
+* **ডেটাবেজ:** `lcxdiarj_newslens`
+* **ওয়েব রুট:** `public_html/` (যেখানে সমস্ত রিকোয়েস্ট নিরাপদে `public/index.php`-তে রিডাইরেক্ট হয়)
 
 ---
 
-### ২. সার্ভার ডিপ্লয়মেন্ট আর্কিটেকচার
+## 🛠️ প্রযুক্তিগত অপ্টিমাইজেশন ও নিরাপত্তা সমাধান (Technical Optimizations & Security)
 
-```mermaid
-graph LR
-    A[১. লোকাল কোড প্যাকেজিং] --> B[২. cPanel MySQL ডাটাবেজ তৈরি]
-    B --> C[৩. স্কিমা ও সিড ডেটা ইমপোর্ট]
-    C --> D[৪. File Manager / FTP আপলোড]
-    D --> E[৫. .env ও .htaccess কনফিগারেশন]
-    E --> F[৬. লাইভ পোর্টাল অ্যাক্টিভ]
-```
+১. **প্রতিষ্ঠান পেজসমূহের সমাধান (`/page/{slug}`):**
+   - লাইভ ডেটাবেজে `pages` টেবিল তৈরি ও ৬টি প্রাথমিক পেজ (আমাদের সম্পর্কে, যোগাযোগ, বিজ্ঞাপন, গোপনীয়তা নীতি, ব্যবহারের শর্তাবলী, সংশোধনী নীতি) স্বয়ংক্রিয়ভাবে সিড করা হয়েছে।
+   - এখন ফুটার বা অন্য যেকোনো লিঙ্ক থেকে ক্লিক করলে কোনো 404 ত্রুটি ছাড়াই সম্পূর্ণ পেজ রেন্ডার হয়।
 
-1. **cPanel ডাটাবেজ প্রস্তুতকরণ:**
-   - cPanel **MySQL® Database Wizard** থেকে ডাটাবেজ `lcxdiarj_newslens` এবং ব্যবহারকারী `lcxdiarj_lensuser` তৈরি করে সম্পূর্ণ প্রিভিলেজ প্রদান করা হয়েছে।
-   - `database/schema.sql` এবং `database/seed_initial.sql` সফলভাবে ইমপোর্ট করা হয়েছে।
-2. **ফাইল প্যাকেজিং ও আপলোড:**
-   - প্রজেক্টের কোর ডিরেক্টরিগুলো সার্ভারের `public_html`-এ আপলোড ও কনফিগার করা হয়েছে।
-3. **লাইভ প্রডাকশন `.env` কনফিগারেশন:**
-   ```ini
-   APP_NAME="Newslensbd"
-   APP_ENV=production
-   APP_DEBUG=false
-   APP_URL=https://newslensbd.com
-
-   DB_HOST=localhost
-   DB_PORT=3306
-   DB_NAME=lcxdiarj_newslens
-   DB_USER=lcxdiarj_lensuser
-   DB_PASS=Lens#Secure2026!Db
-
-   ADMIN_PATH=lens-desk
-   ```
-4. **সার্ভার সিকিউরিটি `.htaccess`:** রুট `.htaccess`-এর মাধ্যমে সরাসরি ডিরেক্টরি ব্রাউজিং রোধ এবং সমস্ত ট্রাফিক নিরাপদে ফ্রন্ট কন্ট্রোলারে রিডাইরেক্ট নিশ্চিত করা হয়েছে।
-
----
-
-## 🛠️ সাম্প্রতিক সমস্যা সমাধান ও অপ্টিমাইজেশন (Technical Optimizations & Bug Fixes)
-
-1. **লেখক পেজে HTTP 500 ত্রুটি সমাধান:**
-   - `AuthorController.php`-তে `short_bio` ও `bio` কলামের বৈষম্য দূর করতে `COALESCE` কোয়েরি হ্যান্ডলিং প্রয়োগ।
-   - ব্রাউজারে `/public/author/1` কিংবা সরাসরি `/author/1` যেকোনো ফরম্যাটে ভিজিট করলেও `Router.php`-তে পাথ নরমালাইজেশনের মাধ্যমে নিখুঁত রেন্ডারিং নিশ্চিত।
-   - `Auth.php`-তে সেশন হেডার প্রেরণের পূর্বে `!headers_sent()` গার্ড যুক্ত করে ওয়ার্নিং ও সেশন লুপ প্রতিরোধ।
-2. **লেখক পোস্ট ক্রিয়েশন ও ইমেজ আপলোড ডিরেক্টরি ফিক্স:**
-   - রাইটার কন্ট্রোলারে আপলোড পাথ লোকাল ও প্রডাকশন উভয় পরিবেশের জন্য `PUBLIC_PATH . '/uploads/news'` ডিরেক্টরিতে সমন্বিত করা হয়েছে।
-   - গ্লোবাল `imageUrl()` হেল্পার ফাংশন যুক্ত করে এক্সটার্নাল URL, রিলেটিভ আপলোড ও লোকাল পাথ ডুপ্লিকেশন দূর করা হয়েছে। হোমপেজ, ক্যাটাগরি, সিঙ্গেল পোস্ট ও বুকমার্কে ভাঙা ইমেজ প্রদর্শন সম্পূর্ণ দূরীভূত।
-3. **স্ট্যাটিক পেজসমূহের ৪MD/404 ত্রুটি সমাধান (`/page/{slug}`):**
-   - ফুটার ও বিজ্ঞাপন স্লটের লিঙ্কগুলোর জন্য `PageController.php` ও `static_page.php` তৈরি করে আমাদের সম্পর্কে, যোগাযোগ, বিজ্ঞাপন, গোপনীয়তা নীতি, ব্যবহারের শর্তাবলী এবং সংশোধনী নীতি সক্রিয় করা হয়েছে।
-4. **পাসওয়ার্ড রিসেট ও রাউট অ্যালাইয়াস ফ্লো ইউনিফিকেশন:**
-   - `/forgot-password` এবং `/password/forgot`, `/reset-password` এবং `/password/reset` উভয় পাথেই নির্বিঘ্ন রিসেট হ্যান্ডলার যুক্ত এবং রিসেট শেষে ভূমিকা অনুযায়ী সঠিক লগইন পেজে রিডাইরেক্ট নিশ্চিত।
-5. **অ্যাডমিন ও এডিটর রোল পারমিশন একীভূতকরণ:**
-   - পোস্ট ডিলিট, স্ট্যাটাস পরিবর্তন, বিজ্ঞাপন, পোল, সাবস্ক্রাইবার ও সেটিংস প্যানেলে `admin` রোলকে অপ্রয়োজনীয়ভাবে ব্লক করার সমস্যা সমাধান করা হয়েছে।
-6. **পেন্ডিং পোস্ট কাউন্ট ও রিভিউ সামঞ্জস্য:**
-   - ড্যাশবোর্ডে `pending` এবং `pending_review` উভয় স্ট্যাটাসকে একীভূত করে সঠিক মোট সংখ্যা প্রদর্শন এবং ফিল্টারে সামঞ্জস্য নিশ্চিত করা হয়েছে।
-7. **পাবলিক এডিটর অ্যাকাউন্ট নিরাপত্তা ও প্রোফাইল ইমেজ সিঙ্ক:**
-   - অ্যাডমিন রেজিস্টার থেকে রেজিস্ট্রেশনকৃত পরবর্তী এডিটর অ্যাকাউন্ট সরাসরি অ্যাক্টিভ না হয়ে `status = 'pending'` হবে (সুপার অ্যাডমিন অনুমোদনের পর সক্রিয় হবে)।
-   - প্রোফাইল আপডেট কন্ট্রোলারে `avatar` এবং `photo` উভয় কলাম আপডেট এবং অথেন্টিক সেশন তাৎক্ষণিক রিফ্রেশ নিশ্চিত করা হয়েছে।
-8. **সাবফোল্ডার রিডাইরেক্ট ও ওয়েব পুশ VAPID কী ফিক্স:**
-   - সাবফোল্ডার হোস্টিংয়ের জন্য মিডলওয়্যার ও রিডাইরেক্টে হার্ডকোডেড `/` পরিহার করে `APP_URL` ভিত্তিক রিডাইরেক্ট নিশ্চিত করা হয়েছে।
-   - ওয়েব পুশ কনফিগারেশনে `public_key` ও `vapid_public_key` উভয় ফিল্ডের সাপোর্ট নিশ্চিত করা হয়েছে।
-
----
-
-## 🔄 ফিউচার আপডেট ও ডেভেলপমেন্ট গাইড (Future Updates FAQ)
-
-ভবিষ্যতে নতুন ফিচার বা কোড পরিবর্তন সংক্রান্ত গুরুত্বপূর্ণ নির্দেশিকা:
-
-| পরিবর্তনের ধরন | phpMyAdmin ডেটাবেজ লাগবে? | কীভাবে সার্ভারে যুক্ত করবেন? |
-| :--- | :---: | :--- |
-| **নতুন কোড/ডিজাইন (PHP, HTML, CSS, JS)** | **না (দরকার নেই)** | শুধুমাত্র পরিবর্তিত ফাইলটি cPanel **File Manager** বা **FTP** দিয়ে আপলোড/রিপ্লেস করবেন। সাথে সাথে লাইভ হয়ে যাবে। |
-| **সংবাদ, ছবি, জরিপ বা বিজ্ঞাপন প্রকাশ** | **না (কখনোই না)** | সরাসরি অ্যাডমিন প্যানেল ([`https://newslensbd.com/lens-desk`](https://newslensbd.com/lens-desk)) থেকে এডিট বা পোস্ট করবেন। |
-| **নতুন ডেটাবেজ টেবিল বা কলাম** | **হ্যাঁ (শুধুমাত্র স্কিমা পরিবর্তনের ক্ষেত্রে)** | নতুন ফিচারের জন্য নতুন টেবিল বা কলাম লাগলে cPanel **phpMyAdmin**-এ ঢুকে শুধু সংশ্লিষ্ট `CREATE TABLE` বা `ALTER TABLE` কোয়েরিটি একবার রান করলেই হবে। |
+২. **লেখক ব্যবস্থাপনা সম্পূর্ণ পৃথকীকরণ ও নিরাপত্তা জোরদার (Complete Writer Separation):**
+   - **পাবলিক রেজিস্ট্রেশন সুরক্ষা:** পাবলিক ফর্ম ও এপিআই এন্ডপয়েন্ট থেকে লেখকের রোল নির্বাচনের অপশন স্থায়ীভাবে সরিয়ে দেওয়া হয়েছে। যে কেউ রেজিস্ট্রেশন করলে বাধ্যতামূলকভাবে `role = 'user'` অ্যাসাইন হবে।
+   - **স্বতন্ত্র লগইন রুট (`/writer/login`):** সাধারণ পাঠকদের জন্য `/login` এবং লেখকদের জন্য স্বতন্ত্র `/writer/login` স্থাপন। লেখক ভুল করে পাবলিক সাইটে লগইন করলে সিস্টেম তাকে নিরাপদে লগআউট করিয়ে লেখক পোর্টালে পাঠিয়ে দেয়।
+   - **ব্রুট-ফোর্স প্রটেকশন ও আইপি রেট-লিমিটিং (`RateLimiter.php`):** ৫টি ব্যর্থ লগইন চেষ্টার পর সংশ্লিষ্ট আইপি ১৫ মিনিটের জন্য সাময়িক ব্লক।
+   - **ব্যবহারকারীর অস্তিত্ব গোপন রাখা (Generic Login Error):** লেখক না এমন কোনো সাধারণ পাঠকের ইমেইল/পাসওয়ার্ড দেওয়া হলে "ইউজার পাওয়া যায়নি" না বলে জেনেরিক মেসেজ দিয়ে সিস্টেমে ইউজারের রোল বা অস্তিত্ব ফাঁস হওয়া রোধ করা হয়েছে।
+   - **কঠোর সার্ভার-সাইড পারমিশন (HTTP 403 Forbidden):** সাধারণ পাঠক সেশন নিয়ে জোরপূর্বক লেখক রুটে প্রবেশের চেষ্টা করলে মিডলওয়্যারে সরাসরি HTTP 403 এরর প্রদান।
+   - **কেন্দ্রীয় অ্যাডমিন নিয়ন্ত্রণ (`/lens-desk/writers`):** অ্যাডমিন কর্তৃক যেকোনো সময় নতুন লেখক তৈরি, পাসওয়ার্ড রিসেট, পাঠককে লেখক পদে প্রমোশন, লেখককে পাঠকে ডিমোশন, একাউন্ট সাসপেন্ড ও পার্মানেন্ট ডিলিট সুবিধা।
+   - **লেখক পোস্ট আইসোলেশন:** লেখক ড্যাশবোর্ড ও পোস্ট তালিকায় `author_id` কঠোরভাবে ফিল্টার করা হয়েছে যাতে কোনো লেখক অন্যের পোস্টের সন্ধান না পায়।
+   - **দ্বিভাষিক (বাংলা/ইংরেজি) ও ডার্ক/লাইট মোড:** লেখক লগইন, ড্যাশবোর্ড এবং পোস্ট ম্যানেজমেন্টের প্রতিটি উপাদানে দ্বিভাষিক ও আধুনিক ডার্ক থিম সংযুক্ত।
 
 ---
 

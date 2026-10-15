@@ -38,7 +38,7 @@ $success = $success ?? null;
       </div>
     <?php endif; ?>
 
-    <form method="POST" action="<?= $appUrl ?>/login" id="loginForm">
+    <form method="POST" action="<?= $appUrl ?>/login" id="loginForm" autocomplete="off">
       <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
 
       <!-- Email Input -->
@@ -53,8 +53,9 @@ $success = $success ?? null;
             name="email" 
             id="login-email" 
             required 
+            value=""
             placeholder="example@domain.com" 
-            autocomplete="email"
+            autocomplete="off"
             style="width: 100%; padding: 12px 14px 12px 42px; background: var(--bg-alt); border: 1.5px solid var(--border-color); border-radius: 10px; font-size: 0.95rem; color: var(--text-main); outline: none; transition: border-color 0.2s, box-shadow 0.2s;"
             onfocus="this.style.borderColor='var(--color-secondary)'; this.style.boxShadow='0 0 0 3px rgba(0, 106, 56, 0.2)';"
             onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none';"
@@ -79,8 +80,9 @@ $success = $success ?? null;
             name="password" 
             id="login-password" 
             required 
+            value=""
             placeholder="••••••••" 
-            autocomplete="current-password"
+            autocomplete="new-password"
             style="width: 100%; padding: 12px 44px 12px 42px; background: var(--bg-alt); border: 1.5px solid var(--border-color); border-radius: 10px; font-size: 0.95rem; color: var(--text-main); outline: none; transition: border-color 0.2s, box-shadow 0.2s;"
             onfocus="this.style.borderColor='var(--color-secondary)'; this.style.boxShadow='0 0 0 3px rgba(0, 106, 56, 0.2)';"
             onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none';"

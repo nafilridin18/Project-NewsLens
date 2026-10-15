@@ -538,18 +538,18 @@ $error = $error ?? '';
         <div class="alert-box alert-error"><?= htmlspecialchars($error) ?></div>
       <?php endif; ?>
 
-      <form action="<?= $appUrl ?>/<?= $adminPath ?>/login" method="post" id="admin-login-form">
+      <form action="<?= $appUrl ?>/<?= $adminPath ?>/login" method="post" id="admin-login-form" autocomplete="off">
         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
         
         <div class="form-group">
           <label for="email" id="txt-label-email" data-bn="অ্যাডমিন ইমেইল" data-en="Admin Email">অ্যাডমিন ইমেইল</label>
-          <input type="email" name="email" id="email" class="form-control" required placeholder="email@domain.com" autocomplete="email">
+          <input type="email" name="email" id="email" class="form-control" required placeholder="email@domain.com" autocomplete="off" value="">
         </div>
 
         <div class="form-group">
           <label for="password" id="txt-label-pass" data-bn="গোপন পাসওয়ার্ড" data-en="Secret Password">গোপন পাসওয়ার্ড</label>
           <div class="password-input-wrap">
-            <input type="password" name="password" id="password" class="form-control" required placeholder="••••••••" autocomplete="current-password">
+            <input type="password" name="password" id="password" class="form-control" required placeholder="••••••••" autocomplete="new-password" value="">
             <button type="button" class="btn-toggle-pass" id="btn-toggle-pass" aria-label="পাসওয়ার্ড দেখুন" title="পাসওয়ার্ড দেখুন">
               <svg class="eye-icon eye-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
