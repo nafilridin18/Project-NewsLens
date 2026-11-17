@@ -32,7 +32,7 @@ class PostController {
         try {
             $db = Database::getConnection();
             $query = "
-                SELECT p.*, c.name_bn as category_name, c.name_en as category_name_en, COALESCE(NULLIF(p.custom_author, ''), u.name, 'স্টাফ') as author_name, d.name_bn as district_name, d.name_en as district_name_en
+                SELECT p.*, c.name_bn as category_name, c.name_en as category_name_en, c.slug as category_slug, COALESCE(NULLIF(p.custom_author, ''), u.name, 'স্টাফ') as author_name, d.name_bn as district_name, d.name_en as district_name_en
                 FROM `posts` p
                 JOIN `categories` c ON p.category_id = c.id
                 LEFT JOIN `users` u ON p.author_id = u.id
@@ -66,7 +66,8 @@ class PostController {
             'statusFilter' => $statusFilter,
             'user'         => $user,
             'adminPath'    => $this->adminPath,
-            'appUrl'       => $this->appUrl
+            'appUrl'       => $this->appUrl,
+            'csrfToken'    => Auth::generateCsrf()
         ], null);
     }
 
@@ -160,7 +161,7 @@ class PostController {
                 ':body'         => $body,
                 ':excerpt'      => $excerpt,
                 ':image'        => $featuredImage,
-                ':video'        => $videoUrl,
+                ':video'        => $videoUrl !== '' ? $videoUrl : null,
                 ':catId'        => $categoryId,
                 ':distId'       => $districtId,
                 ':authorId'     => $user['id'] ?? 1,
@@ -253,7 +254,8 @@ class PostController {
         }
 
         $status = $_POST['status'] ?? 'published';
-        $excerpt = mb_substr(strip_tags($body), 0, 180, 'UTF-8');
+        $submittedExcerpt = trim($_POST['excerpt'] ?? '');
+        $excerpt = $submittedExcerpt !== '' ? $submittedExcerpt : mb_substr(strip_tags($body), 0, 180, 'UTF-8');
 
         $authorChoice = $_POST['author_choice'] ?? 'account';
         $customAuthor = null;
@@ -277,6 +279,7 @@ class PostController {
                     `district_id` = :distId,
                     `custom_author` = :customAuthor,
                     `status` = :status,
+                    `published_at` = CASE WHEN :status_pub = 'published' THEN COALESCE(`published_at`, NOW()) ELSE `published_at` END,
                     `is_lead` = :isLead,
                     `is_breaking` = :isBreaking
                 WHERE `id` = :id
@@ -286,11 +289,12 @@ class PostController {
                 ':body'         => $body,
                 ':excerpt'      => $excerpt,
                 ':image'        => $featuredImage,
-                ':video'        => $videoUrl,
+                ':video'        => $videoUrl !== '' ? $videoUrl : null,
                 ':catId'        => $categoryId,
                 ':distId'       => $districtId,
                 ':customAuthor' => $customAuthor,
                 ':status'       => $status,
+                ':status_pub'   => $status,
                 ':isLead'       => $isLead,
                 ':isBreaking'   => $isBreaking,
                 ':id'           => $id
@@ -357,10 +361,10 @@ class PostController {
                 $db = Database::getConnection();
                 $stmt = $db->prepare("
                     UPDATE `posts` 
-                    SET `status` = :status, `published_at` = CASE WHEN :status = 'published' THEN NOW() ELSE `published_at` END
+                    SET `status` = :status, `published_at` = CASE WHEN :status_check = 'published' THEN COALESCE(`published_at`, NOW()) ELSE `published_at` END
                     WHERE `id` = :id
                 ");
-                $stmt->execute([':status' => $newStatus, ':id' => $postId]);
+                $stmt->execute([':status' => $newStatus, ':status_check' => $newStatus, ':id' => $postId]);
             } catch (Exception $e) {}
         }
 

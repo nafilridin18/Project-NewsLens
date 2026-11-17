@@ -86,7 +86,7 @@ $appUrl = rtrim($config['app']['url'] ?? '', '/');
               <?php endif; ?>
               <div class="news-meta">
                 <span class="meta-dist">📍 <?= htmlspecialchars($item['district_name'] ?? 'সারাদেশ') ?></span>
-                <span class="meta-time">⏱️ <?= BanglaDate::timeAgo($item['published_at']) ?></span>
+                <span class="meta-time">⏱️ <?= BanglaDate::timeAgo($item['published_at'] ?? $item['created_at'] ?? null) ?></span>
               </div>
             </div>
           </article>

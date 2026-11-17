@@ -31,7 +31,13 @@ class BanglaDate {
      * Format a timestamp into Bangla date format (e.g., ৮ অক্টোবর ২০২৬, বৃহস্পতিবার)
      */
     public static function formatBnDate(?string $datetime = null, bool $withDay = true): string {
-        $dt = $datetime ? new DateTime($datetime, new DateTimeZone('Asia/Dhaka')) : new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+        try {
+            $dt = ($datetime !== null && trim($datetime) !== '')
+                ? new DateTime($datetime, new DateTimeZone('Asia/Dhaka'))
+                : new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+        } catch (\Throwable $e) {
+            $dt = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+        }
         $dayName = self::$bnDays[$dt->format('l')] ?? '';
         $dayNum = self::bnNum($dt->format('j'));
         $monthName = self::$bnMonths[(int) $dt->format('n')] ?? '';
@@ -46,10 +52,17 @@ class BanglaDate {
     /**
      * Relative human-readable time in Bangla (e.g. ৫ মিনিট আগে, ১ ঘণ্টা আগে)
      */
-    public static function timeAgo(string $datetime): string {
-        $dt = new DateTime($datetime, new DateTimeZone('Asia/Dhaka'));
-        $now = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
-        $diff = $now->diff($dt);
+    public static function timeAgo(?string $datetime = null): string {
+        if ($datetime === null || trim($datetime) === '') {
+            return 'এইমাত্র';
+        }
+        try {
+            $dt = new DateTime($datetime, new DateTimeZone('Asia/Dhaka'));
+            $now = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+            $diff = $now->diff($dt);
+        } catch (\Throwable $e) {
+            return 'এইমাত্র';
+        }
 
         if ($diff->y > 0) {
             return self::bnNum($diff->y) . ' বছর আগে';

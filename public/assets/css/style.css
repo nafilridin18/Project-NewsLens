@@ -952,6 +952,7 @@ button, input, select, textarea {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top;
   transition: transform 0.4s ease;
 }
 
@@ -1035,8 +1036,9 @@ button, input, select, textarea {
 
 .sub-lead-thumb {
   position: relative;
-  width: 120px;
-  height: 80px;
+  width: 136px;
+  aspect-ratio: 16 / 9;
+  height: auto;
   flex-shrink: 0;
   border-radius: var(--radius-sm);
   overflow: hidden;
@@ -1046,6 +1048,7 @@ button, input, select, textarea {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top;
 }
 
 .category-badge-sm {
@@ -1167,6 +1170,18 @@ button, input, select, textarea {
 .news-card {
   padding: 8px;
   border-bottom: 1px solid var(--border-color);
+}
+
+.card-thumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: var(--radius-sm);
+  margin-bottom: 10px;
+  display: block;
+  background: var(--bg-alt);
 }
 
 .card-title {
@@ -2404,11 +2419,16 @@ button, input, select, textarea {
   margin: 20px 0;
   border-radius: var(--radius-md);
   overflow: hidden;
+  background: var(--bg-alt);
+  border: 1px solid var(--border-color);
 }
 .article-featured-img {
   width: 100%;
-  max-height: 520px;
-  object-fit: cover;
+  height: auto !important;
+  max-height: 680px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
 }
 .article-featured-caption {
   font-size: 0.85rem;
@@ -2485,10 +2505,13 @@ button, input, select, textarea {
 }
 .related-thumb {
   width: 100%;
-  height: 120px;
+  aspect-ratio: 16 / 9;
+  height: auto;
   object-fit: cover;
+  object-position: center top;
   border-radius: 4px;
   margin-bottom: 8px;
+  display: block;
 }
 
 /* ================= CATEGORY & SEARCH PAGES ================= */
@@ -2538,7 +2561,8 @@ button, input, select, textarea {
 .cat-card-thumb {
   flex-shrink: 0;
   width: 240px;
-  height: 150px;
+  aspect-ratio: 16 / 9;
+  height: auto;
   border-radius: var(--radius-sm);
   overflow: hidden;
 }
@@ -2546,6 +2570,15 @@ button, input, select, textarea {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top;
+}
+@media (max-width: 640px) {
+  .cat-news-card {
+    flex-direction: column;
+  }
+  .cat-card-thumb {
+    width: 100%;
+  }
 }
 .cat-card-body {
   flex: 1;

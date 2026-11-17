@@ -117,7 +117,7 @@ $isEditor = in_array($user['role'], ['super_admin', 'editor']);
                 <td>#<?= $p['id'] ?></td>
                 <td>
                   <strong><?= htmlspecialchars($p['title']) ?></strong>
-                  <?php if (!empty($p['video_url'])): ?>
+                  <?php if (!empty(trim($p['video_url'] ?? '')) && !str_contains($p['video_url'], 'dQw4w9WgXcQ')): ?>
                     <span style="color:#f87171;font-size:0.75rem;margin-left:4px;" data-bn="▶ ভিডিও" data-en="▶ Video">▶ ভিডিও</span>
                   <?php endif; ?>
                 </td>
@@ -131,10 +131,11 @@ $isEditor = in_array($user['role'], ['super_admin', 'editor']);
                   <span class="views-badge" data-bn="👁️ <?= BanglaDate::bnNum($p['views'] ?? 0) ?>" data-en="👁️ <?= (int)($p['views'] ?? 0) ?>">👁️ <?= BanglaDate::bnNum($p['views'] ?? 0) ?></span>
                 </td>
                 <td>
-                  <span class="status-pill status-<?= $p['status'] ?>" 
-                        data-bn="<?= $p['status'] === 'published' ? 'প্রকাশিত' : ($p['status'] === 'pending' ? 'রিভিউধীন' : ($p['status'] === 'rejected' ? 'বাতিল' : 'খসড়া')) ?>" 
-                        data-en="<?= $p['status'] === 'published' ? 'Published' : ($p['status'] === 'pending' ? 'Pending' : ($p['status'] === 'rejected' ? 'Rejected' : 'Draft')) ?>">
-                    <?= $p['status'] === 'published' ? 'প্রকাশিত' : ($p['status'] === 'pending' ? 'রিভিউধীন' : ($p['status'] === 'rejected' ? 'বাতিল' : 'খসড়া')) ?>
+                  <?php $isPending = in_array($p['status'], ['pending', 'pending_review'], true); ?>
+                  <span class="status-pill status-<?= $isPending ? 'pending' : $p['status'] ?>" 
+                        data-bn="<?= $p['status'] === 'published' ? 'প্রকাশিত' : ($isPending ? 'রিভিউধীন' : ($p['status'] === 'rejected' ? 'বাতিল' : 'খসড়া')) ?>" 
+                        data-en="<?= $p['status'] === 'published' ? 'Published' : ($isPending ? 'Pending' : ($p['status'] === 'rejected' ? 'Rejected' : 'Draft')) ?>">
+                    <?= $p['status'] === 'published' ? 'প্রকাশিত' : ($isPending ? 'রিভিউধীন' : ($p['status'] === 'rejected' ? 'বাতিল' : 'খসড়া')) ?>
                   </span>
                 </td>
                 <td>
@@ -145,13 +146,14 @@ $isEditor = in_array($user['role'], ['super_admin', 'editor']);
                     </a>
 
                     <!-- View Post Button -->
-                    <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($p['category_slug'] ?? 'national') ?>/<?= $p['id'] ?>/<?= htmlspecialchars($p['slug']) ?>" target="_blank" class="btn-action btn-view" title="দেখুন" data-title-bn="দেখুন" data-title-en="View">
+                    <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($p['category_slug'] ?? 'national') ?>/<?= $p['id'] ?>/<?= htmlspecialchars($p['slug'] ?? '') ?>" target="_blank" class="btn-action btn-view" title="দেখুন" data-title-bn="দেখুন" data-title-en="View">
                       <span class="btn-icon">↗</span><span class="btn-text" data-bn="দেখুন" data-en="View">দেখুন</span>
                     </a>
 
                     <!-- Delete Button -->
                     <?php if ($isEditor): ?>
                       <form action="<?= $appUrl ?>/<?= $adminPath ?>/posts/delete" method="post" style="display:inline;" onsubmit="return confirm('আপনি কি নিশ্চিত যে সংবাদটি মুছে ফেলতে চান?');">
+                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken ?? '') ?>">
                         <input type="hidden" name="id" value="<?= $p['id'] ?>">
                         <button type="submit" class="btn-action btn-del" title="মুছুন" data-title-bn="মুছুন" data-title-en="Delete">
                           <span class="btn-icon">🗑️</span><span class="btn-text" data-bn="মুছুন" data-en="Delete">মুছুন</span>
@@ -160,8 +162,9 @@ $isEditor = in_array($user['role'], ['super_admin', 'editor']);
                     <?php endif; ?>
 
                     <!-- Workflow Approval for Pending Posts -->
-                    <?php if ($isEditor && $p['status'] === 'pending'): ?>
+                    <?php if ($isEditor && $isPending): ?>
                       <form action="<?= $appUrl ?>/<?= $adminPath ?>/posts/status" method="post" style="display:inline-flex; gap:4px;">
+                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken ?? '') ?>">
                         <input type="hidden" name="post_id" value="<?= $p['id'] ?>">
                         <button type="submit" name="status" value="published" class="btn-action btn-publish" data-bn="অনুমোদন" data-en="Approve">অনুমোদন</button>
                         <button type="submit" name="status" value="rejected" class="btn-action btn-reject" data-bn="বাতিল" data-en="Reject">বাতিল</button>

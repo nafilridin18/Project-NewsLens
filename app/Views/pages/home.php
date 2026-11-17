@@ -15,18 +15,18 @@ $videoPosts = $videoPosts ?? [];
       <?php if ($mainLead): ?>
       <article class="hero-lead-card">
         <div class="hero-media">
-          <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($mainLead['category_slug']) ?>/<?= $mainLead['id'] ?>/<?= htmlspecialchars($mainLead['slug']) ?>">
-            <img src="<?= htmlspecialchars(imageUrl($mainLead['featured_image'], $appUrl)) ?>" alt="<?= htmlspecialchars($mainLead['title']) ?>" loading="eager" width="800" height="450">
+          <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($mainLead['category_slug'] ?? 'national') ?>/<?= $mainLead['id'] ?>/<?= htmlspecialchars($mainLead['slug'] ?? '') ?>">
+            <img src="<?= htmlspecialchars(imageUrl($mainLead['featured_image'] ?? null, $appUrl)) ?>" alt="<?= htmlspecialchars($mainLead['title'] ?? '') ?>" loading="eager" width="800" height="450">
           </a>
-          <span class="category-badge"><?= htmlspecialchars($mainLead['category_name']) ?></span>
+          <span class="category-badge"><?= htmlspecialchars($mainLead['category_name'] ?? '') ?></span>
         </div>
         <div class="hero-content">
           <h1 class="hero-title">
-            <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($mainLead['category_slug']) ?>/<?= $mainLead['id'] ?>/<?= htmlspecialchars($mainLead['slug']) ?>">
-              <?= htmlspecialchars($mainLead['title']) ?>
+            <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($mainLead['category_slug'] ?? 'national') ?>/<?= $mainLead['id'] ?>/<?= htmlspecialchars($mainLead['slug'] ?? '') ?>">
+              <?= htmlspecialchars($mainLead['title'] ?? '') ?>
             </a>
           </h1>
-          <p class="hero-excerpt"><?= htmlspecialchars($mainLead['excerpt']) ?></p>
+          <p class="hero-excerpt"><?= htmlspecialchars($mainLead['excerpt'] ?? '') ?></p>
           <div class="meta-row">
             <?php
               $leadAuthor = $mainLead['author_name'] ?? 'স্টাফ রিপোর্টার';
@@ -34,7 +34,7 @@ $videoPosts = $videoPosts ?? [];
               if ($leadAuthor === 'স্টাফ রিপোর্টার') $leadAuthorEn = 'Staff Reporter';
             ?>
             <span class="meta-author" data-bn="✍️ <?= htmlspecialchars($leadAuthor) ?>" data-en="✍️ <?= htmlspecialchars($leadAuthorEn) ?>">✍️ <?= htmlspecialchars($leadAuthor) ?></span>
-            <span class="meta-time" data-time="<?= htmlspecialchars($mainLead['published_at']) ?>">⏱️ <?= BanglaDate::timeAgo($mainLead['published_at']) ?></span>
+            <span class="meta-time" data-time="<?= htmlspecialchars($mainLead['published_at'] ?? $mainLead['created_at'] ?? '') ?>">⏱️ <?= BanglaDate::timeAgo($mainLead['published_at'] ?? $mainLead['created_at'] ?? null) ?></span>
             <span class="meta-views" data-views="<?= (int)($mainLead['views'] ?? 0) ?>" data-bn="👁️ <?= BanglaDate::bnNum($mainLead['views'] ?? 0) ?> বার পঠিত" data-en="👁️ <?= (int)($mainLead['views'] ?? 0) ?> views">👁️ <?= BanglaDate::bnNum($mainLead['views'] ?? 0) ?> বার পঠিত</span>
           </div>
         </div>
@@ -46,18 +46,18 @@ $videoPosts = $videoPosts ?? [];
         <?php foreach ($secondaryLeads as $sLead): ?>
           <article class="sub-lead-card">
             <div class="sub-lead-thumb">
-              <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($sLead['category_slug']) ?>/<?= $sLead['id'] ?>/<?= htmlspecialchars($sLead['slug']) ?>">
-                <img src="<?= htmlspecialchars(imageUrl($sLead['featured_image'], $appUrl)) ?>" alt="<?= htmlspecialchars($sLead['title']) ?>" loading="lazy" width="280" height="175">
+              <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($sLead['category_slug'] ?? 'national') ?>/<?= $sLead['id'] ?>/<?= htmlspecialchars($sLead['slug'] ?? '') ?>">
+                <img src="<?= htmlspecialchars(imageUrl($sLead['featured_image'] ?? null, $appUrl)) ?>" alt="<?= htmlspecialchars($sLead['title'] ?? '') ?>" loading="lazy" width="280" height="175">
               </a>
-              <span class="category-badge-sm"><?= htmlspecialchars($sLead['category_name']) ?></span>
+              <span class="category-badge-sm"><?= htmlspecialchars($sLead['category_name'] ?? '') ?></span>
             </div>
             <div class="sub-lead-body">
               <h2 class="sub-lead-title">
-                <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($sLead['category_slug']) ?>/<?= $sLead['id'] ?>/<?= htmlspecialchars($sLead['slug']) ?>">
-                  <?= htmlspecialchars($sLead['title']) ?>
+                <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($sLead['category_slug'] ?? 'national') ?>/<?= $sLead['id'] ?>/<?= htmlspecialchars($sLead['slug'] ?? '') ?>">
+                  <?= htmlspecialchars($sLead['title'] ?? '') ?>
                 </a>
               </h2>
-              <span class="meta-time-sm">⏱️ <?= BanglaDate::timeAgo($sLead['published_at']) ?></span>
+              <span class="meta-time-sm">⏱️ <?= BanglaDate::timeAgo($sLead['published_at'] ?? $sLead['created_at'] ?? null) ?></span>
             </div>
           </article>
         <?php endforeach; ?>
@@ -87,16 +87,16 @@ $videoPosts = $videoPosts ?? [];
           <?php foreach ($nationalPosts as $post): ?>
             <article class="news-card">
               <?php if (!empty($post['featured_image'])): ?>
-                <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($post['category_slug']) ?>/<?= $post['id'] ?>/<?= htmlspecialchars($post['slug']) ?>">
-                  <img src="<?= htmlspecialchars(imageUrl($post['featured_image'], $appUrl)) ?>" alt="<?= htmlspecialchars($post['title']) ?>" class="card-thumb" loading="lazy">
+                <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($post['category_slug'] ?? 'national') ?>/<?= $post['id'] ?>/<?= htmlspecialchars($post['slug'] ?? '') ?>">
+                  <img src="<?= htmlspecialchars(imageUrl($post['featured_image'], $appUrl)) ?>" alt="<?= htmlspecialchars($post['title'] ?? '') ?>" class="card-thumb" loading="lazy">
                 </a>
               <?php endif; ?>
               <h4 class="card-title">
-                <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($post['category_slug']) ?>/<?= $post['id'] ?>/<?= htmlspecialchars($post['slug']) ?>">
-                  <?= htmlspecialchars($post['title']) ?>
+                <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($post['category_slug'] ?? 'national') ?>/<?= $post['id'] ?>/<?= htmlspecialchars($post['slug'] ?? '') ?>">
+                  <?= htmlspecialchars($post['title'] ?? '') ?>
                 </a>
               </h4>
-              <span class="meta-time-sm">⏱️ <?= BanglaDate::timeAgo($post['published_at']) ?></span>
+              <span class="meta-time-sm">⏱️ <?= BanglaDate::timeAgo($post['published_at'] ?? $post['created_at'] ?? null) ?></span>
             </article>
           <?php endforeach; ?>
         </div>
@@ -129,11 +129,11 @@ $videoPosts = $videoPosts ?? [];
             <?php foreach ($economyPosts as $post): ?>
               <article class="cat-list-item">
                 <h4 class="cat-item-title">
-                  <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($post['category_slug']) ?>/<?= $post['id'] ?>/<?= htmlspecialchars($post['slug']) ?>">
-                    <?= htmlspecialchars($post['title']) ?>
+                  <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($post['category_slug'] ?? 'economy') ?>/<?= $post['id'] ?>/<?= htmlspecialchars($post['slug'] ?? '') ?>">
+                    <?= htmlspecialchars($post['title'] ?? '') ?>
                   </a>
                 </h4>
-                <span class="meta-time-tiny">⏱️ <?= BanglaDate::timeAgo($post['published_at']) ?></span>
+                <span class="meta-time-tiny">⏱️ <?= BanglaDate::timeAgo($post['published_at'] ?? $post['created_at'] ?? null) ?></span>
               </article>
             <?php endforeach; ?>
           </div>
@@ -151,11 +151,11 @@ $videoPosts = $videoPosts ?? [];
             <?php foreach ($techPosts as $post): ?>
               <article class="cat-list-item">
                 <h4 class="cat-item-title">
-                  <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($post['category_slug']) ?>/<?= $post['id'] ?>/<?= htmlspecialchars($post['slug']) ?>">
-                    <?= htmlspecialchars($post['title']) ?>
+                  <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($post['category_slug'] ?? 'tech') ?>/<?= $post['id'] ?>/<?= htmlspecialchars($post['slug'] ?? '') ?>">
+                    <?= htmlspecialchars($post['title'] ?? '') ?>
                   </a>
                 </h4>
-                <span class="meta-time-tiny">⏱️ <?= BanglaDate::timeAgo($post['published_at']) ?></span>
+                <span class="meta-time-tiny">⏱️ <?= BanglaDate::timeAgo($post['published_at'] ?? $post['created_at'] ?? null) ?></span>
               </article>
             <?php endforeach; ?>
           </div>
@@ -163,32 +163,33 @@ $videoPosts = $videoPosts ?? [];
         <?php endif; ?>
       </div>
 
-      <!-- Multimedia & Video Gallery Section with Working Video Player (Picture 5 Fix) -->
+      <!-- Multimedia & Video Gallery Section (Only shown when real video news exists) -->
+      <?php if (!empty($videoPosts)): ?>
       <section class="video-gallery-section" aria-label="ভিডিও সংবাদ">
         <div class="section-header">
           <h3 class="section-title"><span class="title-accent" data-bn="ভিডিও ও মাল্টিমিডিয়া" data-en="Video & Multimedia">ভিডিও ও মাল্টিমিডিয়া</span></h3>
         </div>
         <div class="video-grid">
-          <?php if (!empty($videoPosts)): ?>
-            <?php foreach ($videoPosts as $vPost): ?>
-              <div class="video-card">
-                <div class="video-thumbnail-box video-play-trigger" 
-                     data-video-url="<?= htmlspecialchars($vPost['video_url'] ?: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ') ?>"
-                     data-video-title="<?= htmlspecialchars($vPost['title']) ?>"
-                     role="button" tabindex="0" title="ভিডিও চালু করুন">
-                  <img src="<?= htmlspecialchars(imageUrl($vPost['featured_image'] ?: 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=600&q=80', $appUrl)) ?>" alt="<?= htmlspecialchars($vPost['title']) ?>" loading="lazy">
-                  <span class="play-badge" aria-label="Play Video">▶</span>
-                </div>
-                <h4 class="video-title">
-                  <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($vPost['category_slug'] ?? 'national') ?>/<?= $vPost['id'] ?>/<?= htmlspecialchars($vPost['slug']) ?>">
-                    <?= htmlspecialchars($vPost['title']) ?>
-                  </a>
-                </h4>
+          <?php foreach ($videoPosts as $vPost): ?>
+            <?php if (empty(trim($vPost['video_url'] ?? ''))) continue; ?>
+            <div class="video-card">
+              <div class="video-thumbnail-box video-play-trigger" 
+                   data-video-url="<?= htmlspecialchars(trim($vPost['video_url'])) ?>"
+                   data-video-title="<?= htmlspecialchars($vPost['title'] ?? '') ?>"
+                   role="button" tabindex="0" title="ভিডিও চালু করুন">
+                <img src="<?= htmlspecialchars(imageUrl($vPost['featured_image'] ?: 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=600&q=80', $appUrl)) ?>" alt="<?= htmlspecialchars($vPost['title'] ?? '') ?>" loading="lazy">
+                <span class="play-badge" aria-label="Play Video">▶</span>
               </div>
-            <?php endforeach; ?>
-          <?php endif; ?>
+              <h4 class="video-title">
+                <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($vPost['category_slug'] ?? 'national') ?>/<?= $vPost['id'] ?>/<?= htmlspecialchars($vPost['slug'] ?? '') ?>">
+                  <?= htmlspecialchars($vPost['title'] ?? '') ?>
+                </a>
+              </h4>
+            </div>
+          <?php endforeach; ?>
         </div>
       </section>
+      <?php endif; ?>
 
     </div>
 
@@ -210,9 +211,9 @@ $videoPosts = $videoPosts ?? [];
                 <span class="num-counter"><?= BanglaDate::bnNum($idx + 1) ?></span>
                 <div class="item-details">
                   <a href="<?= $appUrl ?>/news/<?= htmlspecialchars($post['category_slug'] ?? 'national') ?>/<?= $post['id'] ?>/<?= htmlspecialchars($post['slug'] ?? '') ?>" class="item-title">
-                    <?= htmlspecialchars($post['title']) ?>
+                    <?= htmlspecialchars($post['title'] ?? '') ?>
                   </a>
-                  <span class="meta-time-tiny">⏱️ <?= BanglaDate::timeAgo($post['published_at']) ?></span>
+                  <span class="meta-time-tiny">⏱️ <?= BanglaDate::timeAgo($post['published_at'] ?? $post['created_at'] ?? null) ?></span>
                 </div>
               </li>
             <?php endforeach; ?>

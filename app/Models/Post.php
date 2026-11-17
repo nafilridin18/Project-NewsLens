@@ -13,11 +13,11 @@ class Post {
         try {
             $db = Database::getConnection();
             $stmt = $db->prepare("
-                SELECT p.id, p.title, p.slug, c.slug AS category_slug, p.published_at 
+                SELECT p.id, p.title, p.slug, c.slug AS category_slug, COALESCE(p.published_at, p.created_at) AS published_at 
                 FROM `posts` p
                 JOIN `categories` c ON p.category_id = c.id
                 WHERE p.status = 'published' AND (p.is_breaking = 1 OR p.is_lead = 1)
-                ORDER BY p.published_at DESC
+                ORDER BY COALESCE(p.published_at, p.created_at) DESC
                 LIMIT :limit
             ");
             $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
@@ -29,11 +29,11 @@ class Post {
 
             // If no breaking flags, return latest published
             $stmtLatest = $db->prepare("
-                SELECT p.id, p.title, p.slug, c.slug AS category_slug, p.published_at 
+                SELECT p.id, p.title, p.slug, c.slug AS category_slug, COALESCE(p.published_at, p.created_at) AS published_at 
                 FROM `posts` p
                 JOIN `categories` c ON p.category_id = c.id
                 WHERE p.status = 'published'
-                ORDER BY p.published_at DESC
+                ORDER BY COALESCE(p.published_at, p.created_at) DESC
                 LIMIT :limit
             ");
             $stmtLatest->bindValue(':limit', $limit, PDO::PARAM_INT);
@@ -54,7 +54,8 @@ class Post {
         try {
             $db = Database::getConnection();
             $stmt = $db->query("
-                SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug, 
+                SELECT p.*, COALESCE(p.published_at, p.created_at) AS published_at,
+                       c.name_bn AS category_name, c.slug AS category_slug, 
                        COALESCE(NULLIF(p.custom_author, ''), u.name, 'স্টাফ রিপোর্টার') AS author_name, 
                        d.name_bn AS district_name
                 FROM `posts` p
@@ -62,7 +63,7 @@ class Post {
                 LEFT JOIN `users` u ON p.author_id = u.id
                 LEFT JOIN `districts` d ON p.district_id = d.id
                 WHERE p.status = 'published'
-                ORDER BY p.is_lead DESC, p.published_at DESC
+                ORDER BY p.is_lead DESC, COALESCE(p.published_at, p.created_at) DESC
                 LIMIT 5
             ");
             $results = $stmt->fetchAll();
@@ -84,13 +85,14 @@ class Post {
         try {
             $db = Database::getConnection();
             $stmt = $db->prepare("
-                SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug, 
+                SELECT p.*, COALESCE(p.published_at, p.created_at) AS published_at,
+                       c.name_bn AS category_name, c.slug AS category_slug, 
                        COALESCE(NULLIF(p.custom_author, ''), u.name, 'স্টাফ রিপোর্টার') AS author_name
                 FROM `posts` p
                 JOIN `categories` c ON p.category_id = c.id
                 LEFT JOIN `users` u ON p.author_id = u.id
                 WHERE p.status = 'published'
-                ORDER BY p.published_at DESC
+                ORDER BY COALESCE(p.published_at, p.created_at) DESC
                 LIMIT :limit
             ");
             $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
@@ -109,11 +111,12 @@ class Post {
         try {
             $db = Database::getConnection();
             $stmt = $db->prepare("
-                SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug
+                SELECT p.*, COALESCE(p.published_at, p.created_at) AS published_at,
+                       c.name_bn AS category_name, c.slug AS category_slug
                 FROM `posts` p
                 JOIN `categories` c ON p.category_id = c.id
                 WHERE p.status = 'published'
-                ORDER BY p.views DESC, p.published_at DESC
+                ORDER BY p.views DESC, COALESCE(p.published_at, p.created_at) DESC
                 LIMIT :limit
             ");
             $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
@@ -132,7 +135,8 @@ class Post {
         try {
             $db = Database::getConnection();
             $stmt = $db->prepare("
-                SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug, 
+                SELECT p.*, COALESCE(p.published_at, p.created_at) AS published_at,
+                       c.name_bn AS category_name, c.slug AS category_slug, 
                        COALESCE(NULLIF(p.custom_author, ''), u.name, 'স্টাফ রিপোর্টার') AS author_name, 
                        d.name_bn AS district_name
                 FROM `posts` p
@@ -140,7 +144,7 @@ class Post {
                 LEFT JOIN `users` u ON p.author_id = u.id
                 LEFT JOIN `districts` d ON p.district_id = d.id
                 WHERE p.status = 'published' AND c.slug = :categorySlug
-                ORDER BY p.published_at DESC
+                ORDER BY COALESCE(p.published_at, p.created_at) DESC
                 LIMIT :limit
             ");
             $stmt->bindValue(':categorySlug', $categorySlug);
@@ -154,32 +158,27 @@ class Post {
     }
 
     /**
-     * Get video news posts
+     * Get video news posts (Strictly only posts where writer/admin added a video URL)
      */
     public static function getVideoPosts(int $limit = 4): array {
         try {
             $db = Database::getConnection();
             $stmt = $db->prepare("
-                SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug 
+                SELECT p.*, COALESCE(p.published_at, p.created_at) AS published_at,
+                       c.name_bn AS category_name, c.slug AS category_slug 
                 FROM `posts` p
                 JOIN `categories` c ON p.category_id = c.id
-                WHERE p.status = 'published' AND (p.video_url IS NOT NULL AND p.video_url != '')
-                ORDER BY p.published_at DESC
+                WHERE p.status = 'published'
+                  AND p.video_url IS NOT NULL
+                  AND TRIM(p.video_url) != ''
+                  AND p.video_url NOT LIKE '%dQw4w9WgXcQ%'
+                ORDER BY COALESCE(p.published_at, p.created_at) DESC
                 LIMIT :limit
             ");
             $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
             $stmt->execute();
             $results = $stmt->fetchAll();
-            if (!empty($results)) return $results;
-
-            // Fallback to latest posts with sample video
-            $fallback = self::getLatest($limit);
-            foreach ($fallback as &$f) {
-                if (empty($f['video_url'])) {
-                    $f['video_url'] = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
-                }
-            }
-            return $fallback;
+            return $results ?: [];
         } catch (Exception $e) {}
 
         return [];
@@ -192,7 +191,8 @@ class Post {
         try {
             $db = Database::getConnection();
             $stmt = $db->prepare("
-                SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug, 
+                SELECT p.*, COALESCE(p.published_at, p.created_at) AS published_at,
+                       c.name_bn AS category_name, c.slug AS category_slug, 
                        COALESCE(NULLIF(p.custom_author, ''), u.name, 'স্টাফ রিপোর্টার') AS author_name, 
                        COALESCE(u.avatar, u.photo) AS author_photo,
                        d.name_bn AS district_name, dv.name_bn AS division_name
@@ -220,7 +220,8 @@ class Post {
         try {
             $db = Database::getConnection();
             $stmt = $db->prepare("
-                SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug, 
+                SELECT p.*, COALESCE(p.published_at, p.created_at) AS published_at,
+                       c.name_bn AS category_name, c.slug AS category_slug, 
                        COALESCE(NULLIF(p.custom_author, ''), u.name, 'স্টাফ রিপোর্টার') AS author_name, 
                        COALESCE(u.avatar, u.photo) AS author_photo,
                        d.name_bn AS district_name, dv.name_bn AS division_name
@@ -260,11 +261,12 @@ class Post {
         try {
             $db = Database::getConnection();
             $stmt = $db->prepare("
-                SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug
+                SELECT p.*, COALESCE(p.published_at, p.created_at) AS published_at,
+                       c.name_bn AS category_name, c.slug AS category_slug
                 FROM `posts` p
                 JOIN `categories` c ON p.category_id = c.id
                 WHERE p.status = 'published' AND p.category_id = :categoryId AND p.id != :excludeId
-                ORDER BY p.published_at DESC
+                ORDER BY COALESCE(p.published_at, p.created_at) DESC
                 LIMIT :limit
             ");
             $stmt->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
@@ -284,7 +286,8 @@ class Post {
         try {
             $db = Database::getConnection();
             $sql = "
-                SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug, 
+                SELECT p.*, COALESCE(p.published_at, p.created_at) AS published_at,
+                       c.name_bn AS category_name, c.slug AS category_slug, 
                        COALESCE(NULLIF(p.custom_author, ''), u.name, 'স্টাফ রিপোর্টার') AS author_name, 
                        d.name_bn AS district_name, dv.name_bn AS division_name
                 FROM `posts` p
@@ -319,18 +322,18 @@ class Post {
             if (!empty($filters['time_range'])) {
                 switch ($filters['time_range']) {
                     case 'today':
-                        $sql .= " AND DATE(p.published_at) = CURDATE()";
+                        $sql .= " AND DATE(COALESCE(p.published_at, p.created_at)) = CURDATE()";
                         break;
                     case 'week':
-                        $sql .= " AND p.published_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)";
+                        $sql .= " AND COALESCE(p.published_at, p.created_at) >= DATE_SUB(NOW(), INTERVAL 7 DAY)";
                         break;
                     case 'month':
-                        $sql .= " AND p.published_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)";
+                        $sql .= " AND COALESCE(p.published_at, p.created_at) >= DATE_SUB(NOW(), INTERVAL 30 DAY)";
                         break;
                 }
             }
 
-            $sql .= " ORDER BY p.published_at DESC LIMIT :limit";
+            $sql .= " ORDER BY COALESCE(p.published_at, p.created_at) DESC LIMIT :limit";
             $stmt = $db->prepare($sql);
             foreach ($params as $k => $v) {
                 $stmt->bindValue($k, $v);

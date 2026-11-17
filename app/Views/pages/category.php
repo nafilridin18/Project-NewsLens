@@ -47,7 +47,7 @@ $appUrl = rtrim($config['app']['url'] ?? '', '/');
                   <p class="cat-card-excerpt"><?= htmlspecialchars($post['excerpt']) ?></p>
                 <?php endif; ?>
                 <div class="meta-row-tiny">
-                  <span class="meta-time">⏱️ <?= BanglaDate::timeAgo($post['published_at']) ?></span>
+                  <span class="meta-time">⏱️ <?= BanglaDate::timeAgo($post['published_at'] ?? $post['created_at'] ?? null) ?></span>
                   <?php if (!empty($post['district_name'])): ?>
                     <span class="meta-dist">📍 <?= htmlspecialchars($post['district_name']) ?></span>
                   <?php endif; ?>

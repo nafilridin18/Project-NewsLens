@@ -288,20 +288,22 @@ class WriterPanelController {
                 `category_id` = :cat,
                 `district_id` = :dist,
                 `status` = :status,
+                `published_at` = CASE WHEN :status_pub = 'published' THEN COALESCE(`published_at`, NOW()) ELSE `published_at` END,
                 `updated_at` = NOW()
             WHERE `id` = :id
         ");
 
         $stmt->execute([
-            ':title'   => $title,
-            ':body'    => $body,
-            ':excerpt' => $excerpt,
-            ':img'     => $imagePath,
-            ':vid'     => !empty($videoUrl) ? $videoUrl : null,
-            ':cat'     => $categoryId,
-            ':dist'    => $districtId,
-            ':status'  => $finalStatus,
-            ':id'      => $id
+            ':title'      => $title,
+            ':body'       => $body,
+            ':excerpt'    => $excerpt,
+            ':img'        => $imagePath,
+            ':vid'        => !empty($videoUrl) ? $videoUrl : null,
+            ':cat'        => $categoryId,
+            ':dist'       => $districtId,
+            ':status'     => $finalStatus,
+            ':status_pub' => $finalStatus,
+            ':id'         => $id
         ]);
 
         if ($finalStatus === 'pending_review') {

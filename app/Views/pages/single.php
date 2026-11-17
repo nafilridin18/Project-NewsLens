@@ -61,9 +61,9 @@ $currentUrl = "{$scheme}://{$host}{$reqUri}";
             </div>
 
             <?php 
-              $pubDt = $post['published_at'] ?? $post['created_at'];
+              $pubDt = $post['published_at'] ?? $post['created_at'] ?? null;
               $pubBn = BanglaDate::formatBnDate($pubDt);
-              $pubEn = date('l, d F Y, h:i A', strtotime($pubDt));
+              $pubEn = $pubDt ? date('l, d F Y, h:i A', strtotime($pubDt)) : date('l, d F Y, h:i A');
             ?>
             <div class="time-meta-box">
               <span class="publish-time" data-bn="⏱️ <?= $pubBn ?>" data-en="⏱️ <?= $pubEn ?>">⏱️ <?= $pubBn ?></span>
@@ -101,20 +101,21 @@ $currentUrl = "{$scheme}://{$host}{$reqUri}";
         <!-- Media: Featured Image or Video -->
         <?php if (!empty($post['featured_image'])): ?>
           <figure class="article-featured-figure">
-            <img src="<?= htmlspecialchars(imageUrl($post['featured_image'], $appUrl)) ?>" alt="<?= htmlspecialchars($post['title']) ?>" class="article-featured-img" width="850" height="480">
+            <img src="<?= htmlspecialchars(imageUrl($post['featured_image'], $appUrl)) ?>" alt="<?= htmlspecialchars($post['title']) ?>" class="article-featured-img">
             <?php if (!empty($post['excerpt'])): ?>
               <figcaption class="article-featured-caption"><?= htmlspecialchars($post['excerpt']) ?></figcaption>
             <?php endif; ?>
           </figure>
         <?php endif; ?>
 
-        <!-- Video Player Section (if video available) -->
-        <?php if (!empty($post['video_url'])): ?>
+        <!-- Video Player Section (Only shown when writer or admin explicitly added a video URL) -->
+        <?php $cleanVideoUrl = trim($post['video_url'] ?? ''); ?>
+        <?php if ($cleanVideoUrl !== '' && !str_contains($cleanVideoUrl, 'dQw4w9WgXcQ')): ?>
           <div class="article-video-player-container">
             <h3 class="video-player-title" data-bn="📺 ভিডিও প্রতিবেদন" data-en="📺 Video Report">📺 ভিডিও প্রতিবেদন</h3>
             <?php 
               // Check if YouTube
-              $videoUrl = $post['video_url'];
+              $videoUrl = $cleanVideoUrl;
               $embedUrl = '';
               if (preg_match('/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/', $videoUrl, $m)) {
                   $embedUrl = "https://www.youtube.com/embed/" . $m[1];
@@ -172,7 +173,7 @@ $currentUrl = "{$scheme}://{$host}{$reqUri}";
                   <?php endif; ?>
                   <h4 class="card-title"><?= htmlspecialchars($rPost['title']) ?></h4>
                 </a>
-                <span class="meta-time-sm">⏱️ <?= BanglaDate::timeAgo($rPost['published_at']) ?></span>
+                <span class="meta-time-sm">⏱️ <?= BanglaDate::timeAgo($rPost['published_at'] ?? $rPost['created_at'] ?? null) ?></span>
               </article>
             <?php endforeach; ?>
           </div>

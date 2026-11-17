@@ -35,7 +35,8 @@ CREATE TABLE `users` (
     `deleted_at` TIMESTAMP NULL,
     INDEX `idx_users_role` (`role`),
     INDEX `idx_users_status` (`status`),
-    INDEX `idx_users_permission` (`permission_level`)
+    INDEX `idx_users_permission` (`permission_level`),
+    INDEX `idx_users_role_status` (`role`, `status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 2. Divisions table (৮ বিভাগ)

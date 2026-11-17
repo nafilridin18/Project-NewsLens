@@ -105,7 +105,8 @@ class District {
         try {
             $db = Database::getConnection();
             $query = "
-                SELECT p.*, c.name_bn AS category_name, c.slug AS category_slug, d.name_bn AS district_name, divn.name_bn AS division_name
+                SELECT p.*, COALESCE(p.published_at, p.created_at) AS published_at,
+                       c.name_bn AS category_name, c.slug AS category_slug, d.name_bn AS district_name, divn.name_bn AS division_name
                 FROM `posts` p
                 JOIN `categories` c ON p.category_id = c.id
                 LEFT JOIN `districts` d ON p.district_id = d.id
@@ -119,7 +120,7 @@ class District {
                 $query .= " AND d.division_id = :divisionId";
             }
 
-            $query .= " ORDER BY p.published_at DESC LIMIT :limit";
+            $query .= " ORDER BY COALESCE(p.published_at, p.created_at) DESC LIMIT :limit";
             $stmt = $db->prepare($query);
             if ($districtId) $stmt->bindValue(':districtId', $districtId, PDO::PARAM_INT);
             elseif ($divisionId) $stmt->bindValue(':divisionId', $divisionId, PDO::PARAM_INT);

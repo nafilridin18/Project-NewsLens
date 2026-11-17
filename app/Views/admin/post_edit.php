@@ -163,7 +163,7 @@ $postBody = $post['body'] ?? $post['content'] ?? '';
         <select id="status" name="status" class="form-control">
           <option value="published" <?= ($post['status'] === 'published') ? 'selected' : '' ?> data-bn="প্রকাশিত (Published)" data-en="Published">প্রকাশিত (Published)</option>
           <option value="draft" <?= ($post['status'] === 'draft') ? 'selected' : '' ?> data-bn="খসড়া (Draft)" data-en="Draft">খসড়া (Draft)</option>
-          <option value="pending" <?= ($post['status'] === 'pending') ? 'selected' : '' ?> data-bn="রিভিউ অপেক্ষমাণ (Pending)" data-en="Pending Review">রিভিউ অপেক্ষমাণ (Pending)</option>
+          <option value="pending_review" <?= (in_array($post['status'], ['pending', 'pending_review'], true)) ? 'selected' : '' ?> data-bn="রিভিউ অপেক্ষমাণ (Pending)" data-en="Pending Review">রিভিউ অপেক্ষমাণ (Pending)</option>
           <option value="rejected" <?= ($post['status'] === 'rejected') ? 'selected' : '' ?> data-bn="বাতিল (Rejected)" data-en="Rejected">বাতিল (Rejected)</option>
         </select>
       </div>
