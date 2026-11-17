@@ -156,6 +156,28 @@ $router->get('/api/health', function() {
     echo json_encode(['status' => 'ok', 'app' => 'Newslensbd', 'timestamp' => date('c')]);
 });
 
+// Dynamic XML Sitemap for SEO & Google News
+$router->get('/sitemap.xml', function() use ($config) {
+    header('Content-Type: application/xml; charset=utf-8');
+    $baseUrl = rtrim($config['app']['url'] ?? 'https://newslensbd.com', '/');
+    echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+    echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+    echo "  <url><loc>{$baseUrl}/</loc><changefreq>always</changefreq><priority>1.0</priority></url>\n";
+    echo "  <url><loc>{$baseUrl}/saradesh</loc><changefreq>hourly</changefreq><priority>0.9</priority></url>\n";
+    foreach (\App\Models\Category::getMenuCategories() as $cat) {
+        $slug = htmlspecialchars($cat['slug'] ?? '', ENT_XML1);
+        echo "  <url><loc>{$baseUrl}/category/{$slug}</loc><changefreq>hourly</changefreq><priority>0.8</priority></url>\n";
+    }
+    foreach (\App\Models\Post::getLatest(100) as $post) {
+        $catSlug = htmlspecialchars($post['category_slug'] ?? 'national', ENT_XML1);
+        $postSlug = htmlspecialchars($post['slug'] ?? '', ENT_XML1);
+        $id = (int)($post['id'] ?? 0);
+        $lastmod = date('c', strtotime($post['published_at'] ?? $post['created_at'] ?? 'now'));
+        echo "  <url><loc>{$baseUrl}/news/{$catSlug}/{$id}/{$postSlug}</loc><lastmod>{$lastmod}</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>\n";
+    }
+    echo '</urlset>';
+});
+
 // ================= ADMIN CMS ROUTES (/lens-desk) =================
 $router->get('/' . $adminPath, 'Admin\DashboardController@index');
 $router->get('/' . $adminPath . '/login', 'Admin\AuthController@login');

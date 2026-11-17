@@ -46,15 +46,21 @@ class NewsController {
         $settings     = Setting::all();
         $todayBn      = BanglaDate::formatBnDate(null, true);
 
+        $config = require CONFIG_PATH . '/config.php';
+        $appUrl = rtrim($config['app']['url'] ?? '', '/');
+
         View::render('pages.single', [
-            'pageTitle'    => htmlspecialchars($post['title']) . ' | Newslensbd',
-            'post'         => $post,
-            'relatedPosts' => $relatedPosts,
-            'popularPosts' => $popularPosts,
-            'categories'   => $categories,
-            'breakingNews' => $breakingNews,
-            'settings'     => $settings,
-            'todayBn'      => $todayBn
+            'pageTitle'     => htmlspecialchars($post['title']) . ' | Newslensbd',
+            'ogType'        => 'article',
+            'ogDescription' => $post['excerpt'] ?? mb_substr(strip_tags($post['body'] ?? ''), 0, 160),
+            'ogImage'       => imageUrl($post['featured_image'] ?? null, $appUrl),
+            'post'          => $post,
+            'relatedPosts'  => $relatedPosts,
+            'popularPosts'  => $popularPosts,
+            'categories'    => $categories,
+            'breakingNews'  => $breakingNews,
+            'settings'      => $settings,
+            'todayBn'       => $todayBn
         ]);
     }
 
@@ -88,7 +94,15 @@ class NewsController {
             return;
         }
 
-        $posts = Post::search(['category_id' => $currentCategory['id']], 24);
+        $page = max(1, (int) ($_GET['page'] ?? 1));
+        $perPage = 12;
+        $filters = ['category_id' => $currentCategory['id']];
+        $totalCount = Post::countSearch($filters);
+        $totalPages = max(1, (int) ceil($totalCount / $perPage));
+        if ($page > $totalPages) $page = $totalPages;
+        $offset = ($page - 1) * $perPage;
+
+        $posts = Post::search($filters, $perPage, $offset);
         $breakingNews = Post::getBreakingNews(6);
         $popularPosts = Post::getPopular(6);
         $settings     = Setting::all();
@@ -98,6 +112,9 @@ class NewsController {
             'pageTitle'       => htmlspecialchars($currentCategory['name_bn']) . ' সংবাদ | Newslensbd',
             'currentCategory' => $currentCategory,
             'posts'           => $posts,
+            'totalCount'      => $totalCount,
+            'currentPage'     => $page,
+            'totalPages'      => $totalPages,
             'categories'      => $categories,
             'breakingNews'    => $breakingNews,
             'popularPosts'    => $popularPosts,
@@ -115,6 +132,8 @@ class NewsController {
         $divisionId = !empty($_GET['division']) ? (int) $_GET['division'] : null;
         $districtId = !empty($_GET['district']) ? (int) $_GET['district'] : null;
         $timeRange  = trim($_GET['time'] ?? '');
+        $page       = max(1, (int) ($_GET['page'] ?? 1));
+        $perPage    = 12;
 
         $filters = [
             'q'           => $q,
@@ -124,7 +143,12 @@ class NewsController {
             'time_range'  => $timeRange
         ];
 
-        $results = Post::search($filters, 30);
+        $totalCount = Post::countSearch($filters);
+        $totalPages = max(1, (int) ceil($totalCount / $perPage));
+        if ($page > $totalPages) $page = $totalPages;
+        $offset = ($page - 1) * $perPage;
+
+        $results = Post::search($filters, $perPage, $offset);
 
         $categories   = Category::getMenuCategories();
         $divisions    = District::getDivisions();
@@ -139,6 +163,9 @@ class NewsController {
             'q'            => $q,
             'filters'      => $filters,
             'results'      => $results,
+            'totalCount'   => $totalCount,
+            'currentPage'  => $page,
+            'totalPages'   => $totalPages,
             'categories'   => $categories,
             'divisions'    => $divisions,
             'districts'    => $districts,

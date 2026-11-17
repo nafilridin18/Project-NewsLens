@@ -18,8 +18,8 @@ $appUrl = rtrim($config['app']['url'] ?? '', '/');
       <span class="cat-accent-bar"></span>
       <span class="cat-page-title-text" data-bn="<?= htmlspecialchars($currentCategory['name_bn']) ?>" data-en="<?= htmlspecialchars($currentCategory['name_en'] ?? $currentCategory['name_bn']) ?>"><?= htmlspecialchars($currentCategory['name_bn']) ?></span>
     </h1>
-    <span class="cat-news-count" data-bn="মোট সংবাদ: <?= BanglaDate::bnNum(count($posts)) ?> টি" data-en="Total News: <?= count($posts) ?>">
-      মোট সংবাদ: <?= BanglaDate::bnNum(count($posts)) ?> টি
+    <span class="cat-news-count" data-bn="মোট সংবাদ: <?= BanglaDate::bnNum($totalCount ?? count($posts)) ?> টি" data-en="Total News: <?= $totalCount ?? count($posts) ?>">
+      মোট সংবাদ: <?= BanglaDate::bnNum($totalCount ?? count($posts)) ?> টি
     </span>
   </header>
 
@@ -57,6 +57,20 @@ $appUrl = rtrim($config['app']['url'] ?? '', '/');
             </article>
           <?php endforeach; ?>
         </div>
+
+        <?php if (($totalPages ?? 1) > 1): ?>
+          <nav class="pagination-nav" aria-label="পৃষ্ঠা নেভিগেশন" style="display:flex; justify-content:center; align-items:center; gap:8px; margin-top:28px; flex-wrap:wrap;">
+            <?php if (($currentPage ?? 1) > 1): ?>
+              <a href="<?= $appUrl ?>/category/<?= htmlspecialchars($currentCategory['slug']) ?>?page=<?= $currentPage - 1 ?>" style="padding:8px 14px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-card); color:var(--text-main); font-weight:600; text-decoration:none;" data-bn="« পূর্ববর্তী" data-en="« Prev">« পূর্ববর্তী</a>
+            <?php endif; ?>
+            <?php for ($p = 1; $p <= $totalPages; $p++): ?>
+              <a href="<?= $appUrl ?>/category/<?= htmlspecialchars($currentCategory['slug']) ?>?page=<?= $p ?>" style="padding:8px 14px; border-radius:6px; border:1px solid <?= $p === ($currentPage ?? 1) ? '#0E7A3A' : 'var(--border-color)' ?>; background:<?= $p === ($currentPage ?? 1) ? '#0E7A3A' : 'var(--bg-card)' ?>; color:<?= $p === ($currentPage ?? 1) ? '#fff' : 'var(--text-main)' ?>; font-weight:700; text-decoration:none;"><?= BanglaDate::bnNum($p) ?></a>
+            <?php endfor; ?>
+            <?php if (($currentPage ?? 1) < $totalPages): ?>
+              <a href="<?= $appUrl ?>/category/<?= htmlspecialchars($currentCategory['slug']) ?>?page=<?= $currentPage + 1 ?>" style="padding:8px 14px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-card); color:var(--text-main); font-weight:600; text-decoration:none;" data-bn="পরবর্তী »" data-en="Next »">পরবর্তী »</a>
+            <?php endif; ?>
+          </nav>
+        <?php endif; ?>
       <?php else: ?>
         <div class="empty-state-box">
           <p data-bn="এই বিভাগে আপাতত কোনো সংবাদ পাওয়া যায়নি।" data-en="No news found in this category right now.">এই বিভাগে আপাতত কোনো সংবাদ পাওয়া যায়নি।</p>

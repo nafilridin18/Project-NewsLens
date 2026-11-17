@@ -11,6 +11,11 @@ use App\Models\District;
 use PDO;
 
 class WriterPanelController {
+    private function baseUrl(): string {
+        $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+        return rtrim($scriptDir, '/');
+    }
+
     /**
      * Writer Dashboard
      */
@@ -128,9 +133,10 @@ class WriterPanelController {
      */
     public function store(): void {
         $user = Middleware::requireWriter();
+        $base = $this->baseUrl();
         if (!Auth::verifyCsrf($_POST['csrf_token'] ?? null)) {
             $_SESSION['writer_post_err'] = 'নিরাপত্তা টোকেন সঠিক নয়।';
-            header("Location: /writer/posts/create");
+            header("Location: {$base}/writer/posts/create");
             exit;
         }
 
@@ -143,7 +149,7 @@ class WriterPanelController {
 
         if (empty($title) || $categoryId <= 0 || empty($body)) {
             $_SESSION['writer_post_err'] = 'শিরোনাম, ক্যাটাগরি ও বিস্তারিত বিবরণ আবশ্যক।';
-            header("Location: /writer/posts/create");
+            header("Location: {$base}/writer/posts/create");
             exit;
         }
 
@@ -200,7 +206,7 @@ class WriterPanelController {
             $_SESSION['writer_post_msg'] = 'সংবাদটি খসড়া হিসেবে সংরক্ষিত হয়েছে।';
         }
 
-        header("Location: /writer/posts");
+        header("Location: {$base}/writer/posts");
         exit;
     }
 
@@ -234,10 +240,11 @@ class WriterPanelController {
         $id = (int) ($_POST['id'] ?? 0);
         $post = Middleware::checkPostOwnership($id);
         $user = Auth::user();
+        $base = $this->baseUrl();
 
         if (!Auth::verifyCsrf($_POST['csrf_token'] ?? null)) {
             $_SESSION['writer_post_err'] = 'নিরাপত্তা টোকেন সঠিক নয়।';
-            header("Location: /writer/posts/edit?id={$id}");
+            header("Location: {$base}/writer/posts/edit?id={$id}");
             exit;
         }
 
@@ -250,7 +257,7 @@ class WriterPanelController {
 
         if (empty($title) || $categoryId <= 0 || empty($body)) {
             $_SESSION['writer_post_err'] = 'শিরোনাম, ক্যাটাগরি ও বিস্তারিত বিবরণ আবশ্যক।';
-            header("Location: /writer/posts/edit?id={$id}");
+            header("Location: {$base}/writer/posts/edit?id={$id}");
             exit;
         }
 
@@ -312,7 +319,7 @@ class WriterPanelController {
             $_SESSION['writer_post_msg'] = 'সংবাদটি সফলভাবে আপডেট করা হয়েছে!';
         }
 
-        header("Location: /writer/posts");
+        header("Location: {$base}/writer/posts");
         exit;
     }
 
@@ -322,10 +329,11 @@ class WriterPanelController {
     public function delete(): void {
         $id = (int) ($_POST['id'] ?? 0);
         Middleware::checkPostOwnership($id);
+        $base = $this->baseUrl();
 
         if (!Auth::verifyCsrf($_POST['csrf_token'] ?? null)) {
             $_SESSION['writer_post_err'] = 'নিরাপত্তা টোকেন সঠিক নয়।';
-            header("Location: /writer/posts");
+            header("Location: {$base}/writer/posts");
             exit;
         }
 
@@ -333,7 +341,7 @@ class WriterPanelController {
         $db->prepare("DELETE FROM `posts` WHERE `id` = :id")->execute([':id' => $id]);
 
         $_SESSION['writer_post_msg'] = 'সংবাদটি সফলভাবে মুছে ফেলা হয়েছে।';
-        header("Location: /writer/posts");
+        header("Location: {$base}/writer/posts");
         exit;
     }
 

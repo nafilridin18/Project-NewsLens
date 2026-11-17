@@ -8,21 +8,27 @@ use App\Helpers\RateLimiter;
 use PDO;
 
 class WriterAuthController {
+    private function baseUrl(): string {
+        $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+        return rtrim($scriptDir, '/');
+    }
+
     /**
      * Show Dedicated Writer Login Page (/writer/login)
      */
     public function showLogin(): void {
         Auth::init();
+        $base = $this->baseUrl();
 
         // If already logged in as active writer, redirect to writer dashboard
         if (Auth::check()) {
             $user = Auth::user();
             if ($user['role'] === 'writer') {
                 if ($user['status'] === 'active') {
-                    header("Location: /writer/dashboard");
+                    header("Location: {$base}/writer/dashboard");
                     exit;
                 } elseif ($user['status'] === 'pending') {
-                    header("Location: /writer/pending");
+                    header("Location: {$base}/writer/pending");
                     exit;
                 }
             }
@@ -51,6 +57,7 @@ class WriterAuthController {
      */
     public function login(): void {
         Auth::init();
+        $base = $this->baseUrl();
         $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
         $rateLimitKey = 'writer_login_' . md5($ip);
 
@@ -59,14 +66,14 @@ class WriterAuthController {
             $secondsLeft = RateLimiter::availableIn($rateLimitKey);
             $minutesLeft = ceil($secondsLeft / 60);
             $_SESSION['writer_login_error'] = "অতিরিক্ত ভুল চেষ্টার কারণে লগইন সাময়িকভাবে লক করা হয়েছে। অনুগ্রহ করে {$minutesLeft} মিনিট পর পুনরায় চেষ্টা করুন।";
-            header("Location: /writer/login");
+            header("Location: {$base}/writer/login");
             exit;
         }
 
         // 2. CSRF Token Validation
         if (!Auth::verifyCsrf($_POST['csrf_token'] ?? null)) {
             $_SESSION['writer_login_error'] = 'নিরাপত্তা টোকেন সঠিক নয়। অনুগ্রহ করে পুনরায় চেষ্টা করুন।';
-            header("Location: /writer/login");
+            header("Location: {$base}/writer/login");
             exit;
         }
 
@@ -75,7 +82,7 @@ class WriterAuthController {
 
         if (empty($email) || empty($password)) {
             $_SESSION['writer_login_error'] = 'ইমেইল এবং পাসওয়ার্ড আবশ্যক।';
-            header("Location: /writer/login");
+            header("Location: {$base}/writer/login");
             exit;
         }
 
@@ -85,7 +92,7 @@ class WriterAuthController {
         if (!$res['success']) {
             RateLimiter::hit($rateLimitKey, 900);
             $_SESSION['writer_login_error'] = 'ইমেইল অথবা পাসওয়ার্ড সঠিক নয়।';
-            header("Location: /writer/login?email=" . urlencode($email));
+            header("Location: {$base}/writer/login?email=" . urlencode($email));
             exit;
         }
 
@@ -97,7 +104,7 @@ class WriterAuthController {
             Auth::logout();
             RateLimiter::hit($rateLimitKey, 900);
             $_SESSION['writer_login_error'] = 'ইমেইল অথবা পাসওয়ার্ড সঠিক নয়।';
-            header("Location: /writer/login?email=" . urlencode($email));
+            header("Location: {$base}/writer/login?email=" . urlencode($email));
             exit;
         }
 
@@ -105,19 +112,19 @@ class WriterAuthController {
         if (!empty($user['deleted_at']) || $user['status'] === 'removed') {
             Auth::logout();
             $_SESSION['writer_login_error'] = 'এই লেখক অ্যাকাউন্টটি মুছে ফেলা হয়েছে।';
-            header("Location: /writer/login");
+            header("Location: {$base}/writer/login");
             exit;
         }
 
         if ($user['status'] === 'suspended' || $user['status'] === 'banned') {
             Auth::logout();
             $_SESSION['writer_login_error'] = 'আপনার লেখক অ্যাকাউন্টটি কর্তৃপক্ষ কর্তৃক সাময়িকভাবে স্থগিত করা হয়েছে।';
-            header("Location: /writer/login");
+            header("Location: {$base}/writer/login");
             exit;
         }
 
         if ($user['status'] === 'pending') {
-            header("Location: /writer/pending");
+            header("Location: {$base}/writer/pending");
             exit;
         }
 
@@ -128,7 +135,7 @@ class WriterAuthController {
         $_SESSION['writer_user'] = $user;
         $_SESSION['auth_user'] = $user;
 
-        header("Location: /writer/dashboard");
+        header("Location: {$base}/writer/dashboard");
         exit;
     }
 
@@ -139,7 +146,7 @@ class WriterAuthController {
         Auth::init();
         unset($_SESSION['writer_user'], $_SESSION['auth_user']);
         Auth::logout();
-        header("Location: /writer/login?logged_out=1");
+        header("Location: " . $this->baseUrl() . "/writer/login?logged_out=1");
         exit;
     }
 
@@ -150,7 +157,7 @@ class WriterAuthController {
     public function showRegister(): void {
         Auth::init();
         $_SESSION['writer_login_info'] = 'পাবলিক লেখক নিবন্ধন সেবা বন্ধ রয়েছে। লেখক অ্যাকাউন্ট শুধুমাত্র অ্যাডমিন কর্তৃপক্ষ তৈরি করেন।';
-        header("Location: /writer/login");
+        header("Location: " . $this->baseUrl() . "/writer/login");
         exit;
     }
 
@@ -171,8 +178,9 @@ class WriterAuthController {
      */
     public function showPending(): void {
         Auth::init();
+        $base = $this->baseUrl();
         if (!Auth::check()) {
-            header("Location: /writer/login");
+            header("Location: {$base}/writer/login");
             exit;
         }
 
@@ -180,7 +188,7 @@ class WriterAuthController {
         $user = Auth::user();
 
         if ($user['role'] === 'writer' && $user['status'] === 'active') {
-            header("Location: /writer/dashboard");
+            header("Location: {$base}/writer/dashboard");
             exit;
         }
 

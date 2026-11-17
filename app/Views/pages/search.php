@@ -84,8 +84,8 @@ $appUrl = rtrim($config['app']['url'] ?? '', '/');
 
   <!-- Results Count -->
   <div class="search-results-meta">
-    <h2 class="results-heading" data-bn="অনুসন্ধানের ফলাফল (<?= BanglaDate::bnNum(count($results)) ?> টি সংবাদ পাওয়া গেছে)" data-en="Search Results (<?= count($results) ?> news found)">
-      অনুসন্ধানের ফলাফল (<?= BanglaDate::bnNum(count($results)) ?> টি সংবাদ পাওয়া গেছে)
+    <h2 class="results-heading" data-bn="অনুসন্ধানের ফলাফল (<?= BanglaDate::bnNum($totalCount ?? count($results)) ?> টি সংবাদ পাওয়া গেছে)" data-en="Search Results (<?= $totalCount ?? count($results) ?> news found)">
+      অনুসন্ধানের ফলাফল (<?= BanglaDate::bnNum($totalCount ?? count($results)) ?> টি সংবাদ পাওয়া গেছে)
     </h2>
   </div>
 
@@ -124,6 +124,26 @@ $appUrl = rtrim($config['app']['url'] ?? '', '/');
             </article>
           <?php endforeach; ?>
         </div>
+
+        <?php if (($totalPages ?? 1) > 1): ?>
+          <?php
+            $queryArgs = $_GET;
+            unset($queryArgs['page']);
+            $baseQuery = http_build_query($queryArgs);
+            $pagePrefix = $appUrl . '/search?' . ($baseQuery ? $baseQuery . '&' : '') . 'page=';
+          ?>
+          <nav class="pagination-nav" aria-label="পৃষ্ঠা নেভিগেশন" style="display:flex; justify-content:center; align-items:center; gap:8px; margin-top:28px; flex-wrap:wrap;">
+            <?php if (($currentPage ?? 1) > 1): ?>
+              <a href="<?= htmlspecialchars($pagePrefix . ($currentPage - 1)) ?>" style="padding:8px 14px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-card); color:var(--text-main); font-weight:600; text-decoration:none;" data-bn="« পূর্ববর্তী" data-en="« Prev">« পূর্ববর্তী</a>
+            <?php endif; ?>
+            <?php for ($p = 1; $p <= $totalPages; $p++): ?>
+              <a href="<?= htmlspecialchars($pagePrefix . $p) ?>" style="padding:8px 14px; border-radius:6px; border:1px solid <?= $p === ($currentPage ?? 1) ? '#0E7A3A' : 'var(--border-color)' ?>; background:<?= $p === ($currentPage ?? 1) ? '#0E7A3A' : 'var(--bg-card)' ?>; color:<?= $p === ($currentPage ?? 1) ? '#fff' : 'var(--text-main)' ?>; font-weight:700; text-decoration:none;"><?= BanglaDate::bnNum($p) ?></a>
+            <?php endfor; ?>
+            <?php if (($currentPage ?? 1) < $totalPages): ?>
+              <a href="<?= htmlspecialchars($pagePrefix . ($currentPage + 1)) ?>" style="padding:8px 14px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-card); color:var(--text-main); font-weight:600; text-decoration:none;" data-bn="পরবর্তী »" data-en="Next »">পরবর্তী »</a>
+            <?php endif; ?>
+          </nav>
+        <?php endif; ?>
       <?php else: ?>
         <div class="empty-state-box">
           <p data-bn="আপনার অনুসন্ধানের সাথে মিলে এমন কোনো সংবাদ পাওয়া যায়নি। অনুগ্রহ করে অন্য কী-ওয়ার্ড দিয়ে চেষ্টা করুন।" data-en="No news matched your search. Please try other keywords or clear filters.">

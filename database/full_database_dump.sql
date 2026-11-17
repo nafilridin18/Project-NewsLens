@@ -347,7 +347,7 @@ CREATE TABLE `post_views` (
 DROP TABLE IF EXISTS `notifications`;
 CREATE TABLE `notifications` (
     `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `user_id` BIGINT UNSIGNED NOT NULL,
+    `user_id` BIGINT UNSIGNED NULL,
     `type` VARCHAR(50) NOT NULL DEFAULT 'breaking_news',
     `title` VARCHAR(255) NOT NULL,
     `body` TEXT NOT NULL,

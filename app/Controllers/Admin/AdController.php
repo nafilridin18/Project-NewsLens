@@ -60,14 +60,18 @@ class AdController {
         $imageUrl = trim($_POST['image_url'] ?? '');
         $code = trim($_POST['code'] ?? '');
 
-        // Handle Image File Upload if provided
+        // Handle Image File Upload if provided (Verified MIME type & safe permissions)
         if (!empty($_FILES['image_file']) && $_FILES['image_file']['error'] === UPLOAD_ERR_OK) {
             $file = $_FILES['image_file'];
-            $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-            if (in_array($ext, ['png', 'jpg', 'jpeg', 'webp', 'gif', 'svg'])) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime = finfo_file($finfo, $file['tmp_name']);
+            finfo_close($finfo);
+            $allowedMimes = ['image/png' => 'png', 'image/jpeg' => 'jpg', 'image/webp' => 'webp', 'image/gif' => 'gif'];
+            if (isset($allowedMimes[$mime])) {
+                $ext = $allowedMimes[$mime];
                 $uploadDir = dirname(CONFIG_PATH) . '/public/uploads/ads/';
                 if (!is_dir($uploadDir)) {
-                    @mkdir($uploadDir, 0777, true);
+                    @mkdir($uploadDir, 0755, true);
                 }
                 $filename = 'ad_' . time() . '_' . rand(100, 999) . '.' . $ext;
                 $dest = $uploadDir . $filename;
@@ -119,14 +123,18 @@ class AdController {
         $imageUrl = trim($_POST['image_url'] ?? $ad['image']);
         $code = trim($_POST['code'] ?? '');
 
-        // Handle Image File Upload if provided
+        // Handle Image File Upload if provided (Verified MIME type & safe permissions)
         if (!empty($_FILES['image_file']) && $_FILES['image_file']['error'] === UPLOAD_ERR_OK) {
             $file = $_FILES['image_file'];
-            $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-            if (in_array($ext, ['png', 'jpg', 'jpeg', 'webp', 'gif', 'svg'])) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime = finfo_file($finfo, $file['tmp_name']);
+            finfo_close($finfo);
+            $allowedMimes = ['image/png' => 'png', 'image/jpeg' => 'jpg', 'image/webp' => 'webp', 'image/gif' => 'gif'];
+            if (isset($allowedMimes[$mime])) {
+                $ext = $allowedMimes[$mime];
                 $uploadDir = dirname(CONFIG_PATH) . '/public/uploads/ads/';
                 if (!is_dir($uploadDir)) {
-                    @mkdir($uploadDir, 0777, true);
+                    @mkdir($uploadDir, 0755, true);
                 }
                 $filename = 'ad_' . time() . '_' . rand(100, 999) . '.' . $ext;
                 $dest = $uploadDir . $filename;

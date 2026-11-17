@@ -280,9 +280,9 @@ class Post {
     }
 
     /**
-     * Search posts with filters
+     * Search posts with filters and optional pagination offset
      */
-    public static function search(array $filters = [], int $limit = 20): array {
+    public static function search(array $filters = [], int $limit = 20, int $offset = 0): array {
         try {
             $db = Database::getConnection();
             $sql = "
@@ -333,16 +333,77 @@ class Post {
                 }
             }
 
-            $sql .= " ORDER BY COALESCE(p.published_at, p.created_at) DESC LIMIT :limit";
+            $sql .= " ORDER BY COALESCE(p.published_at, p.created_at) DESC LIMIT :limit OFFSET :offset";
             $stmt = $db->prepare($sql);
             foreach ($params as $k => $v) {
                 $stmt->bindValue($k, $v);
             }
             $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', max(0, $offset), PDO::PARAM_INT);
             $stmt->execute();
             return $stmt->fetchAll();
         } catch (Exception $e) {
             return [];
+        }
+    }
+
+    /**
+     * Count total matching posts for pagination
+     */
+    public static function countSearch(array $filters = []): int {
+        try {
+            $db = Database::getConnection();
+            $sql = "
+                SELECT COUNT(*)
+                FROM `posts` p
+                JOIN `categories` c ON p.category_id = c.id
+                LEFT JOIN `districts` d ON p.district_id = d.id
+                WHERE p.status = 'published'
+            ";
+            $params = [];
+
+            if (!empty($filters['q'])) {
+                $sql .= " AND (p.title LIKE :q1 OR p.body LIKE :q2)";
+                $qVal = '%' . trim($filters['q']) . '%';
+                $params[':q1'] = $qVal;
+                $params[':q2'] = $qVal;
+            }
+
+            if (!empty($filters['category_id'])) {
+                $sql .= " AND p.category_id = :category_id";
+                $params[':category_id'] = (int) $filters['category_id'];
+            }
+
+            if (!empty($filters['district_id'])) {
+                $sql .= " AND p.district_id = :district_id";
+                $params[':district_id'] = (int) $filters['district_id'];
+            } elseif (!empty($filters['division_id'])) {
+                $sql .= " AND d.division_id = :division_id";
+                $params[':division_id'] = (int) $filters['division_id'];
+            }
+
+            if (!empty($filters['time_range'])) {
+                switch ($filters['time_range']) {
+                    case 'today':
+                        $sql .= " AND DATE(COALESCE(p.published_at, p.created_at)) = CURDATE()";
+                        break;
+                    case 'week':
+                        $sql .= " AND COALESCE(p.published_at, p.created_at) >= DATE_SUB(NOW(), INTERVAL 7 DAY)";
+                        break;
+                    case 'month':
+                        $sql .= " AND COALESCE(p.published_at, p.created_at) >= DATE_SUB(NOW(), INTERVAL 30 DAY)";
+                        break;
+                }
+            }
+
+            $stmt = $db->prepare($sql);
+            foreach ($params as $k => $v) {
+                $stmt->bindValue($k, $v);
+            }
+            $stmt->execute();
+            return (int) $stmt->fetchColumn();
+        } catch (Exception $e) {
+            return 0;
         }
     }
 }

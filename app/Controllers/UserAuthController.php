@@ -12,13 +12,18 @@ use App\Helpers\Mailer;
 use PDO;
 
 class UserAuthController {
+    private function baseUrl(): string {
+        $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+        return rtrim($scriptDir, '/');
+    }
+
     /**
      * Show Reader Registration Form
      */
     public function showRegister(): void {
         Auth::init();
         if (Auth::check()) {
-            header("Location: /");
+            header("Location: " . ($this->baseUrl() ?: '/'));
             exit;
         }
 
@@ -36,9 +41,10 @@ class UserAuthController {
      */
     public function register(): void {
         Auth::init();
+        $base = $this->baseUrl();
         if (!Auth::verifyCsrf($_POST['csrf_token'] ?? null)) {
             $_SESSION['user_reg_error'] = 'নিরাপত্তা টোকেন সঠিক নয়।';
-            header("Location: /register");
+            header("Location: {$base}/register");
             exit;
         }
 
@@ -52,25 +58,25 @@ class UserAuthController {
 
         if (empty($name) || empty($email) || empty($password)) {
             $_SESSION['user_reg_error'] = 'নাম, ইমেইল এবং পাসওয়ার্ড আবশ্যক।';
-            header("Location: /register");
+            header("Location: {$base}/register");
             exit;
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $_SESSION['user_reg_error'] = 'সঠিক ইমেইল ঠিকানা দিন।';
-            header("Location: /register");
+            header("Location: {$base}/register");
             exit;
         }
 
         if (strlen($password) < 6) {
             $_SESSION['user_reg_error'] = 'পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।';
-            header("Location: /register");
+            header("Location: {$base}/register");
             exit;
         }
 
         if ($password !== $confirm) {
             $_SESSION['user_reg_error'] = 'উভয় পাসওয়ার্ড হুবহু এক হতে হবে।';
-            header("Location: /register");
+            header("Location: {$base}/register");
             exit;
         }
 
@@ -85,11 +91,11 @@ class UserAuthController {
                 if ($otpRes['success']) {
                     Mailer::sendOtp($email, $otpRes['code'], 'register', $name);
                 }
-                header("Location: /otp/verify?email=" . urlencode($email) . "&purpose=register");
+                header("Location: {$base}/otp/verify?email=" . urlencode($email) . "&purpose=register");
                 exit;
             }
             $_SESSION['user_reg_error'] = 'এই ইমেইল দিয়ে ইতিপূর্বে অ্যাকাউন্ট খোলা হয়েছে। অনুগ্রহ করে লগইন করুন।';
-            header("Location: /login");
+            header("Location: {$base}/login");
             exit;
         }
 
@@ -110,12 +116,12 @@ class UserAuthController {
         $otpRes = OtpCode::createOtp($email, 'register', $ip);
         if (!$otpRes['success']) {
             $_SESSION['user_reg_error'] = $otpRes['message'];
-            header("Location: /register");
+            header("Location: {$base}/register");
             exit;
         }
 
         Mailer::sendOtp($email, $otpRes['code'], 'register', $name);
-        header("Location: /otp/verify?email=" . urlencode($email) . "&purpose=register");
+        header("Location: {$base}/otp/verify?email=" . urlencode($email) . "&purpose=register");
         exit;
     }
 
@@ -125,7 +131,7 @@ class UserAuthController {
     public function showLogin(): void {
         Auth::init();
         if (Auth::check()) {
-            header("Location: /");
+            header("Location: " . ($this->baseUrl() ?: '/'));
             exit;
         }
 
@@ -143,9 +149,10 @@ class UserAuthController {
      */
     public function login(): void {
         Auth::init();
+        $base = $this->baseUrl();
         if (!Auth::verifyCsrf($_POST['csrf_token'] ?? null)) {
             $_SESSION['user_login_error'] = 'নিরাপত্তা টোকেন সঠিক নয়।';
-            header("Location: /login");
+            header("Location: {$base}/login");
             exit;
         }
 
@@ -154,7 +161,7 @@ class UserAuthController {
 
         if (empty($email) || empty($password)) {
             $_SESSION['user_login_error'] = 'ইমেইল এবং পাসওয়ার্ড আবশ্যক।';
-            header("Location: /login");
+            header("Location: {$base}/login");
             exit;
         }
 
@@ -162,7 +169,7 @@ class UserAuthController {
 
         if (!$res['success']) {
             $_SESSION['user_login_error'] = $res['message'];
-            header("Location: /login");
+            header("Location: {$base}/login");
             exit;
         }
 
@@ -173,7 +180,7 @@ class UserAuthController {
             if ($otpRes['success']) {
                 Mailer::sendOtp($email, $otpRes['code'], 'register', $user['name']);
             }
-            header("Location: /otp/verify?email=" . urlencode($email) . "&purpose=register");
+            header("Location: {$base}/otp/verify?email=" . urlencode($email) . "&purpose=register");
             exit;
         }
 
@@ -181,7 +188,7 @@ class UserAuthController {
         if ($user['role'] === 'writer') {
             Auth::logout();
             $_SESSION['writer_login_info'] = 'লেখক অ্যাকাউন্টের জন্য অনুগ্রহ করে লেখক লগইন পোর্টাল ব্যবহার করুন।';
-            header("Location: /writer/login?email=" . urlencode($email));
+            header("Location: {$base}/writer/login?email=" . urlencode($email));
             exit;
         }
 
@@ -190,12 +197,12 @@ class UserAuthController {
             $config = require CONFIG_PATH . '/config.php';
             $adminPath = $config['app']['admin_path'] ?? 'lens-desk';
             $_SESSION['admin_login_info'] = 'প্রশাসনিক অ্যাকাউন্টের জন্য অনুগ্রহ করে অ্যাডমিন লগইন ব্যবহার করুন।';
-            header("Location: /{$adminPath}/login?email=" . urlencode($email));
+            header("Location: {$base}/{$adminPath}/login?email=" . urlencode($email));
             exit;
         }
 
         // Reader user only
-        header("Location: /");
+        header("Location: " . ($base ?: '/'));
         exit;
     }
 
@@ -204,7 +211,7 @@ class UserAuthController {
      */
     public function logout(): void {
         Auth::logout();
-        header("Location: /login?logged_out=1");
+        header("Location: " . $this->baseUrl() . "/login?logged_out=1");
         exit;
     }
 

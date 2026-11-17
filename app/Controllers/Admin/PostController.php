@@ -109,15 +109,19 @@ class PostController {
         $videoUrl = trim($_POST['video_url'] ?? '');
         $featuredImage = trim($_POST['featured_image'] ?? $_POST['image_url'] ?? 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=800&q=80');
 
-        // Check if an image was uploaded
+        // Check if an image was uploaded (Verified MIME type & safe permissions)
         if (!empty($_FILES['image_file']) && $_FILES['image_file']['error'] === UPLOAD_ERR_OK) {
-            $ext = strtolower(pathinfo($_FILES['image_file']['name'], PATHINFO_EXTENSION));
-            if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp'])) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime = finfo_file($finfo, $_FILES['image_file']['tmp_name']);
+            finfo_close($finfo);
+            $allowedMimes = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp'];
+            if (isset($allowedMimes[$mime])) {
+                $ext = $allowedMimes[$mime];
                 $dir = dirname(CONFIG_PATH) . '/public/uploads/news/';
-                if (!is_dir($dir)) mkdir($dir, 0777, true);
+                if (!is_dir($dir)) mkdir($dir, 0755, true);
                 $fn = 'news_' . time() . '_' . rand(100, 999) . '.' . $ext;
                 if (move_uploaded_file($_FILES['image_file']['tmp_name'], $dir . $fn)) {
-                    $featuredImage = $this->appUrl . '/uploads/news/' . $fn;
+                    $featuredImage = 'uploads/news/' . $fn;
                 }
             }
         }
@@ -240,15 +244,19 @@ class PostController {
         $videoUrl = trim($_POST['video_url'] ?? '');
         $featuredImage = trim($_POST['featured_image'] ?? $_POST['image_url'] ?? '');
 
-        // Upload picture if chosen
+        // Upload picture if chosen (Verified MIME type & safe permissions)
         if (!empty($_FILES['image_file']) && $_FILES['image_file']['error'] === UPLOAD_ERR_OK) {
-            $ext = strtolower(pathinfo($_FILES['image_file']['name'], PATHINFO_EXTENSION));
-            if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp'])) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime = finfo_file($finfo, $_FILES['image_file']['tmp_name']);
+            finfo_close($finfo);
+            $allowedMimes = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp'];
+            if (isset($allowedMimes[$mime])) {
+                $ext = $allowedMimes[$mime];
                 $dir = dirname(CONFIG_PATH) . '/public/uploads/news/';
-                if (!is_dir($dir)) mkdir($dir, 0777, true);
+                if (!is_dir($dir)) mkdir($dir, 0755, true);
                 $fn = 'news_' . time() . '_' . rand(100, 999) . '.' . $ext;
                 if (move_uploaded_file($_FILES['image_file']['tmp_name'], $dir . $fn)) {
-                    $featuredImage = $this->appUrl . '/uploads/news/' . $fn;
+                    $featuredImage = 'uploads/news/' . $fn;
                 }
             }
         }
